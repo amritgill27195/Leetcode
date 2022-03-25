@@ -7,100 +7,68 @@
  * }
  */
 
+
 /*
-    Validate BST == inorder traversal
+    Sorted order == valid BST
+    How to traverse a tree in a sorted order?
+    - Inorder traversal of a BST guarentees a sorted order
     
-    which means, if we perform a inorder traversal on a valid BST,
-    then nodes will be processed in a sorted manner
+    If you traverse a tree in inorder fashion, you will see nodes in asc order.
     
-    So how do we verify that there sorted? Sure we can visit them but how to verify?
-    
-    appraoch 1:
-    store each visited node in a list
-    and compare the list
-    
-    time:
-    space: o(h) + o(n)
-    
-    
-    approach 2:
-    Just like LinkedLists, maintain a prev pointer.
-    Previous pointer here is the previous node for a current node in "inorder" fashion.
-    Which means go all the left first
-    Then set the prev
-    Then use the prev to compare with next root node
-    if its a valid bst, the prev must be smaller each time its compared with a next inorder root node
-    ( which also means, if its valid, update the prev to current so the next inorder can compare its value with the correct prev one. )
+    approach 1: Populate a list while traversing inorder
+    - inorder traverse
+        - time: o(n) - where n is the number of nodes in the tree. We end up seeing all nodes.
+        - space: o(h) - where h is the height of the tree. Regardless if we use recursion or iterative stack
+    - push each item to a list
+        - time: o(1)
+        - space: o(n)
+    - finally check if the list is sorted
+        - time : o(n)
+        - space : o(1)
+    time: o(n) + o(1) + o(n) = o(n)
+    space: o(n) + o(h) + o(1) = o(n)
     
     
-
+    approach 2: Maintain a prev pointer to compare current root node with
+    - inorder traversal
+    - compare prev with current root
+        - prev will always be smaller in a true BST ( prev in a number line thats sorted will always be smalled )
+        - if prev >= current { return false }
+    time: o(n)
+    space: o(h)
+    
+    approach 3: Iterative implmentation of approach #2
 */
-func isValidBST(root *TreeNode) bool {
-	b := &bst{prev: nil}
-	return b.inorder(root)
-}
 
+func isValidBST(root *TreeNode) bool {
+    b := &bst{prev:nil}
+    return b.inorder(root)
+}
 
 // the hack class to scope global var within an instance of a class..
 // or if we expose global at main func level, than we have global pollution when multiple tests are ran
 type bst struct {
-	prev *TreeNode
+    prev *TreeNode
 }
 
-// using another global variable
-// func (b *bst) inorder(root *TreeNode) {
-// 	if root == nil {
-// 		return
-// 	}
-// 	b.inorder(root.Left)
-// 	if b.prev != nil {
-// 		if b.prev.Val >= root.Val {
-// 			b.flag = false
-// 		}
-// 	}
-// 	b.prev = root
-// 	b.inorder(root.Right)
-// }
-
-// returning whether valid or not 
 func (b *bst) inorder(root *TreeNode) bool {
-	if root == nil {
-		return true // empty tree == valid bst
-	}
-    if leftSideValid := b.inorder(root.Left); !leftSideValid {
-        return false
+    // base
+    if root == nil {
+        return true // because a nil tree is a valid BST
     }
-	if b.prev != nil {
-		if b.prev.Val >= root.Val {
-			return false
-		}
-	}
-	b.prev = root
-	return b.inorder(root.Right)
+    
+    // logic
+    leftValid := b.inorder(root.Left)
+    // stack.Pop()
+    if !leftValid {
+        return false // no need to push more items in the recursion stack, we can exit early
+    }
+    
+    if b.prev != nil {
+        if b.prev.Val >= root.Val {
+            return false
+        }
+    }
+    b.prev = root
+    return b.inorder(root.Right)
 }
-
-
-// inorder iterative 
-// func isValidBST(root *TreeNode) bool {
-//     if root == nil {
-//         return false
-//     }
-//     var prev *TreeNode
-//     stack := []*TreeNode{}
-//     for root != nil || len(stack) != 0 {
-//         for root != nil {
-//             stack = append(stack, root)
-//             root = root.Left
-//         }
-//         root = stack[len(stack)-1]
-//         stack = stack[:len(stack)-1]
-//         if prev != nil {
-//             if prev.Val >= root.Val {
-//                 return false
-//             }
-//         }
-//         prev = root
-//         root = root.Right
-//     }
-//     return true
-// }
