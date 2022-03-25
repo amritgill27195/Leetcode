@@ -40,25 +40,28 @@ func isValidBST(root *TreeNode) bool {
 		prev: nil,
 		flag: true,
 	}
-	b.dfs(root)
+	b.inorder(root)
 	return b.flag
 }
 
+
+// the hack class to scope global var within an instance of a class..
+// or if we expose global at main func level, than we have global pollution when multiple tests are ran
 type bst struct {
 	prev *TreeNode
 	flag bool
 }
 
-func (b *bst) dfs(root *TreeNode) {
+func (b *bst) inorder(root *TreeNode) {
 	if root == nil {
 		return
 	}
-	b.dfs(root.Left)
+	b.inorder(root.Left)
 	if b.prev != nil {
 		if b.prev.Val >= root.Val {
 			b.flag = false
 		}
 	}
 	b.prev = root
-	b.dfs(root.Right)
+	b.inorder(root.Right)
 }
