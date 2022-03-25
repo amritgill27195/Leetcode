@@ -100,13 +100,13 @@
 // }
 
 
-// pre order ( processing first and then left -> right )
+// pre-order ( processing root first and then left -> right )
 func isValidBST(root *TreeNode) bool {
     return dfs(root, nil, nil)
 
 }
 
-// pre order ( processing root first and then left -> right )
+// pre-order ( processing root first and then left -> right )
 func dfs(root *TreeNode, min, max *TreeNode) bool {
     
     // base 
