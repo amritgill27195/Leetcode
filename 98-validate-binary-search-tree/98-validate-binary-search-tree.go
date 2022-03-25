@@ -70,5 +70,5 @@ func (b *bst) inorder(root *TreeNode) bool {
         }
     }
     b.prev = root
-    return b.inorder(root.Right)
+    return b.inorder(root.Right) // stack.Pop()
 }
