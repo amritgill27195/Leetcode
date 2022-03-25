@@ -40,61 +40,61 @@
     approach 3: Iterative implmentation of approach #2
 */
 
-// func isValidBST(root *TreeNode) bool {
-//     b := &bst{prev:nil}
-//     return b.inorder(root)
-// }
+func isValidBST(root *TreeNode) bool {
+    b := &bst{prev:nil}
+    return b.inorder(root)
+}
 
-// // the hack class to scope global var within an instance of a class..
-// // or if we expose global at main func level, than we have global pollution when multiple tests are ran
-// type bst struct {
-//     prev *TreeNode
-// }
+// the hack class to scope global var within an instance of a class..
+// or if we expose global at main func level, than we have global pollution when multiple tests are ran
+type bst struct {
+    prev *TreeNode
+}
 
-// func (b *bst) inorder(root *TreeNode) bool {
-//     // base
-//     if root == nil {
-//         return true // because a nil tree is a valid BST
-//     }
+func (b *bst) inorder(root *TreeNode) bool {
+    // base
+    if root == nil {
+        return true // because a nil tree is a valid BST
+    }
     
-//     // logic
-//     leftValid := b.inorder(root.Left)
-//     // stack.Pop()
-//     if !leftValid {
-//         return false // no need to push more items in the recursion stack, we can exit early
-//     }
+    // logic
+    leftValid := b.inorder(root.Left)
+    // stack.Pop()
+    if !leftValid {
+        return false // no need to push more items in the recursion stack, we can exit early
+    }
     
-//     if b.prev != nil {
-//         if b.prev.Val >= root.Val {
-//             return false
-//         }
-//     }
-//     b.prev = root
-//     return b.inorder(root.Right) // stack.Pop()
-// }
+    if b.prev != nil {
+        if b.prev.Val >= root.Val {
+            return false
+        }
+    }
+    b.prev = root
+    return b.inorder(root.Right) // stack.Pop()
+}
 
 
 // inorder iterative
-func isValidBST(root *TreeNode) bool {
-    if root == nil {
-        return true
-    }
-    var prev *TreeNode
-    stack := []*TreeNode{}
-    for root != nil || len(stack) != 0 {
-        for root != nil {
-            stack= append(stack, root)
-            root = root.Left
-        }
-        root = stack[len(stack)-1]
-        stack = stack[:len(stack)-1]
-        if prev != nil {
-            if prev.Val >= root.Val {
-                return false
-            }
-        }
-        prev = root
-        root = root.Right
-    }
-    return true
-}
+// func isValidBST(root *TreeNode) bool {
+//     if root == nil {
+//         return true
+//     }
+//     var prev *TreeNode
+//     stack := []*TreeNode{}
+//     for root != nil || len(stack) != 0 {
+//         for root != nil {
+//             stack= append(stack, root)
+//             root = root.Left
+//         }
+//         root = stack[len(stack)-1]
+//         stack = stack[:len(stack)-1]
+//         if prev != nil {
+//             if prev.Val >= root.Val {
+//                 return false
+//             }
+//         }
+//         prev = root
+//         root = root.Right
+//     }
+//     return true
+// }
