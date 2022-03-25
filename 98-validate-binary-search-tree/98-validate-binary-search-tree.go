@@ -106,21 +106,14 @@ func isValidBST(root *TreeNode) bool {
 
 }
 
-// pre order ( processing first and then left -> right )
+// pre order ( processing root first and then left -> right )
 func dfs(root *TreeNode, min, max *TreeNode) bool {
     
     // base 
-    if root == nil {
-        return true
-    }
-    if min != nil && root.Val <= min.Val {
-        return false
-    }
-    if max != nil && root.Val >= max.Val {
-        return false
-    }
+    if root == nil {return true}
+    if min != nil && root.Val <= min.Val {return false}
+    if max != nil && root.Val >= max.Val {return false}
     
     // logic
-    
     return dfs(root.Left, min, root) && dfs(root.Right, root, max)
 }
