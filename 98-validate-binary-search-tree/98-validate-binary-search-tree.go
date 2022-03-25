@@ -35,23 +35,19 @@
     
 
 */
-// func isValidBST(root *TreeNode) bool {
-// 	b := &bst{
-// 		prev: nil,
-// 		flag: true,
-// 	}
-// 	b.inorder(root)
-// 	return b.flag
-// }
+func isValidBST(root *TreeNode) bool {
+	b := &bst{prev: nil}
+	return b.inorder(root)
+}
 
 
 // the hack class to scope global var within an instance of a class..
 // or if we expose global at main func level, than we have global pollution when multiple tests are ran
-// type bst struct {
-// 	prev *TreeNode
-// 	flag bool
-// }
+type bst struct {
+	prev *TreeNode
+}
 
+// using another global variable
 // func (b *bst) inorder(root *TreeNode) {
 // 	if root == nil {
 // 		return
@@ -66,28 +62,45 @@
 // 	b.inorder(root.Right)
 // }
 
-
-
-func isValidBST(root *TreeNode) bool {
-    if root == nil {
+// returning whether valid or not 
+func (b *bst) inorder(root *TreeNode) bool {
+	if root == nil {
+		return true // empty tree == valid bst
+	}
+    if leftSideValid := b.inorder(root.Left); !leftSideValid {
         return false
     }
-    var prev *TreeNode
-    stack := []*TreeNode{}
-    for root != nil || len(stack) != 0 {
-        for root != nil {
-            stack = append(stack, root)
-            root = root.Left
-        }
-        root = stack[len(stack)-1]
-        stack = stack[:len(stack)-1]
-        if prev != nil {
-            if prev.Val >= root.Val {
-                return false
-            }
-        }
-        prev = root
-        root = root.Right
-    }
-    return true
+	if b.prev != nil {
+		if b.prev.Val >= root.Val {
+			return false
+		}
+	}
+	b.prev = root
+	return b.inorder(root.Right)
 }
+
+
+// inorder iterative 
+// func isValidBST(root *TreeNode) bool {
+//     if root == nil {
+//         return false
+//     }
+//     var prev *TreeNode
+//     stack := []*TreeNode{}
+//     for root != nil || len(stack) != 0 {
+//         for root != nil {
+//             stack = append(stack, root)
+//             root = root.Left
+//         }
+//         root = stack[len(stack)-1]
+//         stack = stack[:len(stack)-1]
+//         if prev != nil {
+//             if prev.Val >= root.Val {
+//                 return false
+//             }
+//         }
+//         prev = root
+//         root = root.Right
+//     }
+//     return true
+// }
