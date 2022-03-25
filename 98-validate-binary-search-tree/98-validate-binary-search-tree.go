@@ -35,33 +35,59 @@
     
 
 */
-func isValidBST(root *TreeNode) bool {
-	b := &bst{
-		prev: nil,
-		flag: true,
-	}
-	b.inorder(root)
-	return b.flag
-}
+// func isValidBST(root *TreeNode) bool {
+// 	b := &bst{
+// 		prev: nil,
+// 		flag: true,
+// 	}
+// 	b.inorder(root)
+// 	return b.flag
+// }
 
 
 // the hack class to scope global var within an instance of a class..
 // or if we expose global at main func level, than we have global pollution when multiple tests are ran
-type bst struct {
-	prev *TreeNode
-	flag bool
-}
+// type bst struct {
+// 	prev *TreeNode
+// 	flag bool
+// }
 
-func (b *bst) inorder(root *TreeNode) {
-	if root == nil {
-		return
-	}
-	b.inorder(root.Left)
-	if b.prev != nil {
-		if b.prev.Val >= root.Val {
-			b.flag = false
-		}
-	}
-	b.prev = root
-	b.inorder(root.Right)
+// func (b *bst) inorder(root *TreeNode) {
+// 	if root == nil {
+// 		return
+// 	}
+// 	b.inorder(root.Left)
+// 	if b.prev != nil {
+// 		if b.prev.Val >= root.Val {
+// 			b.flag = false
+// 		}
+// 	}
+// 	b.prev = root
+// 	b.inorder(root.Right)
+// }
+
+
+
+func isValidBST(root *TreeNode) bool {
+    if root == nil {
+        return false
+    }
+    var prev *TreeNode
+    stack := []*TreeNode{}
+    for root != nil || len(stack) != 0 {
+        for root != nil {
+            stack = append(stack, root)
+            root = root.Left
+        }
+        root = stack[len(stack)-1]
+        stack = stack[:len(stack)-1]
+        if prev != nil {
+            if prev.Val >= root.Val {
+                return false
+            }
+        }
+        prev = root
+        root = root.Right
+    }
+    return true
 }
