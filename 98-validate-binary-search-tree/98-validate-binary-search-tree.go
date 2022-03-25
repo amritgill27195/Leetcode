@@ -121,8 +121,6 @@ func dfs(root *TreeNode, min, max *TreeNode) bool {
     }
     
     // logic
-    left := dfs(root.Left, min, root)
-    right := dfs(root.Right, root, max)
     
-    return left && right
+    return dfs(root.Left, min, root) && dfs(root.Right, root, max)
 }
