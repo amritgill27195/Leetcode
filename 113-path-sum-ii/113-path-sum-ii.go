@@ -20,7 +20,6 @@ func dfs(root *TreeNode, targetSum, cs int, paths []int, result *[][]int) {
 
 	if cs == targetSum && root.Left == nil && root.Right == nil {
 		*result = append(*result, append([]int{}, paths...))
-        return
 	}
 
 	dfs(root.Left, targetSum, cs, paths, result)
