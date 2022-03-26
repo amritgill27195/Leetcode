@@ -16,7 +16,7 @@
     Therefore we will save at each node ( within the recursion stack ) - a local state for the paused call.
     Such that when that paused call is resumed, the local state is back to the way we paused it.
     
-    approach 1: using inorder + global sum
+    approach 1: using inorder + global sum  *recursive*
     - have a global sum var
     - we can perform a inorder traversal
     - before going to any inorder paths, we will update the local runningNum ( concatnated number ) and save it so we can come back to it.
@@ -30,7 +30,7 @@
     time: o(n)
     space: o(h)
     
-    approach 2: using inorder + without any global var
+    approach 2: using inorder + without any global var   *recursive*
     - our inorder helper will itself be responsible for returning the sum.
     - How?
     - we can perform a inorder traversal
@@ -46,13 +46,17 @@
     - Then this sum will be left sum of parents-parent ( initially )
     - Then parents-parent calls right and repeats concatnate number -> inorder(left) -> if leaf { return leaf} -> inorder(right) -> return left + right
     - In this approach our base condition will return 0 instead of the running / concatnated number in hand
-        - Why? because 1 of the test case fails if we dont
+        - Why? because 1 of the test case fails if we dont -- wish I had figured it out prior to running into a failed case....
         - example: [1,0]
         - from left it returns 10 correctly
         - but the control comes back to main root node, which has 1 as the running number saved, it calls right ( null ) with 1 as the running number
         - when right's base cond gets hit and if we return the running number in hand
         - left + right on the root node gets added ( 10 + 1 ) = which returns 11 which is invalid
+    time: o(n) -- we visit every single node
+    space: o(h) -- implicit recursion stack under the hood
 */
+
+
 // approach 1
 func sumNumbers(root *TreeNode) int {
     c := &classHack{sum: 0}
@@ -74,6 +78,7 @@ func (c *classHack) inorder(root *TreeNode, runningNum int) {
     }
     c.inorder(root.Right, runningNum)
 } 
+
 
 // // approach 2
 // func sumNumbers(root *TreeNode) int {    
