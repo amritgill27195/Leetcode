@@ -32,6 +32,14 @@
             - and when we do find an answer, we allocate another o(n) slice to copy current paths slice into
             - o(hn)
             Not sure if this is correct ^
+        
+        
+        approach 2: inorder but iterative
+        - When we pop the top of the stack,
+        - We must reset the "local recursion" state to match the top of the stack
+        - this also had the same slice problem ( so had to copy )
+        - time: o(n^2)
+        - space: o(h for stack) * if at the current node we find an answer we allocate o(n) to save paths - o(hn)
 
 */
 
