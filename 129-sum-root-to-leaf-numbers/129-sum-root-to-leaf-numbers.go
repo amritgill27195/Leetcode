@@ -53,28 +53,51 @@
         - when right's base cond gets hit and if we return the running number in hand
         - left + right on the root node gets added ( 10 + 1 ) = which returns 11 which is invalid
 */
-func sumNumbers(root *TreeNode) int {    
-    return inorder(root, 0)
+// approach 1
+func sumNumbers(root *TreeNode) int {
+    c := &classHack{sum: 0}
+    c.inorder(root, 0)
+    return c.sum
 }
 
-
-func inorder(root *TreeNode, runningNum int) int  {
-    // base
+type classHack struct{
+    sum int
+}
+func (c *classHack) inorder(root *TreeNode, runningNum int) {
     if root == nil {
-        return 0
+        return
     }
-    
     runningNum = runningNum * 10 + root.Val
-    // logic
-    left := inorder(root.Left, runningNum)
+    c.inorder(root.Left, runningNum)
     if root.Left == nil && root.Right == nil {
-        return runningNum
+        c.sum += runningNum
     }
+    c.inorder(root.Right, runningNum)
+} 
+
+// // approach 2
+// func sumNumbers(root *TreeNode) int {    
+//     return inorder(root, 0)
+// }
+
+
+// func inorder(root *TreeNode, runningNum int) int  {
+//     // base
+//     if root == nil {
+//         return 0
+//     }
     
-    right := inorder(root.Right, runningNum)
-    if root.Left == nil && root.Right == nil {
-        return runningNum
-    }
-    return left + right
+//     runningNum = runningNum * 10 + root.Val
+//     // logic
+//     left := inorder(root.Left, runningNum)
+//     if root.Left == nil && root.Right == nil {
+//         return runningNum
+//     }
     
-}
+//     right := inorder(root.Right, runningNum)
+//     if root.Left == nil && root.Right == nil {
+//         return runningNum
+//     }
+//     return left + right
+    
+// }
