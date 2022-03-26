@@ -18,10 +18,13 @@ func dfs(root *TreeNode, targetSum, cs int, paths []int, result *[][]int) {
 	cs += root.Val
 	paths = append(paths, root.Val)
 
-	if cs == targetSum && root.Left == nil && root.Right == nil {
+	dfs(root.Left, targetSum, cs, paths, result)
+
+    if cs == targetSum && root.Left == nil && root.Right == nil {
 		*result = append(*result, append([]int{}, paths...))
 	}
 
-	dfs(root.Left, targetSum, cs, paths, result)
-	dfs(root.Right, targetSum, cs, paths, result)
+
+    
+    dfs(root.Right, targetSum, cs, paths, result)
 }
