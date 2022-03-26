@@ -1,27 +1,55 @@
-func pathSum(root *TreeNode, targetSum int) [][]int {
-	var result [][]int
-    inorderDfs(root,targetSum,nil, &result)
-	return result
-}
-func inorderDfs(root *TreeNode, targetSum int, paths []int, result *[][]int) {
-	// BASE
-    if root == nil {
-		return
-	}
 
+/*
+    approach 1: inorder traversal with recursion
+    
+    - We will save local state at each node
+        - instead of saving a running sum at each node, we will subtract target from root.val
+        - So target will be maintained at each node ( updated target )
+        - We will also keep track of a list thats maintaining running path ( using go slices )*
+            - slices are pass by value
+            - slices have len and cap as properties
+            - cap = total size avail
+            - len = current occupied size
+            - slices also have a ptr to 1 underlying array and they use len and cap to make growing and shrinking decisions
+            - this is important because since we wont allocate a specific size slice we want the slice to grow and shrink as needed
+            - the side effect of this is using in recursion, is that at some node len will be 3 while cap will be 4 ( meaning the underlying array still has size )
+            - remember the underlying arr is a ref.
+            - slice is pass by value ( a copy is created if cap == len ) 
+            - but when the slice says that it still has capacity , we go down a branch and come back and to the same node that said the underlying arr still has capacity
+            - but! it does not. The local state is out of date because when we down a branch , it added an element and make len == cap
+            - but when the recursion popped the top of the stack, in that local state for the same slice is something else ( because slices are pass by value )
+            - so we have 2 different states while the underlying array may be full..
+            - The only workaround I have found so far is - when saving the result, ENSURE its being copied into a new slice and then save the new slice or else 
+                - the underlying array ( ref ) gets changed and then your result will change too....
+            - in python, its all pass by ref, so we can easily backtrack and remove 1 element and all nodes have the same truth vs in Golang the truth once we go back to a prev node is a lie! so careful! ( I learned this after spending an entire day of troubleshooting .......)
+        - once we run into a target == 0 and current node is a leaf node
+        - Then we will add the running path to a resulting list
+            - which means we will also maintain a reference to a slice of result array
+*/
+
+func pathSum(root *TreeNode, targetSum int) [][]int {
+    var result [][]int
+    inorderDfs(root, targetSum, nil, &result)
+    return result
+}
+
+func inorderDfs(root *TreeNode, targetSum int, paths []int, result *[][]int) {
+    
+    
+    // base ( since this is void func, we return and do nothing )
+    if root == nil {
+        return
+    }
     
     // logic
-	targetSum -= root.Val
+    targetSum = targetSum - root.Val
     paths = append(paths, root.Val)
-
     inorderDfs(root.Left, targetSum, paths, result)
-        
+    
     if targetSum == 0 && root.Left == nil && root.Right == nil {
-        newPath := make([]int, len(paths))
-        copy(newPath, paths)
-		*result = append(*result, newPath)
-	}    
+        newList := make([]int, len(paths))
+        copy(newList, paths)
+        *result = append(*result, newList)
+    }
     inorderDfs(root.Right, targetSum, paths, result)
-
-
 }
