@@ -14,9 +14,9 @@
             - this is important because since we wont allocate a specific size slice we want the slice to grow and shrink as needed
             - the side effect of this is using in recursion, is that at some node len will be 3 while cap will be 4 ( meaning the underlying array still has size )
             - remember the underlying arr is a ref.
-            - slice is pass by value ( a copy is created if cap == len ) 
+            - slice is pass by value ( copy of top level meta info like len, cap, but arr ref is STILL THE SAME )
             - but when the slice says that it still has capacity , we go down a branch and come back and to the same node that said the underlying arr still has capacity
-            - but! it does not. The local state is out of date because when we down a branch , it added an element and make len == cap
+            - but! it does not. The local state is out of date because when we down a branch , it added an element and made len == cap
             - but when the recursion popped the top of the stack, in that local state for the same slice is something else ( because slices are pass by value )
             - so we have 2 different states while the underlying array may be full..
             - The only workaround I have found so far is - when saving the result, ENSURE its being copied into a new slice and then save the new slice or else 
