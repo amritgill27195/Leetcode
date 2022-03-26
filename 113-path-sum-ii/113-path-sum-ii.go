@@ -25,6 +25,14 @@
         - once we run into a target == 0 and current node is a leaf node
         - Then we will add the running path to a resulting list
             - which means we will also maintain a reference to a slice of result array
+        
+        - time: o(n^2) - we visit every single node and when we do find an answer, we have to copy 1 slice to another to avoid the side effects above
+        - space:
+            - o(h) for recursion stack
+            - and when we do find an answer, we allocate another o(n) slice to copy current paths slice into
+            - o(hn)
+            Not sure if this is correct ^
+
 */
 
 func pathSum(root *TreeNode, targetSum int) [][]int {
