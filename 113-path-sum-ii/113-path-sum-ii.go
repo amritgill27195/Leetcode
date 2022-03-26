@@ -103,6 +103,7 @@ func pathSum(root *TreeNode, targetSum int) [][]int{
             result = append(result, newList)
         }
         root = root.Right
+        // reset the same things recursion implicitly resets at the local state but explicitly here
         runningSum = s
         paths = p
     }
