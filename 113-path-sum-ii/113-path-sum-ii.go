@@ -19,14 +19,12 @@ func inorderDfs(root *TreeNode, targetSum int, paths []int, result *[][]int) {
 	targetSum -= root.Val
     paths = append(paths, root.Val)
 
-    if targetSum == 0 && root.Left == nil && root.Right == nil {
+    
+    inorderDfs(root.Left, targetSum, paths, result)
+    inorderDfs(root.Right, targetSum, paths, result)
+if targetSum == 0 && root.Left == nil && root.Right == nil {
         newPath := make([]int, len(paths))
         copy(newPath, paths)
 		*result = append(*result, newPath)
 	}
-    inorderDfs(root.Left, targetSum, paths, result)
-
-    
-    inorderDfs(root.Right, targetSum, paths, result)
-
 }
