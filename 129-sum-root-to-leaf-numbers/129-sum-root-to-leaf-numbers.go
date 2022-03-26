@@ -58,51 +58,51 @@
 
 
 // approach 1
-func sumNumbers(root *TreeNode) int {
-    c := &classHack{sum: 0}
-    c.inorder(root, 0)
-    return c.sum
-}
+// func sumNumbers(root *TreeNode) int {
+//     c := &classHack{sum: 0}
+//     c.inorder(root, 0)
+//     return c.sum
+// }
 
-type classHack struct{
-    sum int
-}
-func (c *classHack) inorder(root *TreeNode, runningNum int) {
-    if root == nil {
-        return
-    }
-    runningNum = runningNum * 10 + root.Val
-    c.inorder(root.Left, runningNum)
-    if root.Left == nil && root.Right == nil {
-        c.sum += runningNum
-    }
-    c.inorder(root.Right, runningNum)
-} 
+// type classHack struct{
+//     sum int
+// }
+// func (c *classHack) inorder(root *TreeNode, runningNum int) {
+//     if root == nil {
+//         return
+//     }
+//     runningNum = runningNum * 10 + root.Val
+//     c.inorder(root.Left, runningNum)
+//     if root.Left == nil && root.Right == nil {
+//         c.sum += runningNum
+//     }
+//     c.inorder(root.Right, runningNum)
+// } 
 
 
 // // approach 2
-// func sumNumbers(root *TreeNode) int {    
-//     return inorder(root, 0)
-// }
+func sumNumbers(root *TreeNode) int {    
+    return inorder(root, 0)
+}
 
 
-// func inorder(root *TreeNode, runningNum int) int  {
-//     // base
-//     if root == nil {
-//         return 0
-//     }
+func inorder(root *TreeNode, runningNum int) int  {
+    // base
+    if root == nil {
+        return 0
+    }
     
-//     runningNum = runningNum * 10 + root.Val
-//     // logic
-//     left := inorder(root.Left, runningNum)
-//     if root.Left == nil && root.Right == nil {
-//         return runningNum
-//     }
+    runningNum = runningNum * 10 + root.Val
+    // logic
+    left := inorder(root.Left, runningNum)
+    if root.Left == nil && root.Right == nil {
+        return runningNum
+    }
     
-//     right := inorder(root.Right, runningNum)
-//     if root.Left == nil && root.Right == nil {
-//         return runningNum
-//     }
-//     return left + right
+    right := inorder(root.Right, runningNum)
+    if root.Left == nil && root.Right == nil {
+        return runningNum
+    }
+    return left + right
     
-// }
+}
