@@ -8,23 +8,29 @@
  */
 func pathSum(root *TreeNode, targetSum int) [][]int {
 	var result [][]int
-	inorderDfs(root,targetSum, 0, nil, &result)
+    inorderDfs(root,targetSum, []int{}, &result)
 	return result
 }
-func inorderDfs(root *TreeNode, targetSum, cs int, paths []int, result *[][]int) {
+func inorderDfs(root *TreeNode, targetSum int, paths []int, result *[][]int) {
 	if root == nil {
 		return
 	}
-	cs += root.Val
+    // fmt.Println("Starting node: ",root.Val)
+	targetSum -= root.Val
 	paths = append(paths, root.Val)
-
-	inorderDfs(root.Left, targetSum, cs, paths, result)
-
-    if cs == targetSum && root.Left == nil && root.Right == nil {
-		*result = append(*result, append([]int{}, paths...))
-	}
-
+    
+    inorderDfs(root.Left, targetSum, paths, result)
+    
+    // fmt.Println("Back to: ", root.Val)
+    // fmt.Println("Paths on this node are: ", paths)
 
     
-    inorderDfs(root.Right, targetSum, cs, paths, result)
+    if targetSum == 0 && root.Left == nil && root.Right == nil {
+        // fmt.Println("Adding the following path to result: ", paths)
+        newPath := make([]int, len(paths))
+        copy(newPath, paths)
+		*result = append(*result, newPath)
+	}
+    
+    inorderDfs(root.Right, targetSum, paths, result)
 }
