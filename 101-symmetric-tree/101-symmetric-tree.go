@@ -39,7 +39,7 @@ func dfs(a *TreeNode, b *TreeNode) bool {
     
     // logic
     if left := dfs(a.Left, b.Right); !left {
-        return false
+        return false // no need to go to next if this is already failing
     }
     if a == nil || b == nil || a.Val != b.Val {
         return false
