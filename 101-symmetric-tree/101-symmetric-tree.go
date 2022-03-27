@@ -28,6 +28,7 @@ func isSymmetric(root *TreeNode) bool {
 // }
 
 // inorder dfs ( go left, then process, and then go right )
+// this is slightly messy, I prefer preorder in this case 
 func dfs(a *TreeNode, b *TreeNode) bool {
     // base
     if a == nil && b == nil {
