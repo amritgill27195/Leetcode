@@ -11,19 +11,19 @@ func isBalanced(root *TreeNode) bool {
     return ans
 }
 
+
 func postOrderDfs(root *TreeNode) (int, bool) {
-    
     // base
     if root == nil {
         return 0, true
     }
     
     
-    lh,leftBalanced := postOrderDfs(root.Left)
+    // logic
+    lh, leftBalanced := postOrderDfs(root.Left)
     if !leftBalanced {
         return -1, false
     }
-    
     rh, rightBalanced := postOrderDfs(root.Right)
     if !rightBalanced {
         return -1, false
@@ -33,10 +33,13 @@ func postOrderDfs(root *TreeNode) (int, bool) {
     if diff > 1 {
         return -1, false
     }
-    max := lh
-    if rh > max {max = rh} 
-    return max+1, true
     
+    max := lh
+    if rh > max {
+        max = rh
+    }
+    
+    return max+1, true
 }
 
 func abs(n int) int {
