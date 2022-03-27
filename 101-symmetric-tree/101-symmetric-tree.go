@@ -17,11 +17,33 @@ func isSymmetric(root *TreeNode) bool {
     return dfs(root, root)
 }
 
+// preorder dfs ( processing first, then left and right )
+// func dfs(a *TreeNode, b *TreeNode) bool {
+//     if a == nil && b == nil {
+//         return true
+//     }
+//     if a == nil || b == nil || a.Val != b.Val {return false}
+    
+//     return dfs(a.Left, b.Right) && dfs(a.Right, b.Left)
+// }
+
+// inorder dfs ( go left, then process, and then go right )
 func dfs(a *TreeNode, b *TreeNode) bool {
+    // base
     if a == nil && b == nil {
         return true
     }
-    if a == nil || b == nil || a.Val != b.Val {return false}
+    if a == nil || b == nil {
+        return false 
+    }
     
-    return dfs(a.Left, b.Right) && dfs(a.Right, b.Left)
+    // logic
+    if left := dfs(a.Left, b.Right); !left {
+        return false
+    }
+    if a == nil || b == nil || a.Val != b.Val {
+        return false
+    }
+    return dfs(a.Right, b.Left)
+    
 }
