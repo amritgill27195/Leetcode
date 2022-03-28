@@ -18,10 +18,10 @@
     
 */
 func hasPathSum(root *TreeNode, targetSum int) bool {
-    return inorderDfs(root, targetSum, 0)
+    return inorderDfs(root, targetSum)
 }
 
-func inorderDfs(root *TreeNode, targetSum, rs int) bool {
+func inorderDfs(root *TreeNode, targetSum int) bool {
     
     // base
     if root == nil {
@@ -29,15 +29,15 @@ func inorderDfs(root *TreeNode, targetSum, rs int) bool {
     }
     
     // logic
-    rs = rs + root.Val
+    targetSum = targetSum - root.Val
     
-    left := inorderDfs(root.Left, targetSum, rs)
+    left := inorderDfs(root.Left, targetSum)
     if left { return true }
     
-    if rs == targetSum && root.Left == nil && root.Right == nil {
+    if targetSum == 0 && root.Left == nil && root.Right == nil {
         return true
     }
     
-    return inorderDfs(root.Right, targetSum, rs)
+    return inorderDfs(root.Right, targetSum)
     
 }
