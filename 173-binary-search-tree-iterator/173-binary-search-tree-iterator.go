@@ -7,10 +7,6 @@
  * }
  */
 
-/*
-    We need 1 additional ptr that keeps track of our current inorder position
-    (i.e: where are we currently in the inorder traversal )
-*/
 type BSTIterator struct {
     stack []*TreeNode
 }
