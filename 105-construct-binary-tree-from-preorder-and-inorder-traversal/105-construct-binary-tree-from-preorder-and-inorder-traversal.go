@@ -6,35 +6,60 @@
  *     Right *TreeNode
  * }
  */
+/*
+    approach:
+    
+    Preorder -> root-left-right
+    Inorder -> left-root-right
+    
+    * The trick here is to recursively collect all root nodes and pass them back to parent.Left and parent.Right
+    
+    1. Get the initial root value from preorder : it will always be the 0th idx
+    2. Find the index of the root value in inorder
+        - All elements to the left of rootIdx in inorder is the left subtree
+        - All elements to the right to rootIdx in inorder is the right subtree
+    3. Using the rootIdx found in inorder, we can locate the left and right subtree in preorder
+        - Why do we need to do this?
+        - Well we will always look for a starting root in recursive call for a parent.Left and parent.Right
+        - Once a recursive call at the lowest level is done, the root obj gets passed back to its parent.Left and or parent.Right
+        - So we are setting/finding root at each recursive call and caller parent will set the return value to root.Left and root.Right
+    4. How can we find the preorder left and right subtree in preorder using rootIdx from inorder?
+        - Well it happens to be that in preorder;
+            - preOrder[1:rootIdx+1] - is the left subtree in preorder
+                - Why start from 1 here? because 0 is already used - ITS THE INITIAL ROOT!
+            - preOrder[rootIdx+1:] is the right subtree in preorder
+    5. Now we have preLeft and preRight - i.e we have root for left subtree and right subtree
+    6. Which means we can recursively call the buildTree with updated preorder and inorder
+        - Inorder left would be everything to the left of rootIdx in inorder
+        - Inorder right would be everything to the right of rootIdx in inorder
+        - Which means its also important that we send down the updated inorder list to each recursive call so we can correctly find the rootIdx again relative to the new updated preOrder list
+        
+    
+*/
 func buildTree(preorder []int, inorder []int) *TreeNode {
     
-    if len(preorder) == 0 && len(inorder) == 0 || len(preorder) != len(inorder) {
+    if len(preorder) != len(inorder) || len(preorder) == 0 && len(inorder) == 0 {
         return nil
     }
     
-    // get mid from preorder
+    // get the root value from preorder[0] ( since preorder is root-left-right)
     root := &TreeNode{Val: preorder[0]}
-
-    // find the root in inorder list
-    mid := -1
+    
+    // then look for the same root val in inorder
+    rootIdx := -1
     for i := 0; i < len(inorder); i++ {
         if inorder[i] == root.Val {
-            mid = i
+            rootIdx = i
             break
         }
     }
     
-    // left of mid in inorder is the left subtree
-    // right of mid in inorder is the right subtree
+    // all elements to left of rootIdx in inorder is the left subtree from inorder's perspective
+    // all elements to right of rootIdx in inorder is the right subtree from inorder's perspective
+    // now using the rootIdx, we can locate the preOrder left and right and recursively call buildTree for this root.Left and root.Right
+    root.Left = buildTree(preorder[1:rootIdx+1], inorder[0:rootIdx])
+    root.Right = buildTree(preorder[rootIdx+1:], inorder[rootIdx+1:])
     
-    // how do we get the same for preorder?
-    // we can exclude idx 0 from pre as it is the root, it will never be a subtree
-    // the mid idx in inorder tells us the end position of preorder in preorder list
-    // that means, that preorder[1:mid+1] is the left of preorder
-    // that means, that preorder[mid+1:] is the right of preorder
-    // that means, that inorder[0:mid] is the left of inorder
-    // that means, that inorder[mid+1:] is the right of inorder
-    root.Left = buildTree(preorder[1:mid+1], inorder[0:mid])
-    root.Right = buildTree(preorder[mid+1:], inorder[mid+1:])
+    // at some point 1 root node will return and pop all of the parents from recursion stack and build the tree from bottom up
     return root
 }
