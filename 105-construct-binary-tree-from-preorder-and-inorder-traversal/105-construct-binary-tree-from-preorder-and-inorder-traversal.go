@@ -47,6 +47,7 @@ func buildTree(preorder []int, inorder []int) *TreeNode {
     
     // then look for the same root val in inorder
     rootIdx := -1
+    // time: o(len(inorder))
     for i := 0; i < len(inorder); i++ {
         if inorder[i] == root.Val {
             rootIdx = i
