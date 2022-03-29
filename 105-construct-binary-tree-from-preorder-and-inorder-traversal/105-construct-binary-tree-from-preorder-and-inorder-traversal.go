@@ -70,9 +70,15 @@
 // the above approach works however time complexity wise, we have o(n^2) because at each recursive call
 // we search in o(n) time in inordet to find rootIdx
 // and we also take (n) for each preOrder and inorder slicing 
+// same thing for space, at each recursive call, we allocated a new smaller inorder and preorder list : o(n^2) 
+
 
 // for searching over and over again, lets toss inorder into a val:idx map initially
 // and for slicing inorder left and right , we will use 2 pointers as boundary idx ( start and end ) 
+
+// time: o(n)
+// space: o(n)
+
 
 // This is to scope down the global var access to be only within an instance of this class or we will end up with global pollution
 type btree struct {
