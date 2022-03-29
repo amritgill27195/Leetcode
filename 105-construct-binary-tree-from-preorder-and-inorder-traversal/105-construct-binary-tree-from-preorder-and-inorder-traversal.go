@@ -71,9 +71,10 @@
 // we search in o(n) time in inordet to find rootIdx
 // and we also take (n) for each preOrder and inorder slicing 
 
-
 // for searching over and over again, lets toss inorder into a val:idx map initially
 // and for slicing inorder left and right , we will use 2 pointers as boundary idx ( start and end ) 
+
+// This is to scope down the global var access to be only within an instance of this class or we will end up with global pollution
 type btree struct {
     inordermap map[int]int
     idx int
@@ -84,7 +85,6 @@ func buildTree(preorder []int, inorder []int) *TreeNode {
     for i := 0; i < len(inorder); i++ {
         btree.inordermap[inorder[i]] = i
     }
-              
     return btree.build(preorder, 0, len(inorder)-1)
 }
 
