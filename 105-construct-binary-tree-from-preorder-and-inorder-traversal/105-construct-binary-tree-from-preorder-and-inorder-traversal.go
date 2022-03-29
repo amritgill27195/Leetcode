@@ -82,7 +82,7 @@ type btree struct {
 
 func buildTree(preorder []int, inorder []int) *TreeNode {
     btree := &btree{inordermap: map[int]int{}, idx: 0}
-    for i := 0; i < len(inorder); i++ {
+    for i := 0; i < len(inorder); i++ { // o(len(inorder)) time and space for inordermap
         btree.inordermap[inorder[i]] = i
     }
     return btree.build(preorder, 0, len(inorder)-1)
