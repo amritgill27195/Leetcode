@@ -36,31 +36,70 @@
         
     
 */
-func buildTree(preorder []int, inorder []int) *TreeNode {
+// func buildTree(preorder []int, inorder []int) *TreeNode {
     
-    if len(preorder) != len(inorder) || len(preorder) == 0 && len(inorder) == 0 {
+//     if len(preorder) != len(inorder) || len(preorder) == 0 && len(inorder) == 0 {
+//         return nil
+//     }
+    
+//     // get the root value from preorder[0] ( since preorder is root-left-right)
+//     root := &TreeNode{Val: preorder[0]}
+    
+//     // then look for the same root val in inorder
+//     rootIdx := -1
+//     // time: o(len(inorder))
+//     for i := 0; i < len(inorder); i++ {
+//         if inorder[i] == root.Val {
+//             rootIdx = i
+//             break
+//         }
+//     }
+    
+//     // all elements to left of rootIdx in inorder is the left subtree from inorder's perspective
+//     // all elements to right of rootIdx in inorder is the right subtree from inorder's perspective
+//     // now using the rootIdx, we can locate the preOrder left and right and recursively call buildTree for this root.Left and root.Right
+//     root.Left = buildTree(preorder[1:rootIdx+1], inorder[0:rootIdx])
+//     root.Right = buildTree(preorder[rootIdx+1:], inorder[rootIdx+1:])
+    
+//     // at some point 1 root node will return and pop all of the parents from recursion stack and build the tree from bottom up
+//     return root
+// }
+
+
+
+// the above approach works however time complexity wise, we have o(n^2) because at each recursive call
+// we search in o(n) time in inordet to find rootIdx
+// and we also take (n) for each preOrder and inorder slicing 
+
+
+// for searching over and over again, lets toss inorder into a val:idx map initially
+// and for slicing inorder left and right , we will use 2 pointers as boundary idx ( start and end ) 
+type btree struct {
+    inordermap map[int]int
+    idx int
+}
+
+func buildTree(preorder []int, inorder []int) *TreeNode {
+    btree := &btree{inordermap: map[int]int{}, idx: 0}
+    for i := 0; i < len(inorder); i++ {
+        btree.inordermap[inorder[i]] = i
+    }
+              
+    return btree.build(preorder, 0, len(inorder)-1)
+}
+
+
+// why are we not passing inorder list here?
+// we dont need it because we only used inorder to find our rootIdx
+func (b *btree) build(preorder []int, start, end int) *TreeNode{
+    if start > end {
         return nil
     }
     
-    // get the root value from preorder[0] ( since preorder is root-left-right)
-    root := &TreeNode{Val: preorder[0]}
-    
-    // then look for the same root val in inorder
-    rootIdx := -1
-    // time: o(len(inorder))
-    for i := 0; i < len(inorder); i++ {
-        if inorder[i] == root.Val {
-            rootIdx = i
-            break
-        }
-    }
-    
-    // all elements to left of rootIdx in inorder is the left subtree from inorder's perspective
-    // all elements to right of rootIdx in inorder is the right subtree from inorder's perspective
-    // now using the rootIdx, we can locate the preOrder left and right and recursively call buildTree for this root.Left and root.Right
-    root.Left = buildTree(preorder[1:rootIdx+1], inorder[0:rootIdx])
-    root.Right = buildTree(preorder[rootIdx+1:], inorder[rootIdx+1:])
-    
-    // at some point 1 root node will return and pop all of the parents from recursion stack and build the tree from bottom up
+    root := &TreeNode{Val: preorder[b.idx]}
+    rootIdxInInorder := b.inordermap[root.Val]
+    b.idx++
+    root.Left = b.build(preorder, start, rootIdxInInorder-1)
+    root.Right = b.build(preorder, rootIdxInInorder+1, end)
     return root
 }
