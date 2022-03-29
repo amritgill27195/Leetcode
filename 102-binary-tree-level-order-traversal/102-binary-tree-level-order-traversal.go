@@ -40,13 +40,14 @@
 // time: o(n)
 // space: o(h) -- at worse, we will have the max height number of nodes in our recursion stack
 
+// tried passing result as a reference but golang complains that *result[idx] indexing on references are not supported
+// so then the class solution to narrow down the global scope of result to only 1 instance or else global pollution happens
 type sol struct {
     result [][]int
 }
 
 func levelOrder(root *TreeNode) [][]int{
     sol := new(sol)
-    sol.result = [][]int{}
     sol.preorderDfs(root, 0)
     return sol.result
 }
