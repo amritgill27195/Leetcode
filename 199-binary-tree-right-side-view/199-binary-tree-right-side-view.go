@@ -25,8 +25,13 @@
     We will have a result array and each idx in this result array will represent a level in the tree
     
     2 ways:
-    1. We can traverse left first and override each new element at the same level.
-    2. We can traverse right first and only add to result array at the level IF the size of result array == level (i.e this is the first time we have seen this level )
+    1. We can traverse left first and go reckless override each new element at the same level. 
+        - if right goes after left, the last overrides will be the right side view
+    2. We can traverse right first and only add to result array at the level IF the size of result array == level (i.e this is the first time we have seen this level)
+        - gather all the right side values for each level
+        - if this level does not exist in our result array
+            - that means this is the first time we have seen this level, so append it with current level value
+        - if this level does exist, it means we already have the farthest right side value for this level
     
     time: o(n) - where n is the number of nodes in the tree. We visit and see every single node best/worst case ( we do not exit early anywhere )
     space: o(h) - where h is the max height of tree and it will be o(n) space in a skewed tree
