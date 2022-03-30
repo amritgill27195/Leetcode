@@ -36,35 +36,43 @@
         
     
 */
-// func buildTree(preorder []int, inorder []int) *TreeNode {
-    
-//     if len(preorder) != len(inorder) || len(preorder) == 0 && len(inorder) == 0 {
-//         return nil
-//     }
-    
-//     // get the root value from preorder[0] ( since preorder is root-left-right)
-//     root := &TreeNode{Val: preorder[0]}
-    
-//     // then look for the same root val in inorder
-//     rootIdx := -1
-//     // time: o(len(inorder))
-//     for i := 0; i < len(inorder); i++ {
-//         if inorder[i] == root.Val {
-//             rootIdx = i
-//             break
-//         }
-//     }
-    
-//     // all elements to left of rootIdx in inorder is the left subtree from inorder's perspective
-//     // all elements to right of rootIdx in inorder is the right subtree from inorder's perspective
-//     // now using the rootIdx, we can locate the preOrder left and right and recursively call buildTree for this root.Left and root.Right
-//     root.Left = buildTree(preorder[1:rootIdx+1], inorder[0:rootIdx])
-//     root.Right = buildTree(preorder[rootIdx+1:], inorder[rootIdx+1:])
-    
-//     // at some point 1 root node will return and pop all of the parents from recursion stack and build the tree from bottom up
-//     return root
-// }
 
+// in this approach we will slice down the preorder and inorder in each recursive call to build tree from root using preorder style.
+// slicing is expensive in terms of time and space
+func buildTree(preorder []int, inorder []int) *TreeNode{
+    
+    if len(preorder) != len(inorder) || len(preorder) == 0 || len(inorder) == 0 {
+        return nil
+    }
+    
+    // root will always be 0th idx in preorder
+    // and will be in each recursion call because in each recursion call, we slice down the preorder
+    // so its gauranteed.
+    
+    // remeber we are building tree in preorder using preorder
+    // so process root first and then left n then right 
+    root := &TreeNode{Val: preorder[0]}
+    
+    // now find the rootIdx in inorder
+    // all elements to the left of rootIdx in inorder list will be the left side of the tree ( from inorders perspective )
+    // all elements to the right of rootIdx in inorder list will be the right side of the tree ( from inorders perspective )
+    // remember we are only going down a direction to set what root should be here in left || right... 
+    rootIdx := -1
+    for i := 0; i < len(inorder); i++ {
+        if inorder[i] == root.Val {
+            rootIdx = i
+            break
+        }
+    }
+    
+    
+    // we can use the rootIdx from inorder to slice down the preorder
+    // preorder[1:rootIdx+1] is the preLeft and preorder[mid+1:] is preRight
+    // inorder[0:rootIdx] is the inLeft and inorder[rootIdx+1:] is inRight
+    root.Left = buildTree(preorder[1:rootIdx+1], inorder[0:rootIdx])
+    root.Right = buildTree(preorder[rootIdx+1:], inorder[rootIdx+1:])
+    return root
+}
 
 
 // the above approach works however time complexity wise, we have o(n^2) because at each recursive call
@@ -80,32 +88,3 @@
 // space: o(n)
 
 
-// This is to scope down the global var access to be only within an instance of this class or we will end up with global pollution
-type btree struct {
-    inordermap map[int]int
-    idx int
-}
-
-func buildTree(preorder []int, inorder []int) *TreeNode {
-    btree := &btree{inordermap: map[int]int{}, idx: 0}
-    for i := 0; i < len(inorder); i++ { // o(len(inorder)) time and space for inordermap
-        btree.inordermap[inorder[i]] = i
-    }
-    return btree.build(preorder, 0, len(inorder)-1)
-}
-
-
-// why are we not passing inorder list here?
-// we dont need it because we only used inorder to find our rootIdx
-func (b *btree) build(preorder []int, start, end int) *TreeNode{
-    if start > end {
-        return nil
-    }
-    
-    root := &TreeNode{Val: preorder[b.idx]}
-    rootIdxInInorder := b.inordermap[root.Val]
-    b.idx++
-    root.Left = b.build(preorder, start, rootIdxInInorder-1)
-    root.Right = b.build(preorder, rootIdxInInorder+1, end)
-    return root
-}
