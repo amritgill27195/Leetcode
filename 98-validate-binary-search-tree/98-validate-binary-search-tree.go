@@ -40,80 +40,55 @@
     approach 3: Iterative implmentation of approach #2
 */
 
-// func isValidBST(root *TreeNode) bool {
-//     b := &bst{prev:nil}
-//     return b.inorder(root)
-// }
 
-// // the hack class to scope global var within an instance of a class..
-// // or if we expose global at main func level, than we have global pollution when multiple tests are ran
-// type bst struct {
-//     prev *TreeNode
-// }
+// inorder DFS ( recursive ) -- using prev pointer
+// time: o(n) - we visit all nodes in best/worst case
+// space: o(h) - max height of the tree will be in recursion stack at worse case and o(n) in a skewed tree
 
-// func (b *bst) inorder(root *TreeNode) bool {
-//     // base
-//     if root == nil {
-//         return true // because a nil tree is a valid BST
-//     }
-    
-//     // logic
-//     leftValid := b.inorder(root.Left)
-//     // stack.Pop()
-//     if !leftValid {
-//         return false // no need to push more items in the recursion stack, we can exit early
-//     }
-    
-//     if b.prev != nil {
-//         if b.prev.Val >= root.Val {
-//             return false
-//         }
-//     }
-//     b.prev = root
-//     return b.inorder(root.Right) // stack.Pop()
-// }
-
-
-// inorder iterative
-// func isValidBST(root *TreeNode) bool {
-//     if root == nil {
-//         return true
-//     }
-//     var prev *TreeNode
-//     stack := []*TreeNode{}
-//     for root != nil || len(stack) != 0 {
-//         for root != nil {
-//             stack= append(stack, root)
-//             root = root.Left
-//         }
-//         root = stack[len(stack)-1]
-//         stack = stack[:len(stack)-1]
-//         if prev != nil {
-//             if prev.Val >= root.Val {
-//                 return false
-//             }
-//         }
-//         prev = root
-//         root = root.Right
-//     }
-//     return true
-// }
-
-
-// pre-order ( processing root first and then left -> right )
-func isValidBST(root *TreeNode) bool {
-    return dfs(root, nil, nil)
-
+type dfs struct {
+    prev *TreeNode
 }
 
-// pre-order ( processing root first and then left -> right )
-func dfs(root *TreeNode, min, max *TreeNode) bool {
+func (d *dfs) inorderDfs(root *TreeNode) bool {
     
-    // base 
-    if root == nil {return true}
-    if min != nil && root.Val <= min.Val {return false}
-    if max != nil && root.Val >= max.Val {return false}
+    // base
+    if root == nil {return true }
     
     // logic
-    return dfs(root.Left, min, root) && dfs(root.Right, root, max)
+    leftValid := d.inorderDfs(root.Left)
+    if !leftValid {
+        return false
+    }
+    
+    if d.prev != nil {
+        if d.prev.Val >= root.Val {
+            return false
+        }
+    }
+    d.prev = root
+    return d.inorderDfs(root.Right)
 }
+
+
+func isValidBST(root *TreeNode) bool {
+    d := &dfs{}
+    return d.inorderDfs(root)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
