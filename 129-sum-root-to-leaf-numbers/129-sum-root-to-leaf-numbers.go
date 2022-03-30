@@ -56,53 +56,25 @@
     space: o(h) -- implicit recursion stack under the hood
 */
 
-
-// approach 1
-// func sumNumbers(root *TreeNode) int {
-//     c := &classHack{sum: 0}
-//     c.inorder(root, 0)
-//     return c.sum
-// }
-
-// type classHack struct{
-//     sum int
-// }
-// func (c *classHack) inorder(root *TreeNode, runningNum int) {
-//     if root == nil {
-//         return
-//     }
-//     runningNum = runningNum * 10 + root.Val
-//     c.inorder(root.Left, runningNum)
-//     if root.Left == nil && root.Right == nil {
-//         c.sum += runningNum
-//     }
-//     c.inorder(root.Right, runningNum)
-// } 
-
-
-// // approach 2
 func sumNumbers(root *TreeNode) int {    
-    return inorder(root, 0)
+    return inorderDfs(root, 0)
 }
 
-
-func inorder(root *TreeNode, runningNum int) int  {
+func inorderDfs(root *TreeNode, cn int) int {
     // base
     if root == nil {
         return 0
     }
     
-    runningNum = runningNum * 10 + root.Val
     // logic
-    left := inorder(root.Left, runningNum)
+    cn = cn * 10 + root.Val
+    left := inorderDfs(root.Left, cn)
+    
     if root.Left == nil && root.Right == nil {
-        return runningNum
+        return cn
     }
     
-    right := inorder(root.Right, runningNum)
-    if root.Left == nil && root.Right == nil {
-        return runningNum
-    }
-    return left + right
+    right := inorderDfs(root.Right, cn)
     
+    return left+right
 }
