@@ -104,9 +104,6 @@ func searchMatrix(matrix [][]int, target int) bool {
     left := 0
     right := totalLenOfImaginary1D
     for left <= right {
-        fmt.Println("left", left)
-        fmt.Println("right", right)
-
         mid := left + ((right-left)/2)
         outterIdx := mid/innerSize
         innerIdx := mid%innerSize
