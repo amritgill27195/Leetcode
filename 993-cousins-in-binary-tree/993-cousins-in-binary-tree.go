@@ -70,9 +70,8 @@ func (d *dfs)levelOrderDfs(root, parent *TreeNode, level, x, y int) {
     }
     
     
-    
-    d.levelOrderDfs(root.Left, root, level+1, x,y)
-    
+    // can be pre/post/inorder ( does not matter in this question )
+    // because we are looking for nodes and saving their parents
     // logic
     if root.Val == x {
         d.xParent = parent
@@ -85,6 +84,11 @@ func (d *dfs)levelOrderDfs(root, parent *TreeNode, level, x, y int) {
         // exit early since we found both parents
         return
     }
+    
+    
+    d.levelOrderDfs(root.Left, root, level+1, x,y)
+    
+  
     
     d.levelOrderDfs(root.Right, root, level+1, x,y)
 }
