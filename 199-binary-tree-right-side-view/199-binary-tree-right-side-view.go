@@ -35,23 +35,51 @@
 */
 
 // level order using BFS
-func rightSideView(root *TreeNode) []int {
+// func rightSideView(root *TreeNode) []int {
     
+//     if root == nil {
+//         return nil
+//     }
+//     result := []int{}
+//     queue := []*TreeNode{root}
+//     for len(queue) != 0 {
+//         qSize := len(queue)
+//         result = append(result, queue[qSize-1].Val)
+//         for qSize != 0 {
+//             dq := queue[0]
+//             queue = queue[1:]
+//             if dq.Left != nil { queue = append(queue, dq.Left )}
+//             if dq.Right != nil { queue = append(queue, dq.Right )}
+//             qSize--
+//         }
+//     }
+//     return result
+// }
+
+
+// level order using DFS ( i.e maintain a level local state at each node )
+// this exists to scope down global to only this class/struct or else global pollution happens
+type dfs struct {
+    result []int
+}
+func rightSideView(root *TreeNode) []int {
+    d := &dfs{result: []int{}}
+    d.dfsLeft(root, 0)
+    return d.result
+}
+
+
+func (d *dfs) dfsLeft(root *TreeNode, level int) {
     if root == nil {
-        return nil
+        return
     }
-    result := []int{}
-    queue := []*TreeNode{root}
-    for len(queue) != 0 {
-        qSize := len(queue)
-        result = append(result, queue[qSize-1].Val)
-        for qSize != 0 {
-            dq := queue[0]
-            queue = queue[1:]
-            if dq.Left != nil { queue = append(queue, dq.Left )}
-            if dq.Right != nil { queue = append(queue, dq.Right )}
-            qSize--
-        }
+    
+    // logic
+    if len(d.result) == level {
+        d.result = append(d.result, root.Val)
+    } else {
+        d.result[level] = root.Val
     }
-    return result
+    d.dfsLeft(root.Left, level+1)
+    d.dfsLeft(root.Right, level+1)
 }
