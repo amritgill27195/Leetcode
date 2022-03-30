@@ -64,22 +64,38 @@ type dfs struct {
 }
 func rightSideView(root *TreeNode) []int {
     d := &dfs{result: []int{}}
-    d.dfsLeft(root, 0)
+    d.dfsRight(root, 0)
     return d.result
 }
 
 
-func (d *dfs) dfsLeft(root *TreeNode, level int) {
+// func (d *dfs) dfsLeft(root *TreeNode, level int) {
+//     if root == nil {
+//         return
+//     }
+    
+//     // logic
+//     if len(d.result) == level {
+//         d.result = append(d.result, root.Val)
+//     } else {
+//         d.result[level] = root.Val
+//     }
+//     d.dfsLeft(root.Left, level+1)
+//     d.dfsLeft(root.Right, level+1)
+// }
+
+
+func (d *dfs) dfsRight(root *TreeNode, level int) {
     if root == nil {
         return
     }
     
     // logic
+    // if this level does not exist, add it
+    // else skip because we already have the far most right side for this level
     if len(d.result) == level {
         d.result = append(d.result, root.Val)
-    } else {
-        d.result[level] = root.Val
     }
-    d.dfsLeft(root.Left, level+1)
-    d.dfsLeft(root.Right, level+1)
+    d.dfsRight(root.Right, level+1)
+    d.dfsRight(root.Left, level+1)
 }
