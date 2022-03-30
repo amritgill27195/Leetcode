@@ -70,6 +70,9 @@ func (d *dfs) inorderDfs(root *TreeNode) bool {
 }
 
 
+// preorder is not possible because preorder will NOT give us a sorted order... so we cannot compare...
+// therefore only inorder works in this case.
+
 func isValidBST(root *TreeNode) bool {
     d := &dfs{}
     return d.inorderDfs(root)
