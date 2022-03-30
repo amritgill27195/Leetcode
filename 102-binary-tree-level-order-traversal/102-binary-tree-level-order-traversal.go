@@ -36,7 +36,13 @@
 
 
 
-// recursive using DFS
+// approach : level order using DFS ( by maintaining a level at each node in recursion stack )
+// level order can be done using DFS as well
+// At each node in the recursion stack we will maintain a level -- which represents the idx in the nested array
+// if the len of the result array == level - it means result[level] idx does not exist - for it to exist, the len > level.
+// therefore we will initialize a new array within, so that result[level] exists.
+// once the result[level] array does exist, we will simply append the current level root.Val to result[level]
+
 // time: o(n)
 // space: o(h) -- at worse, we will have the max height number of nodes in our recursion stack
 
