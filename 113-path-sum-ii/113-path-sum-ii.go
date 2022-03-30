@@ -44,73 +44,27 @@
 */
 
 func pathSum(root *TreeNode, targetSum int) [][]int {
-    var result [][]int
-    inorderDfs(root, targetSum, nil, &result)
+    result := [][]int{}
+    inorderDfs(root, &result, targetSum, nil)
     return result
+
 }
 
-func inorderDfs(root *TreeNode, targetSum int, paths []int, result *[][]int) {
-    
-    
-    // base ( since this is void func, we return and do nothing )
+func inorderDfs(root *TreeNode, result *[][]int, target int, paths []int) {
+    // base
     if root == nil {
         return
     }
     
     // logic
-    targetSum = targetSum - root.Val
     paths = append(paths, root.Val)
-    inorderDfs(root.Left, targetSum, paths, result)
-    
-    if targetSum == 0 && root.Left == nil && root.Right == nil {
-        newList := make([]int, len(paths))
-        copy(newList, paths)
-        *result = append(*result, newList)
+    target = target - root.Val
+    inorderDfs(root.Left, result, target, paths)
+    if target == 0 && root.Left == nil && root.Right == nil {
+        newPaths := make([]int, len(paths))
+        copy(newPaths, paths)
+        *result = append(*result, newPaths)
     }
-    inorderDfs(root.Right, targetSum, paths, result)
-    paths = paths[:len(paths)-1]
+    inorderDfs(root.Right, result, target, paths)
 }
 
-
-
-// approach 2  : inorder but iterative
-
-// type obj struct {
-//     node *TreeNode
-//     paths []int
-//     sum int
-// }
-
-// func pathSum(root *TreeNode, targetSum int) [][]int{
-//     if root == nil {return nil}
-//     var result [][]int
-//     stack := []*obj{}
-//     paths := []int{}
-//     runningSum := 0
-
-//     for root != nil || len(stack) != 0 {
-        
-//         for root != nil {
-//             runningSum += root.Val
-//             paths = append(paths, root.Val)
-//             stack = append(stack, &obj{node: root, paths: paths, sum: runningSum})
-//             root = root.Left
-//         }
-//         o := stack[len(stack)-1]
-//         stack = stack[:len(stack)-1]
-//         p := o.paths
-//         root = o.node
-//         s := o.sum
-//         // fmt.Println(root.Val, p, s)
-//         if targetSum == s && root.Left == nil && root.Right == nil {
-//             newList := make([]int, len(p))
-//             copy(newList, p)
-//             result = append(result, newList)
-//         }
-//         root = root.Right
-//         // reset the same things recursion implicitly resets at the local state but explicitly here
-//         runningSum = s
-//         paths = p
-//     }
-//     return result
-// }
