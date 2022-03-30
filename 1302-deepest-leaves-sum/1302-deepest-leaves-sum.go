@@ -30,31 +30,54 @@
 
 
 // approach 1: level order using BFS
-func deepestLeavesSum(root *TreeNode) int {
-    if root == nil {
-        return 0
-    }
-    sum := 0
-    queue := []*TreeNode{root}
-    for len(queue) != 0 {
-        qSize := len(queue)
-        lvlSum := 0
-        for qSize != 0 {
-            dq := queue[0]
-            queue = queue[1:]
-            lvlSum += dq.Val
-            if dq.Left != nil {queue = append(queue, dq.Left)}
-            if dq.Right != nil {queue = append(queue, dq.Right)}
-            qSize--
-        }
-        sum = lvlSum
-    }
+// func deepestLeavesSum(root *TreeNode) int {
+//     if root == nil {
+//         return 0
+//     }
+//     sum := 0
+//     queue := []*TreeNode{root}
+//     for len(queue) != 0 {
+//         qSize := len(queue)
+//         lvlSum := 0
+//         for qSize != 0 {
+//             dq := queue[0]
+//             queue = queue[1:]
+//             lvlSum += dq.Val
+//             if dq.Left != nil {queue = append(queue, dq.Left)}
+//             if dq.Right != nil {queue = append(queue, dq.Right)}
+//             qSize--
+//         }
+//         sum = lvlSum
+//     }
     
-    return sum
+//     return sum
+// }
+
+
+// approach 2: level order using DFS
+type dfs struct {
+    maxLevel int
+    lvlSumMap map[int]int
+}
+func deepestLeavesSum(root *TreeNode) int {
+    d := &dfs{lvlSumMap : map[int]int{}, maxLevel: 0}
+    d.preorder(root, 0)
+    return d.lvlSumMap[d.maxLevel]
 }
 
-
-// // approach 2: level order using DFS
-// func deepestLeavesSum(root *TreeNode) int {
-       
-// }
+func (d *dfs ) preorder(root *TreeNode, level int) {
+    
+    // base
+    if root == nil {
+        return
+    }    
+    
+    // logic
+    level = level+1
+    if level > d.maxLevel {
+        d.maxLevel = level
+    }
+    d.lvlSumMap[level] = d.lvlSumMap[level]+root.Val 
+    d.preorder(root.Left, level)
+    d.preorder(root.Right, level)
+}
