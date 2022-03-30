@@ -108,6 +108,8 @@ type dfs struct {
     idx int
     inordermap map[int]int
 }
+// why are we not passing inorder list here?
+// we dont need it because we only used inorder to find our rootIdx
 
 func (d *dfs) build (preorder []int,start, end int) *TreeNode {
     // base
