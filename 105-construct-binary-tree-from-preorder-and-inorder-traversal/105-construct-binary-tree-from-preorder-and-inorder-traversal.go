@@ -39,40 +39,40 @@
 
 // in this approach we will slice down the preorder and inorder in each recursive call to build tree from root using preorder style.
 // slicing is expensive in terms of time and space
-func buildTree(preorder []int, inorder []int) *TreeNode{
+// func buildTree(preorder []int, inorder []int) *TreeNode{
     
-    if len(preorder) != len(inorder) || len(preorder) == 0 || len(inorder) == 0 {
-        return nil
-    }
+//     if len(preorder) != len(inorder) || len(preorder) == 0 || len(inorder) == 0 {
+//         return nil
+//     }
     
-    // root will always be 0th idx in preorder
-    // and will be in each recursion call because in each recursion call, we slice down the preorder
-    // so its gauranteed.
+//     // root will always be 0th idx in preorder
+//     // and will be in each recursion call because in each recursion call, we slice down the preorder
+//     // so its gauranteed.
     
-    // remeber we are building tree in preorder using preorder
-    // so process root first and then left n then right 
-    root := &TreeNode{Val: preorder[0]}
+//     // remeber we are building tree in preorder using preorder
+//     // so process root first and then left n then right 
+//     root := &TreeNode{Val: preorder[0]}
     
-    // now find the rootIdx in inorder
-    // all elements to the left of rootIdx in inorder list will be the left side of the tree ( from inorders perspective )
-    // all elements to the right of rootIdx in inorder list will be the right side of the tree ( from inorders perspective )
-    // remember we are only going down a direction to set what root should be here in left || right... 
-    rootIdx := -1
-    for i := 0; i < len(inorder); i++ {
-        if inorder[i] == root.Val {
-            rootIdx = i
-            break
-        }
-    }
+//     // now find the rootIdx in inorder
+//     // all elements to the left of rootIdx in inorder list will be the left side of the tree ( from inorders perspective )
+//     // all elements to the right of rootIdx in inorder list will be the right side of the tree ( from inorders perspective )
+//     // remember we are only going down a direction to set what root should be here in left || right... 
+//     rootIdx := -1
+//     for i := 0; i < len(inorder); i++ {
+//         if inorder[i] == root.Val {
+//             rootIdx = i
+//             break
+//         }
+//     }
     
     
-    // we can use the rootIdx from inorder to slice down the preorder
-    // preorder[1:rootIdx+1] is the preLeft and preorder[mid+1:] is preRight
-    // inorder[0:rootIdx] is the inLeft and inorder[rootIdx+1:] is inRight
-    root.Left = buildTree(preorder[1:rootIdx+1], inorder[0:rootIdx])
-    root.Right = buildTree(preorder[rootIdx+1:], inorder[rootIdx+1:])
-    return root
-}
+//     // we can use the rootIdx from inorder to slice down the preorder
+//     // preorder[1:rootIdx+1] is the preLeft and preorder[mid+1:] is preRight
+//     // inorder[0:rootIdx] is the inLeft and inorder[rootIdx+1:] is inRight
+//     root.Left = buildTree(preorder[1:rootIdx+1], inorder[0:rootIdx])
+//     root.Right = buildTree(preorder[rootIdx+1:], inorder[rootIdx+1:])
+//     return root
+// }
 
 
 // the above approach works however time complexity wise, we have o(n^2) because at each recursive call
@@ -87,4 +87,41 @@ func buildTree(preorder []int, inorder []int) *TreeNode{
 // time: o(n)
 // space: o(n)
 
+func buildTree(preorder []int, inorder []int) *TreeNode{
+        
+    if len(preorder) != len(inorder) || len(preorder) == 0 || len(inorder) == 0 {
+        return nil
+    }
+    d := &dfs{idx: 0, inordermap : map[int]int{}}
+    for i := 0 ; i < len(inorder); i++ {
+        d.inordermap[inorder[i]] = i
+    }
+    
+    // instead of slicing we will use 3 ptrs
+    // 1. idx: to tell us where the next root in preorder is ( so we will gradually increase this ptr by 1 in each recursion call )
+    // 2. start: to tell us the start position in inorder
+   // 3. end: to tell us the end position in inorder
+    return d.build(preorder, 0, len(inorder)-1)
+}
 
+type dfs struct {
+    idx int
+    inordermap map[int]int
+}
+
+func (d *dfs) build (preorder []int,start, end int) *TreeNode {
+    // base
+    if start > end {
+        return nil
+    }
+    
+    // logic
+    root := &TreeNode{Val: preorder[d.idx]}
+    rootIdx := d.inordermap[root.Val]
+    d.idx++
+
+    root.Left = d.build(preorder, start, rootIdx-1)
+    root.Right = d.build(preorder, rootIdx+1, end)
+
+    return root
+}
