@@ -48,7 +48,6 @@
 type dfs struct {
     prev *TreeNode
 }
-
 func (d *dfs) inorderDfs(root *TreeNode) bool {
     
     // base
@@ -70,18 +69,25 @@ func (d *dfs) inorderDfs(root *TreeNode) bool {
 }
 
 
-// preorder is not possible because preorder will NOT give us a sorted order... so we cannot compare...
-// therefore only inorder works in this case.
-
 func isValidBST(root *TreeNode) bool {
-    d := &dfs{}
-    return d.inorderDfs(root)
+    // d := &dfs{}
+    // return d.inorderDfs(root)
+    return preOrderUsingMinAndMax(root, nil, nil)
 }
 
 
 
 
-
+// cannot convert inorder to preorder as is, we have to define min and max boundaries at each node
+// if we go left, min will be current min and max will be current root
+// if we go right, min will be current root and max will be current max 
+func preOrderUsingMinAndMax(root, min, max *TreeNode) bool {
+    if root == nil {return true}
+    if min != nil && root.Val <= min.Val {return false}
+    if max != nil && root.Val >= max.Val {return false}
+    
+    return preOrderUsingMinAndMax(root.Left, min, root) && preOrderUsingMinAndMax(root.Right, root, max) 
+}
 
 
 
