@@ -16,7 +16,6 @@ func wallsAndGates(rooms [][]int)  {
             }
         }
     }
-    fmt.Println(q)
     
     // proccess
     for len(q) != 0 {
