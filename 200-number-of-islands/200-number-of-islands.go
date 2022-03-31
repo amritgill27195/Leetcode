@@ -10,9 +10,7 @@ func numIslands(grid [][]byte) int {
     dirs := [][]int{ {0,-1}, {0,1}, {-1, 0}, {1,0} }
     for i := 0; i < m; i++ {
         for j := 0; j < n; j++ {
-
             if grid[i][j] == 49 {
-                
                 q = append(q, []int{i,j})    
                 for len(q) != 0 {
                     qSize := len(q)
@@ -35,7 +33,5 @@ func numIslands(grid [][]byte) int {
             grid[i][j] = 48
         }
     }
-    
-    return count
-    
+    return count 
 }
