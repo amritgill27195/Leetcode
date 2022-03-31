@@ -13,19 +13,15 @@ func numIslands(grid [][]byte) int {
             if grid[i][j] == 49 {
                 q = append(q, []int{i,j})    
                 for len(q) != 0 {
-                    qSize := len(q)
-                    for qSize != 0 {
-                        dq := q[0]
-                        q = q[1:]
-                        for _, dir := range dirs {
-                            r := dq[0] + dir[0]
-                            c := dq[1] + dir[1]
-                            if r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == 49 {
-                                grid[r][c] = 48
-                                q = append(q, []int{r,c})
-                            }
+                    dq := q[0]
+                    q = q[1:]
+                    for _, dir := range dirs {
+                        r := dq[0] + dir[0]
+                        c := dq[1] + dir[1]
+                        if r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == 49 {
+                            grid[r][c] = 48
+                            q = append(q, []int{r,c})
                         }
-                        qSize--
                     }
                 }
                 count++
