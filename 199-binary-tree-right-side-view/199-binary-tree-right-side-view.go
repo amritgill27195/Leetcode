@@ -23,6 +23,8 @@
     We can do level order traversal using DFS too by maintaining a level at each node in recursion stack.
     But how do we only save the right side of the tree?
     We will have a result array and each idx in this result array will represent a level in the tree
+    level == idx and if len(res) == level this means the max idx avail right now is len(res)-1 and if level == len(res) and level is our idx
+    then that means we do not have level as an idx avail ( its less then level ) - so append in this case.
     
     2 ways:
     1. We can traverse left first and go reckless override each new element at the same level. 
