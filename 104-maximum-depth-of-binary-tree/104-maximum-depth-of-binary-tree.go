@@ -19,32 +19,36 @@
     time: o(n)
     space: o(h) - for the recursion stack, where h is the max height of tree
     
+    BFS is also possible,
+    level == height
+    if we proccess a level -> height++
+    
 */
 
 
 // approach 1
-func maxDepth(root *TreeNode) int {
+// func maxDepth(root *TreeNode) int {
     
-    var dfs func(r *TreeNode, h int) int
-    dfs = func (r *TreeNode, h int) int {
-        if r == nil {
-            return h
-        }
-        left := dfs(r.Left, h+1)
-        right := dfs(r.Right, h+1)
-        return int(math.Max(float64(left), float64(right)))
-    }
+//     var dfs func(r *TreeNode, h int) int
+//     dfs = func (r *TreeNode, h int) int {
+//         if r == nil {
+//             return h
+//         }
+//         left := dfs(r.Left, h+1)
+//         right := dfs(r.Right, h+1)
+//         return int(math.Max(float64(left), float64(right)))
+//     }
     
-    return dfs(root, 0)
-}
+//     return dfs(root, 0)
+// }
 
 
 // approach 2
-// func maxDepth(root *TreeNode) int {
-//     if root == nil {
-//         return 0
-//     }
-//     left := maxDepth(root.Left)
-//     right := maxDepth(root.Right)
-//     return int(math.Max( float64(left), float64(right) ))+1
-// }
+func maxDepth(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+    left := maxDepth(root.Left)
+    right := maxDepth(root.Right)
+    return int(math.Max( float64(left), float64(right) ))+1
+}
