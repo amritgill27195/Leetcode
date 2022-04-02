@@ -58,32 +58,29 @@
 // }
 
 func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
-    if image == nil || len(image) == 0 {
-        return image
-    }
-
-    oldColor := image[sr][sc]
-    if oldColor != newColor {
     
-    
-        var dfs func(img [][]int, r, c, oc, nc int)
-        dfs = func(img [][]int, r, c, oc, nc int){
-
-            // base
-            // boundary checks
-            if img == nil || r < 0 || r >= len(img) || c < 0 || c >= len(img[0])  {return}
-            // color checks
-            if img[r][c] != oc {return}
-
-            // logic
-            img[r][c] = nc
-            dfs(img, r+1,c,oc, nc)
-            dfs(img, r-1,c,oc, nc)
-            dfs(img, r,c+1,oc, nc)
-            dfs(img, r,c-1,oc, nc)    
-        }
-        dfs(image, sr, sc, oldColor, newColor)
-    }
+    if image == nil {return image}
+    if image[sr][sc] == newColor {return image}
+    m := len(image)
+    n := len(image[0])
+    o := image[sr][sc]
+    var dfs func(grid [][]int, r, c, oldColor, newColor int)
+    dfs = func(grid [][]int, r, c, oldColor, nc int) {
         
+        // base
+        if r < 0 || r >= m || c < 0 || c >= n || grid[r][c] != oldColor || grid[r][c] == nc {
+            return
+        }
+        
+        
+        //logic
+        grid[r][c] = nc
+        dfs(grid, r+1,c,oldColor,nc)
+        dfs(grid, r-1,c,oldColor,nc)
+        dfs(grid, r,c+1,oldColor,nc)
+        dfs(grid, r,c-1,oldColor,nc)
+        
+    }
+    dfs(image, sr,sc,o,newColor)
     return image
 }
