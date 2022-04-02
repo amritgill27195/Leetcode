@@ -61,7 +61,7 @@ func orangesRotting(grid [][]int) int {
     if fresh == 0  {
         return 0
     }
-    
+    initial := true
     dirs := [][]int{ {1,0}, {-1,0}, {0,1}, {0,-1} }
     for len(q) != 0 {
         qSize := len(q)
@@ -79,12 +79,16 @@ func orangesRotting(grid [][]int) int {
             }
             qSize--
         }
-        time++
+        if initial {
+            initial = false   
+        } else {
+            time++
+        }
         
     }
     
     if fresh != 0 {
         return -1
     }
-    return time-1
+    return time
 }
