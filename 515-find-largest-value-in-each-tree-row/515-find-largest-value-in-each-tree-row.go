@@ -30,32 +30,55 @@
 */
 
 // BFS
+// func largestValues(root *TreeNode) []int {
+//     if root == nil {
+//         return nil
+//     }
+//     result := []int{}
+//     level := 0   
+//     q := []*TreeNode{root}
+//     for len(q) != 0 {
+       
+//         qSize := len(q)
+//         for qSize != 0 {
+//             dq := q[0]
+//             q = q[1:]
+//             if len(result) == level {
+//                 result = append(result, dq.Val)
+//             } else if dq.Val > result[level]{
+//                 result[level] = dq.Val
+//             }
+            
+//             if dq.Left != nil { q = append(q, dq.Left)}
+//             if dq.Right != nil { q = append(q, dq.Right)}
+            
+//             qSize--
+//         }
+//         level++
+    
+//     }
+//     return result
+//  }
+
+// DFS
 func largestValues(root *TreeNode) []int {
     if root == nil {
         return nil
     }
     result := []int{}
-    level := 0   
-    q := []*TreeNode{root}
-    for len(q) != 0 {
-       
-        qSize := len(q)
-        for qSize != 0 {
-            dq := q[0]
-            q = q[1:]
-            if len(result) == level {
-                result = append(result, dq.Val)
-            } else if dq.Val > result[level]{
-                result[level] = dq.Val
-            }
-            
-            if dq.Left != nil { q = append(q, dq.Left)}
-            if dq.Right != nil { q = append(q, dq.Right)}
-            
-            qSize--
+    var dfs func(level int, a *TreeNode)
+    dfs = func(level int, a *TreeNode) {
+        if a == nil {
+            return
         }
-        level++
-    
+        if len(result) == level {
+            result = append(result, a.Val)
+        } else if a.Val > result[level] {
+            result[level] = a.Val
+        }
+        dfs(level+1, a.Left)
+        dfs(level+1, a.Right)
     }
+    dfs(0, root)
     return result
- }
+}
