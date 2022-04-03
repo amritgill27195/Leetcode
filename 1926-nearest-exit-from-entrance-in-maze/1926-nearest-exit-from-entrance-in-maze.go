@@ -9,6 +9,8 @@ func nearestExit(maze [][]byte, entrance []int) int {
     
     
     // enqueue all the exits from all the edges
+    // we could also enqueue the starting position and as soon as we run into an empty cell thats on the edge, we reached the exit
+    // both way works i think
     for i := 0; i < m; i++ {
         for j := 0; j < n; j++ {
             if i == entrance[0] && j == entrance[1] {continue}
