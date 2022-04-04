@@ -45,55 +45,35 @@
 // time: o(n) - we visit all nodes in best/worst case
 // space: o(h) - max height of the tree will be in recursion stack at worse case and o(n) in a skewed tree
 
-type dfs struct {
-    prev *TreeNode
-}
-func (d *dfs) inorderDfs(root *TreeNode) bool {
-    
-    // base
-    if root == nil {return true }
-    
-    // logic
-    leftValid := d.inorderDfs(root.Left)
-    if !leftValid {
-        return false
-    }
-    
-    if d.prev != nil {
-        if d.prev.Val >= root.Val {
+func isValidBST(root *TreeNode) bool {
+    var p *TreeNode
+    // inorder dfs
+    var inorderDfs func(c *TreeNode) bool
+    inorderDfs = func(c *TreeNode) bool {
+        
+        // base
+        if c == nil {
+            return true
+        }
+        
+        // logic
+        leftValid := inorderDfs(c.Left)
+        if !leftValid {
             return false
         }
+        // process
+        if p != nil {
+            if p.Val >= c.Val {
+                return false
+            }
+        }
+        p = c
+        
+        return inorderDfs(c.Right)
     }
-    d.prev = root
-    return d.inorderDfs(root.Right)
+   
+    return inorderDfs(root)
 }
-
-
-func isValidBST(root *TreeNode) bool {
-    // d := &dfs{}
-    // return d.inorderDfs(root)
-    return preOrderUsingMinAndMax(root, nil, nil)
-}
-
-
-
-
-// cannot convert inorder to preorder as is, we have to define min and max boundaries at each node
-// if we go left, min will be current min and max will be current root
-// if we go right, min will be current root and max will be current max 
-func preOrderUsingMinAndMax(root, min, max *TreeNode) bool {
-    if root == nil {return true}
-    if min != nil && root.Val <= min.Val {return false}
-    if max != nil && root.Val >= max.Val {return false}
-    
-    return preOrderUsingMinAndMax(root.Left, min, root) && preOrderUsingMinAndMax(root.Right, root, max) 
-}
-
-
-
-
-
-
 
 
 
