@@ -52,35 +52,58 @@ func isValidBST(root *TreeNode) bool {
     // the prev to this root should be left.
     // if prev is maintained with root in recursion stack, it will never be the left child.
     // therefore global prev
-    var p *TreeNode
+//     var p *TreeNode
     
-    // inorder dfs
-    var inorderDfs func(c *TreeNode) bool
-    inorderDfs = func(c *TreeNode) bool {
+//     // inorder dfs
+//     var inorderDfs func(c *TreeNode) bool
+//     inorderDfs = func(c *TreeNode) bool {
         
-        // base
-        if c == nil {
-            return true
-        }
+//         // base
+//         if c == nil {
+//             return true
+//         }
         
-        // logic
-        leftValid := inorderDfs(c.Left)
-        if !leftValid {
-            return false
-        }
-        // process
-        if p != nil {
-            if p.Val >= c.Val {
-                return false
-            }
-        }
-        p = c
+//         // logic
+//         leftValid := inorderDfs(c.Left)
+//         if !leftValid {
+//             return false
+//         }
+//         // process
+//         if p != nil {
+//             if p.Val >= c.Val {
+//                 return false
+//             }
+//         }
+//         p = c
         
-        return inorderDfs(c.Right)
-    }
+//         return inorderDfs(c.Right)
+//     }
    
-    return inorderDfs(root)
+//     return inorderDfs(root)
+    return preorderUsingMinMax(root, nil, nil)
 }
+
+
+// we need to check at each node
+// it must either be less than parent ( left branch )
+// or it must be greater than parent ( right branch )
+// so at each level we have a min and max 
+// min and max with the parent depending on which side we go on.
+// left -> max parent, and min pass it as is
+// right -> min parent and max pass it as is
+// since we will be checking at each node whether its between min and max, and then only then go left and right, we will do this in preorder fashion
+
+func preorderUsingMinMax(root, min, max *TreeNode) bool {
+    // base 
+    if root == nil {return true}
+    if min != nil && root.Val <= min.Val {return false}
+    if max != nil && root.Val >= max.Val {return false}
+    
+    // logic
+    return preorderUsingMinMax(root.Left, min, root) && preorderUsingMinMax(root.Right, root, max)
+    
+}
+
 
 
 
