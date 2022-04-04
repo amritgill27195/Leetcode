@@ -46,7 +46,14 @@
 // space: o(h) - max height of the tree will be in recursion stack at worse case and o(n) in a skewed tree
 
 func isValidBST(root *TreeNode) bool {
+    
+    // why isnt prev part of recursion stack...
+    // because when the inorder goes back to a root node from left
+    // the prev to this root should be left.
+    // if prev is maintained with root in recursion stack, it will never be the left child.
+    // therefore global prev
     var p *TreeNode
+    
     // inorder dfs
     var inorderDfs func(c *TreeNode) bool
     inorderDfs = func(c *TreeNode) bool {
