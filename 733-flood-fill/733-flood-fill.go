@@ -27,28 +27,57 @@
 
 
 // dfs
-func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
+// func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
     
-    if image == nil {return image}
+//     if image == nil {return image}
+//     oldCol := image[sr][sc]
+//     m := len(image)
+//     n := len(image[0])
+            
+//     var dfs func(r,c,nc,oc int)
+//     dfs = func(r,c,nc,oc int) {        
+//         // base
+//         if r < 0 || r >= m || c < 0 || c >= n || image[r][c] == nc || image[r][c] != oc {
+//             return
+//         }
+        
+//         // logic
+//         image[r][c] = nc
+//         dfs(r+1, c, nc,oc)
+//         dfs(r-1, c, nc,oc)
+//         dfs(r, c-1, nc,oc)
+//         dfs(r, c+1, nc,oc)
+//     }
+    
+//     dfs(sr, sc, newColor, oldCol)
+//     return image
+// }
+
+
+func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
+    if image == nil {
+        return image
+    }
     oldCol := image[sr][sc]
+    if image[sr][sc] == newColor {return image}  
     m := len(image)
     n := len(image[0])
-            
-    var dfs func(r,c,nc,oc int)
-    dfs = func(r,c,nc,oc int) {        
-        // base
-        if r < 0 || r >= m || c < 0 || c >= n || image[r][c] == nc || image[r][c] != oc {
-            return
-        }
+
+    q := [][]int{{sr,sc}}
+    dirs := [][]int{{1,0}, {-1,0}, {0,1}, {0,-1}}
+    for len(q) != 0 {
+        dq := q[0]
+        q = q[1:]
+        image[dq[0]][dq[1]] = newColor
         
-        // logic
-        image[r][c] = nc
-        dfs(r+1, c, nc,oc)
-        dfs(r-1, c, nc,oc)
-        dfs(r, c-1, nc,oc)
-        dfs(r, c+1, nc,oc)
+        for _, dir := range dirs {
+            r := dq[0] + dir[0]
+            c := dq[1] + dir[1]
+            if r >= 0 && r < m && c >= 0 && c < n && image[r][c] == oldCol {
+                image[r][c] = newColor
+                q = append(q, []int{r,c})
+            }
+        }
     }
-    
-    dfs(sr, sc, newColor, oldCol)
     return image
 }
