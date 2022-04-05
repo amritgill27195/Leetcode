@@ -54,30 +54,36 @@
 // }
 
 
+
+// using level order with BFS
 func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
-    if image == nil {
+    
+    if image == nil || len(image) == 0 {
         return image
     }
-    oldCol := image[sr][sc]
-    if image[sr][sc] == newColor {return image}  
-    m := len(image)
-    n := len(image[0])
+    oldColor := image[sr][sc]
+    
+    if oldColor != newColor {
+        queue := [][]int{ {sr,sc} } // [ [r,c] ]
+        dirs := [][]int{ {1,0},{-1,0},{0,1},{0,-1} }
+        image[sr][sc] = newColor
+        m := len(image)
+        n := len(image[0])
 
-    q := [][]int{{sr,sc}}
-    dirs := [][]int{{1,0}, {-1,0}, {0,1}, {0,-1}}
-    for len(q) != 0 {
-        dq := q[0]
-        q = q[1:]
-        image[dq[0]][dq[1]] = newColor
-        
-        for _, dir := range dirs {
-            r := dq[0] + dir[0]
-            c := dq[1] + dir[1]
-            if r >= 0 && r < m && c >= 0 && c < n && image[r][c] == oldCol {
-                image[r][c] = newColor
-                q = append(q, []int{r,c})
+        for len(queue) != 0 {
+            dq := queue[0]
+            queue = queue[1:]
+
+            for _, dir := range dirs {
+                r := dq[0] + dir[0]
+                c := dq[1] + dir[1]
+                if r >= 0 && r < m && c >= 0 && c < n && image[r][c] == oldColor {
+                    image[r][c] = newColor
+                    queue = append(queue, []int{r,c})
+                }
             }
         }
     }
+    
     return image
 }
