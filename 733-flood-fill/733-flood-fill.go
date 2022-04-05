@@ -24,63 +24,31 @@
 */
 
 
-// using level order with BFS
-// func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
-    
-//     if image == nil || len(image) == 0 {
-//         return image
-//     }
-//     oldColor := image[sr][sc]
-    
-//     if oldColor != newColor {
-//         queue := [][]int{ {sr,sc} } // [ [r,c] ]
-//         dirs := [][]int{ {1,0},{-1,0},{0,1},{0,-1} }
-//         image[sr][sc] = newColor
-//         m := len(image)
-//         n := len(image[0])
 
-//         for len(queue) != 0 {
-//             dq := queue[0]
-//             queue = queue[1:]
 
-//             for _, dir := range dirs {
-//                 r := dq[0] + dir[0]
-//                 c := dq[1] + dir[1]
-//                 if r >= 0 && r < m && c >= 0 && c < n && image[r][c] == oldColor {
-//                     image[r][c] = newColor
-//                     queue = append(queue, []int{r,c})
-//                 }
-//             }
-//         }
-//     }
-    
-//     return image
-// }
-
+// dfs
 func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
     
     if image == nil {return image}
-    if image[sr][sc] == newColor {return image}
+    oldCol := image[sr][sc]
     m := len(image)
     n := len(image[0])
-    o := image[sr][sc]
-    var dfs func(grid [][]int, r, c, oldColor, newColor int)
-    dfs = func(grid [][]int, r, c, oldColor, nc int) {
-        
+            
+    var dfs func(r,c,nc,oc int)
+    dfs = func(r,c,nc,oc int) {        
         // base
-        if r < 0 || r >= m || c < 0 || c >= n || grid[r][c] != oldColor || grid[r][c] == nc {
+        if r < 0 || r >= m || c < 0 || c >= n || image[r][c] == nc || image[r][c] != oc {
             return
         }
         
-        
-        //logic
-        grid[r][c] = nc
-        dfs(grid, r+1,c,oldColor,nc)
-        dfs(grid, r-1,c,oldColor,nc)
-        dfs(grid, r,c+1,oldColor,nc)
-        dfs(grid, r,c-1,oldColor,nc)
-        
+        // logic
+        image[r][c] = nc
+        dfs(r+1, c, nc,oc)
+        dfs(r-1, c, nc,oc)
+        dfs(r, c-1, nc,oc)
+        dfs(r, c+1, nc,oc)
     }
-    dfs(image, sr,sc,o,newColor)
+    
+    dfs(sr, sc, newColor, oldCol)
     return image
 }
