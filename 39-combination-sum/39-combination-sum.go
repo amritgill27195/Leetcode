@@ -21,6 +21,8 @@ func combinationSum(candidates []int, target int) [][]int {
         // choose
         paths = append(paths, c[i])
         helper(c, target - c[i], i, paths)
+        
+        paths = paths[:len(paths)-1]
     }
     
     helper(candidates, target, 0, []int{})
