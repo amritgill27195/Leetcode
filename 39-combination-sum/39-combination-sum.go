@@ -1,69 +1,26 @@
-
-
-
-// for loop based recursion with backtracking
 func combinationSum(candidates []int, target int) [][]int {
-    var result [][]int
-    var helper func(c, paths []int, t, start int)
-    helper = func(c, paths []int, t, start int) {
-        
+    result := [][]int{}
+    
+    var dfs func (c []int, i int, t int, p []int)
+    dfs = func(c []int,i int, t int, p []int) {
         // base
-        if t < 0 {return}
         if t == 0 {
-            newL := make([]int, len(paths))
-            copy(newL, paths)
+            newL := make([]int, len(p))
+            copy(newL, p)
             result = append(result, newL)
             return
         }
-    
+        if i >= len(c) || t < 0 {return}
         
         // logic
-        for i := start; i < len(c); i++ {
-            // action
-            paths = append(paths, c[i])
-            // recurse
-            helper(c, paths, t-c[i] , i)
-            // backtrack
-            paths = paths[:len(paths)-1]
-        }
+        // not choose
+        dfs(c, i+1, t, p)
         
+        // choose
+        p = append(p, c[i])
+        dfs(c, i, t-c[i], p)
+        p = p[:len(p)-1]
     }
-    
-    helper(candidates, nil, target, 0)
+    dfs(candidates, 0, target, nil)
     return result
 }
-
-
-// 0/1 recursion based on decision tree with backtracking
-// func combinationSum(candidates []int, target int) [][]int {
-    
-    
-//     var result [][]int
-//     var helper func(c []int, target int, i int, paths []int)
-//     helper = func(c []int, target int, i int, paths []int){
-//         // base
-//         if i >= len(c) || target < 0 {return}
-        
-//         if target == 0 {
-//             newPaths := make([]int, len(paths))
-//             copy(newPaths, paths)
-//             result = append(result, newPaths)
-//             return
-//         }
-        
-//         // logic
-//         // not choose
-//         helper(c, target, i+1, paths)
-        
-//         // choose
-//         paths = append(paths, c[i])
-//         helper(c, target - c[i], i, paths)
-        
-//         paths = paths[:len(paths)-1]
-//     }
-    
-//     helper(candidates, target, 0, []int{})
-//     return result
-// }
-
-
