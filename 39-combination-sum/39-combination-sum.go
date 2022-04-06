@@ -32,8 +32,6 @@
 
 
 func combinationSum(candidates []int, target int) [][]int {
-    
-    
     var result [][]int
     var helper func(c, paths []int, t, start int)
     helper = func(c, paths []int, t, start int) {
@@ -50,12 +48,16 @@ func combinationSum(candidates []int, target int) [][]int {
         
         // logic
         for i := start; i < len(c); i++ {
+            // action
             paths = append(paths, c[i])
+            // recurse
             helper(c, paths, t-c[i] , i)
+            // backtrack
             paths = paths[:len(paths)-1]
         }
         
     }
+    
     helper(candidates, nil, target, 0)
     return result
 }
