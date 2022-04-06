@@ -51,7 +51,8 @@ func combinationSum(candidates []int, target int) [][]int {
         // logic
         for i := start; i < len(c); i++ {
             paths = append(paths, c[i])
-            helper(c, paths, t - c[i], i)
+            nt := t-c[i]
+            helper(c, paths, nt , i)
             paths = paths[:len(paths)-1]
         }
         
