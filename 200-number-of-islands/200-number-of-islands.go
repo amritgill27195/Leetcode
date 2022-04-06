@@ -42,47 +42,76 @@
 
 
 // bfs
+// func numIslands(grid [][]byte) int {
+//     num := 0
+//     q := [][]int{}
+//     dirs := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
+//     m := len(grid)
+//     n := len(grid[0])
+//     for i := 0; i < m; i++ {
+//         for j := 0; j < n; j++ {
+//             if grid[i][j] == '1' {
+                
+//                 q = append(q, []int{i,j})
+//                 // mark the land visited so we do not re-add it from other childs
+//                 grid[i][j] = '0'
+//                 for len(q) != 0 {
+//                     dq := q[0]
+//                     q = q[1:]
+//                     for _, dir := range dirs {
+//                         r := dq[0] + dir[0]
+//                         c := dq[1] + dir[1]
+//                         if r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == '1' {
+//                             // mark the land visited so we do not re-add it from other childs
+//                             grid[r][c] = '0'
+//                             // enqueue this node because this is connected components,
+//                             // we need to find this nodes neighbours
+//                             // its neighbours neighbours... ( all neighbouring lands as far as we can go )
+//                             q = append(q, []int{r,c})
+//                         }
+//                     }
+//                 }
+//                 num++
+//             }
+//         }
+//     }
+//     return num
+// }
+
+
+// dfs
 func numIslands(grid [][]byte) int {
-    num := 0
-    q := [][]int{}
+    
+    var num int
+    var dfs func(r,c int)
     dirs := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
     m := len(grid)
     n := len(grid[0])
+    
+    dfs = func(r,c int) {
+        // base
+        if r < 0 || r >= m || c < 0 || c >= n || grid[r][c] != '1' {return}
+        
+        // logic
+        // mark the land visited
+        grid[r][c] = '0'
+        // then find all connected lands ( connected components as far as we can )
+        for _, dir := range dirs {
+            dfs(r+dir[0], c+dir[1])
+        }
+    }
+    
     for i := 0; i < m; i++ {
-        for j := 0; j < n; j++ {
+        for j := 0; j < n ; j++ {
             if grid[i][j] == '1' {
-                
-                q = append(q, []int{i,j})
-                // mark the land visited so we do not re-add it from other childs
-                grid[i][j] = '0'
-                for len(q) != 0 {
-                    dq := q[0]
-                    q = q[1:]
-                    for _, dir := range dirs {
-                        r := dq[0] + dir[0]
-                        c := dq[1] + dir[1]
-                        if r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == '1' {
-                            // mark the land visited so we do not re-add it from other childs
-                            grid[r][c] = '0'
-                            // enqueue this node because this is connected components,
-                            // we need to find this nodes neighbours
-                            // its neighbours neighbours... ( all neighbouring lands as far as we can go )
-                            q = append(q, []int{r,c})
-                        }
-                    }
-                }
+                dfs(i,j)
                 num++
             }
         }
     }
+    
     return num
 }
-
-
-// dfs
-// func numIslands(grid [][]byte) int {
-    
-// }
 
 
 
