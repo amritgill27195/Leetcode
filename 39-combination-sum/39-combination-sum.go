@@ -1,3 +1,40 @@
+
+
+
+// for loop based recursion with backtracking
+func combinationSum(candidates []int, target int) [][]int {
+    var result [][]int
+    var helper func(c, paths []int, t, start int)
+    helper = func(c, paths []int, t, start int) {
+        
+        // base
+        if t < 0 {return}
+        if t == 0 {
+            newL := make([]int, len(paths))
+            copy(newL, paths)
+            result = append(result, newL)
+            return
+        }
+    
+        
+        // logic
+        for i := start; i < len(c); i++ {
+            // action
+            paths = append(paths, c[i])
+            // recurse
+            helper(c, paths, t-c[i] , i)
+            // backtrack
+            paths = paths[:len(paths)-1]
+        }
+        
+    }
+    
+    helper(candidates, nil, target, 0)
+    return result
+}
+
+
+// 0/1 recursion based on decision tree with backtracking
 // func combinationSum(candidates []int, target int) [][]int {
     
     
@@ -30,34 +67,3 @@
 // }
 
 
-
-func combinationSum(candidates []int, target int) [][]int {
-    var result [][]int
-    var helper func(c, paths []int, t, start int)
-    helper = func(c, paths []int, t, start int) {
-        
-        // base
-        if t < 0 {return}
-        if t == 0 {
-            newL := make([]int, len(paths))
-            copy(newL, paths)
-            result = append(result, newL)
-            return
-        }
-    
-        
-        // logic
-        for i := start; i < len(c); i++ {
-            // action
-            paths = append(paths, c[i])
-            // recurse
-            helper(c, paths, t-c[i] , i)
-            // backtrack
-            paths = paths[:len(paths)-1]
-        }
-        
-    }
-    
-    helper(candidates, nil, target, 0)
-    return result
-}
