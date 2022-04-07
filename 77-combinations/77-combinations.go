@@ -1,8 +1,8 @@
 func combine(n int, k int) [][]int {
     result := [][]int{}
     
-    var backtrack func(start int,end int, paths []int)
-    backtrack = func(start int, end int, paths []int) {
+    var backtrack func(start int, paths []int)
+    backtrack = func(start int, paths []int) {
         
         // base
         if len(paths) == k {
@@ -14,18 +14,17 @@ func combine(n int, k int) [][]int {
         if start > n {return}
         
         // logic
-        for i := start; i <= end; i++ {
+        for i := start; i <= n; i++ {
             // action
             paths = append(paths, i)
-
             // recurse
-            backtrack(i+1, end, paths)
+            backtrack(i+1, paths)
             // backtrack
             paths = paths[:len(paths)-1]
         }
         
     }
-    backtrack(1,n,nil)
+    backtrack(1,nil)
     
     return result
 }
