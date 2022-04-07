@@ -32,13 +32,14 @@ func combinationSum(candidates []int, target int) [][]int {
     backtrack = func(c []int, t int, start int, paths []int) {
         
         // base 
+        if t < 0 || start >= len(c) {
+            return
+        }
+        
         if t == 0 {
             newL := make([]int, len(paths))
             copy(newL, paths)
             result = append(result, newL)
-            return
-        }
-        if t < 0 || start >= len(c) {
             return
         }
         
