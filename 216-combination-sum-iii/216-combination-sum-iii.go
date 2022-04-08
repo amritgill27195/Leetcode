@@ -21,6 +21,7 @@ func combinationSum3(k int, n int) [][]int {
         for i := start; i <= 9; i++ {
             // action
             paths = append(paths, i)
+            if len(paths) > k {return}
             // recurse to eval current combination
             dfs(paths, target-i, i+1) // i+1 because we cannot re-use the same number again.
             // backtrack : undo all the actions
