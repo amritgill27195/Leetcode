@@ -28,6 +28,7 @@ func partition(s string) [][]string {
     }
     
     dfs(0, nil)
+    fmt.Println(cache)
     return result
 }
 
