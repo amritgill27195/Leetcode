@@ -19,90 +19,33 @@
     - For each number in nums,
         - For each list in result,
             create a new list with curr num + eachList contents
+    - time: exponential o(2^n)
 */
 
-
+// 0/1 based recursion
 func subsets(nums []int) [][]int {
-    if nums == nil {
-        return nil
-    }
     
-    result := [][]int{{}}
-    for i := 0; i < len(nums); i++ {
-        
-        for _, res := range result {
-            newRes := make([]int, len(res))
-            copy(newRes, res)
-            newRes = append(newRes, nums[i])
-            result = append(result, newRes)
+    var result [][]int
+    var dfs func(paths []int, idx int)
+    dfs = func(paths []int, idx int) {
+        // base
+        if idx >= len(nums) {
+            newL := make([]int, len(paths))
+            copy(newL, paths)
+            result=append(result, newL)
+            return
         }
         
+        // logic
+        // not choose 
+        dfs(paths, idx+1)
+        
+        // choose
+        paths = append(paths, nums[idx])
+        dfs(paths, idx+1)
+        // backtrack
+        paths = paths[:len(paths)-1]
     }
+    dfs(nil, 0)
     return result
 }
-
-
-// for loop based recursion
-// func subsets(nums []int) [][]int {
-    
-//     var result [][]int
-//     var dfs func(start int, paths []int)
-//     dfs = func(start int, paths []int) {
-        
-//         // base 
-//         newL := make([]int, len(paths))
-//         copy(newL, paths)
-//         result = append(result, newL)
-//         if start >= len(nums) {return}
-        
-        
-//         // logic
-//         for i := start; i < len(nums); i++ {
-//             // action
-//             paths = append(paths, nums[i])
-//             // recurse
-//             dfs(i+1, paths)
-//             // backtrack
-//             paths = paths[:len(paths)-1]
-//         }
-        
-//     }
-//     dfs(0, []int{})
-//     return result
-    
-// }
-
-// 0/1 based recursion
-// func subsets(nums []int) [][]int {
-//     var result [][]int
-//     var dfs func(i int, paths []int)
-//     dfs = func(i int, paths []int) {
-        
-        
-//         // base
-//         if i == len(nums) {
-//             newL := make([]int, len(paths))
-//             copy(newL, paths)
-//             result = append(result, newL)
-//             return
-//         }
-        
-//         // logic
-        
-//         // not choose
-//         dfs(i+1, paths)
-        
-    
-//         // choose
-//         // action
-//         paths = append(paths, nums[i])
-//         // recurse
-//         dfs(i+1, paths)
-//         // backtrack
-//         paths = paths[:len(paths)-1]
-//     }
-    
-//     dfs(0, nil)
-//     return result
-    
-// }
