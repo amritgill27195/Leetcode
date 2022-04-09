@@ -1,7 +1,6 @@
 func partition(s string) [][]string {
     
     var result [][]string
-    cache := map[string]struct{}{}
     var dfs func(start int, paths []string)
     dfs = func(start int, paths []string){
         // base
@@ -15,8 +14,7 @@ func partition(s string) [][]string {
         // logic
         for i := start; i < len(s); i++ {
             subStr := string(s[start:i+1])
-            if _, ok := cache[subStr]; ok || isPalindrome(subStr) {
-                cache[subStr] = struct{}{}
+            if isPalindrome(subStr) {
                 // action
                 paths = append(paths, subStr)
                 // recurse
@@ -28,7 +26,6 @@ func partition(s string) [][]string {
     }
     
     dfs(0, nil)
-    fmt.Println(cache)
     return result
 }
 
