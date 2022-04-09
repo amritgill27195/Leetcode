@@ -28,6 +28,8 @@ func subsets(nums []int) [][]int {
     if nums == nil {return nil}
     result := [][]int{{}}
     for i := 0; i < len(nums); i++ {
+        // because we append to result and we are looping over result size in inner for loop
+        // that result size keeps growing and never breaks, so we need to have a static boundry
         size := len(result)
         for j := 0; j < size; j++ {
             newL := make([]int, len(result[j]))
