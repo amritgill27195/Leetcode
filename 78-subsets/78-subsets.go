@@ -23,27 +23,45 @@
 */
 
 
-// for loop based
-func subsets(nums []int) [][]int{
-    var result [][]int
-    var dfs func(paths []int, start int)
-    dfs = func(paths []int, start int) {
-        // base
-        newL := make([]int, len(paths))
-        copy(newL, paths)
-        result = append(result, newL)
-        
-        
-        // logic
-        for i := start; i < len(nums); i++ {
-            paths = append(paths, nums[i])
-            dfs(paths, i+1)
-            paths=paths[:len(paths)-1]
+// no recursion
+func subsets(nums []int) [][]int {
+    if nums == nil {return nil}
+    result := [][]int{{}}
+    for i := 0; i < len(nums); i++ {
+        size := len(result)
+        for j := 0; j < size; j++ {
+            newL := make([]int, len(result[j]))
+            copy(newL, result[j])
+            newL = append(newL, nums[i])
+            result = append(result, newL)
         }
     }
-    dfs(nil, 0)
     return result
 }
+
+
+
+// for loop based
+// func subsets(nums []int) [][]int{
+//     var result [][]int
+//     var dfs func(paths []int, start int)
+//     dfs = func(paths []int, start int) {
+//         // base
+//         newL := make([]int, len(paths))
+//         copy(newL, paths)
+//         result = append(result, newL)
+        
+        
+//         // logic
+//         for i := start; i < len(nums); i++ {
+//             paths = append(paths, nums[i])
+//             dfs(paths, i+1)
+//             paths=paths[:len(paths)-1]
+//         }
+//     }
+//     dfs(nil, 0)
+//     return result
+// }
 
 // 0/1 based recursion
 // func subsets(nums []int) [][]int {
