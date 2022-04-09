@@ -22,30 +22,53 @@
     - time: exponential o(2^n)
 */
 
-// 0/1 based recursion
-func subsets(nums []int) [][]int {
-    
+
+// for loop based
+func subsets(nums []int) [][]int{
     var result [][]int
-    var dfs func(paths []int, idx int)
-    dfs = func(paths []int, idx int) {
+    var dfs func(paths []int, start int)
+    dfs = func(paths []int, start int) {
         // base
-        if idx >= len(nums) {
-            newL := make([]int, len(paths))
-            copy(newL, paths)
-            result=append(result, newL)
-            return
-        }
+        newL := make([]int, len(paths))
+        copy(newL, paths)
+        result = append(result, newL)
+        
         
         // logic
-        // not choose 
-        dfs(paths, idx+1)
-        
-        // choose
-        paths = append(paths, nums[idx])
-        dfs(paths, idx+1)
-        // backtrack
-        paths = paths[:len(paths)-1]
+        for i := start; i < len(nums); i++ {
+            paths = append(paths, nums[i])
+            dfs(paths, i+1)
+            paths=paths[:len(paths)-1]
+        }
     }
     dfs(nil, 0)
     return result
 }
+
+// 0/1 based recursion
+// func subsets(nums []int) [][]int {
+    
+//     var result [][]int
+//     var dfs func(paths []int, idx int)
+//     dfs = func(paths []int, idx int) {
+//         // base
+//         if idx >= len(nums) {
+//             newL := make([]int, len(paths))
+//             copy(newL, paths)
+//             result=append(result, newL)
+//             return
+//         }
+        
+//         // logic
+//         // not choose 
+//         dfs(paths, idx+1)
+        
+//         // choose
+//         paths = append(paths, nums[idx])
+//         dfs(paths, idx+1)
+//         // backtrack
+//         paths = paths[:len(paths)-1]
+//     }
+//     dfs(nil, 0)
+//     return result
+// }
