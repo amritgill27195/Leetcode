@@ -7,19 +7,19 @@
     - ( new path each recursion or backtrack existing )
     - time: exponential ( o(2^n) where n is the number of elements in nums array )
     - space: o(h) the max height of our decision tree which looks like it will be len(arr)
-    
+
     approach 2: for loop based recursion
     - instead of looking for an answer at a leaf node or when target == 0, we dont have such constraints here
     - each path at every node is an answer
     - time: exponential o(2^n)
     - space: o(h) the max height of our decision tree which looks like it will be len(arr)
-    
+
     approach 3: no recursion
     - Start with [[]] list
     - For each number in nums,
         - For each list in result,
             create a new list with curr num + eachList contents
-    - time: exponential o(2^n)
+    - time: exponential o(n*2^n)
 */
 
 
