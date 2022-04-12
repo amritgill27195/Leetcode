@@ -36,14 +36,18 @@
              s
           aab
           [save result]
+          
+    - time: 2o(n) * 2^n
+        2o(n) == subStr formation o(n) + isPalindrome o(n)
+    - space: o(n), where n is the lenght of str. In recursion stack, we will end up pausing at worse n calls if str = 'aaa' ( with single splits )
 */
 
 
 func partition(s string) [][]string {
     
     var result [][]string
-    var dfs func(start int, paths []string)
-    dfs = func(start int, paths []string){
+    var dfs func(paths []string, start int)
+    dfs = func(paths []string, start int) {
         // base
         if start >= len(s) {
             newL := make([]string, len(paths))
@@ -51,22 +55,21 @@ func partition(s string) [][]string {
             result = append(result, newL)
             return
         }
-        
         // logic
         for i := start; i < len(s); i++ {
-            subStr := string(s[start:i+1])
-            if isPalindrome(subStr) {
+            substr := string(s[start:i+1])
+            // check
+            if isPalindrome(substr) {
                 // action
-                paths = append(paths, subStr)
+                paths = append(paths, substr)
                 // recurse
-                dfs(i+1, paths)
+                dfs(paths, i+1)
                 // backtrack
                 paths = paths[:len(paths)-1]
             }
-        }   
+        }
     }
-    
-    dfs(0, nil)
+    dfs(nil, 0)
     return result
 }
 
