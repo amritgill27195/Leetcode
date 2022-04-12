@@ -16,7 +16,7 @@ func exist(board [][]byte, word string) bool {
         
         
         // logic
-        if string(word[idx]) == string(board[r][c]) {
+        if word[idx] == board[r][c] {
             // action
             tmp := board[r][c]
             board[r][c] = '#'
@@ -33,7 +33,7 @@ func exist(board [][]byte, word string) bool {
     
     for i := 0; i < m ; i++ {
         for j := 0; j < n; j++ {
-            if string(board[i][j]) == string(word[0]) {
+            if board[i][j] == word[0] {
                 if backtrack(0, i, j) {
                     return true
                 }
