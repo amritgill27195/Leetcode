@@ -1,3 +1,5 @@
+// time : o(mn)*3^L where L is len(word)
+// space: O(L)
 func exist(board [][]byte, word string) bool {
     
     
