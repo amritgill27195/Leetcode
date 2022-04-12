@@ -67,44 +67,27 @@
 // for loop based recursion
 func combinationSum(candidates []int, target int) [][]int {
     var result [][]int
-    
-    
-    var dfs func(start, t int, c []int, paths []int)
-    dfs = func(start, t int, c []int, paths []int) {
-        
+    var dfs func(paths []int, t, start int)
+    dfs = func(paths []int, t, start int) {
         // base
-        // when this combination works
         if t == 0 {
             newL := make([]int, len(paths))
             copy(newL, paths)
             result = append(result, newL)
             return
         }
-        // when this combination does not work
-        if t < 0 || start >= len(c) {
-            return
-        }
-        
+        if t < 0 {return}
         
         // logic
-        // from this position, with current paths, 
-        for i := start; i < len(c); i++ {
-            // add new element to path to check if this combination works
-            // ACTION
-            paths = append(paths, c[i])         
-        
-            // RECURSE to evaluate whether we are going to save the paths or not
-            dfs(i, t-c[i], c,paths)
-            
-            // BACKTRACK
-            // Did/did-not workout, undo all the actions to restore ANY MODIFIED
-            // REFERENCE data structure state back to what it was in a parent recursion stack
+        for i := start; i < len(candidates); i++ {
+            // action
+            paths = append(paths, candidates[i])
+            // recurse
+            dfs(paths, t-candidates[i], i)
+            // backtrack
             paths = paths[:len(paths)-1]
         }
     }
-    
-    // actually call the func
-    dfs(0, target, candidates,nil)
-    
+    dfs(nil, target, 0)
     return result
 }
