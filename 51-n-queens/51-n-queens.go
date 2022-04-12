@@ -1,3 +1,5 @@
+// time: o(n!)
+// space: o(n^2)
 func solveNQueens(n int) [][]string {
     if n == 0 {return nil}
     var result [][]string
@@ -45,6 +47,7 @@ func solveNQueens(n int) [][]string {
     
     return result
 }
+
 
 func canBePlaced(board [][]bool, r, c int) bool {
     dirs := [][]int{{-1, 0}, {-1,-1}, {-1,1}}
