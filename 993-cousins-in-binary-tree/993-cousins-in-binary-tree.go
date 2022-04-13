@@ -50,48 +50,99 @@
 */
 
 // dfs level order
-func isCousins(root *TreeNode, x int, y int) bool {
-    if root == nil {
-        return false
-    }
+// time: o(n) -- worse case x and y are leaf nodes so end up seeing all nodes
+// space: o(h) -- max height of the tree will be in our recursion stack
+// func isCousins(root *TreeNode, x int, y int) bool {
+//     if root == nil {
+//         return false
+//     }
     
+//     var (
+//         xParent *TreeNode
+//         yParent *TreeNode
+//         xLevel int
+//         yLevel int
+//     )
+    
+//     var dfs func(level int, a, parent *TreeNode)
+//     dfs = func(level int, a, parent *TreeNode) {
+//         // base
+//         if (xParent != nil && yParent != nil) || a == nil  {
+//             return
+//         }
+        
+//         // logic
+//         if a.Val == x {
+//             xParent = parent
+//             xLevel = level
+//         }
+//         if a.Val == y {
+//             yParent = parent
+//             yLevel = level
+//         }
+        
+//         dfs(level+1, a.Left, a)
+//         dfs(level+1, a.Right, a)
+//     }
+    
+//     dfs(0, root, nil)
+//     if xLevel == yLevel {
+//         return xParent != yParent
+//     }
+    
+//     return false
+// }
+
+
+
+// bfs level order
+func isCousins(root *TreeNode, x, y int) bool {
+    
+    type pair struct {
+        node *TreeNode
+        parent *TreeNode
+    }
     var (
         xParent *TreeNode
         yParent *TreeNode
-        xLevel int
-        yLevel int
     )
     
-    var dfs func(level int, a, parent *TreeNode)
-    dfs = func(level int, a, parent *TreeNode) {
-        // base
-        if (xParent != nil && yParent != nil) || a == nil  {
-            return
+    q := []*pair{&pair{node: root, parent: nil}}
+    
+    for len(q) != 0 {
+        qSize := len(q)
+        for qSize != 0 {
+            dq := q[0]
+            q = q[1:]
+            if dq.node.Val == x {
+                xParent = dq.parent
+            }
+            if dq.node.Val == y {
+                yParent = dq.parent
+            }
+            if dq.node.Left != nil {
+                q = append(q, &pair{node: dq.node.Left, parent: dq.node})
+            }
+            if dq.node.Right != nil {
+                q = append(q, &pair{node: dq.node.Right, parent: dq.node})
+            }
+            qSize--
+        }
+        // we found one of the parent at this level but not both
+        // for x and y to be cousins they must be on the same level
+        // which also means if they were on the same level, we should have discoverd
+        // both parents and not just 1
+        if (xParent != nil && yParent == nil) || (xParent == nil && yParent != nil) {
+            return false
         }
         
-        // logic
-        if a.Val == x {
-            xParent = parent
-            xLevel = level
+        // if we found both, compare and return the result early
+        if xParent != nil && yParent != nil {
+            return xParent != yParent
         }
-        if a.Val == y {
-            yParent = parent
-            yLevel = level
-        }
-        
-        dfs(level+1, a.Left, a)
-        dfs(level+1, a.Right, a)
     }
-    
-    dfs(0, root, nil)
-    if xLevel == yLevel {
-        return xParent != yParent
-    }
-    
     return false
 }
-
-
 
 
 
