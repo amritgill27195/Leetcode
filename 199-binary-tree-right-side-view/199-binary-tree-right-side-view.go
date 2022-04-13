@@ -66,8 +66,30 @@
 
 // level order using DFS ( i.e maintain a level local state at each node )
 // this exists to scope down global to only this class/struct or else global pollution happens
+// func rightSideView(root *TreeNode) []int {
+//     // right side first
+//     var result []int
+//     var dfs func(a *TreeNode, level int)
+//     dfs = func(a *TreeNode, level int){
+//         // base
+//         if a == nil {return}
+        
+//         // logic
+//         if len(result) == level {
+//             // this means this level idx does not exist 
+//             // and since we traverse right side first, save this item
+//             result = append(result, a.Val)
+//         }
+//         dfs(a.Right, level+1)
+//         dfs(a.Left, level+1)
+//     }
+//     dfs(root, 0)
+//     return result
+// }
+
+
 func rightSideView(root *TreeNode) []int {
-    // right side first
+    // left side first
     var result []int
     var dfs func(a *TreeNode, level int)
     dfs = func(a *TreeNode, level int){
@@ -77,12 +99,16 @@ func rightSideView(root *TreeNode) []int {
         // logic
         if len(result) == level {
             // this means this level idx does not exist 
-            // and since we traverse right side first, save this item
+            // add it
             result = append(result, a.Val)
+        } else {
+            // this means levelIdx already exists and since we reach right branch after
+            // the value saved at levelIdx is likely the left val, so we need to replace
+            result[level] = a.Val
         }
-        dfs(a.Right, level+1)
-
         dfs(a.Left, level+1)
+        dfs(a.Right, level+1)
+   
     }
     dfs(root, 0)
     return result
