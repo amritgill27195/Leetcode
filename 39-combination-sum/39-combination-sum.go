@@ -37,10 +37,37 @@
 */
 
 // 0/1 recursion
+// func combinationSum(candidates []int, target int) [][]int {
+//     var result [][]int
+//     var dfs func(paths []int, t int, start int)
+//     dfs = func(paths []int, t int, start int) {
+//         // base
+//         if t == 0 {
+//             newL := make([]int, len(paths))
+//             copy(newL, paths)
+//             result = append(result, newL)
+//             return
+//         }
+//         if start == len(candidates) || t < 0 {return}
+        
+//         // logic
+//         // not choose
+//         dfs(paths, t, start+1)
+        
+//         // choose
+//         paths = append(paths, candidates[start])
+//         dfs(paths, t-candidates[start], start)
+//         paths = paths[:len(paths)-1]
+//     }
+//     dfs(nil, target, 0)
+//     return result
+// }
+
+// generating combinations / permutations == for loop based recursion
 func combinationSum(candidates []int, target int) [][]int {
     var result [][]int
-    var dfs func(paths []int, t int, start int)
-    dfs = func(paths []int, t int, start int) {
+    var backtrack func(paths []int, t, start int) 
+    backtrack = func(paths []int, t, start int) {
         // base
         if t == 0 {
             newL := make([]int, len(paths))
@@ -48,23 +75,23 @@ func combinationSum(candidates []int, target int) [][]int {
             result = append(result, newL)
             return
         }
-        if start == len(candidates) || t < 0 {return}
+        if start == len(candidates) || t < 0 {
+            return
+        }
         
         // logic
-        // not choose
-        dfs(paths, t, start+1)
-        
-        // choose
-        paths = append(paths, candidates[start])
-        dfs(paths, t-candidates[start], start)
-        paths = paths[:len(paths)-1]
+        for i := start; i < len(candidates); i++ {
+            // action
+            paths = append(paths, candidates[i])
+            // recurse
+            backtrack(paths, t-candidates[i], i)
+            // backtrack
+            paths = paths[:len(paths)-1]
+        }
     }
-    dfs(nil, target, 0)
+    backtrack(nil, target, 0)
     return result
 }
-
-
-
 
 
 
