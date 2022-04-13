@@ -10,27 +10,27 @@
 // iterative using BFS
 // time: o(n)
 // space: o(maxWidthOfTheTree)
-func levelOrder(root *TreeNode) [][]int {
-    if root == nil {
-        return nil
-    }
-    var result [][]int
-    q := []*TreeNode{root}
-    for len(q) != 0 {
-        qSize := len(q)
-        level := []int{}
-        for qSize != 0 {
-            dq := q[0]
-            q = q[1:]
-            level = append(level, dq.Val)
-            if dq.Left != nil {q = append(q, dq.Left)}
-            if dq.Right != nil {q = append(q, dq.Right)}
-            qSize--
-        }
-        result = append(result, level)
-    }
-    return result
-}
+// func levelOrder(root *TreeNode) [][]int {
+//     if root == nil {
+//         return nil
+//     }
+//     var result [][]int
+//     q := []*TreeNode{root}
+//     for len(q) != 0 {
+//         qSize := len(q)
+//         level := []int{}
+//         for qSize != 0 {
+//             dq := q[0]
+//             q = q[1:]
+//             level = append(level, dq.Val)
+//             if dq.Left != nil {q = append(q, dq.Left)}
+//             if dq.Right != nil {q = append(q, dq.Right)}
+//             qSize--
+//         }
+//         result = append(result, level)
+//     }
+//     return result
+// }
 
 
 
@@ -44,33 +44,25 @@ func levelOrder(root *TreeNode) [][]int {
 // time: o(n)
 // space: o(h) -- at worse, we will have the max height number of nodes in our recursion stack
 
-// tried passing result as a reference but golang complains that *result[idx] indexing on references are not supported
-// so then the class solution to narrow down the global scope of result to only 1 instance or else global pollution happens
-// type sol struct {
-//     result [][]int
-// }
 
-// func levelOrder(root *TreeNode) [][]int{
-//     sol := new(sol)
-//     sol.preorderDfs(root, 0)
-//     return sol.result
-// }
-
-
-// func (s *sol) preorderDfs(root *TreeNode, level int) {
+func levelOrder(root *TreeNode) [][]int {
     
-//     // base
-//     if root == nil {
-//         return
-//     }
+    var result [][]int
+    var dfs func(a *TreeNode, level int)
+    dfs = func(a *TreeNode, level int) {
+        // base
+        if a == nil {return}
+        
+        // logic
+        if len(result) == level {
+            result = append(result, []int{})
+        }
+        result[level] = append(result[level], a.Val)
+        dfs(a.Left, level+1)
+        dfs(a.Right, level+1)
+    }
     
-//     //logic
-//     if len(s.result) == level {
-//         s.result = append(s.result, []int{})
-//     }
-//     s.result[level] = append(s.result[level], root.Val)
-//     level = level+1
+    dfs(root, 0)
+    return result
     
-//     s.preorderDfs(root.Left, level)
-//     s.preorderDfs(root.Right, level)
-// }
+}
