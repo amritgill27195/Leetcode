@@ -37,74 +37,45 @@
 */
 
 // 0/1 recursion
-// func combinationSum(candidates []int, target int) [][]int {
-    
-//     var result [][]int
-//     var helper func(paths []int, i, t int)
-//     helper = func(paths []int, i, t int) {
-//         // base
-//         if t == 0 {
-//             newL := make([]int, len(paths))
-//             copy(newL, paths)
-//             result = append(result, newL)
-//             return
-//         }
-//         if t < 0 || i >= len(candidates) {return}
-        
-//         // logic
-//         // not choose
-//         helper(paths, i+1, t)
-//         // choose
-//         paths = append(paths, candidates[i])
-//         helper(paths,i, t-candidates[i])
-//         paths = paths[:len(paths)-1]
-//     }
-//     helper(nil,0, target)
-//     return result
-// }
-
-
-// for loop based recursion
 func combinationSum(candidates []int, target int) [][]int {
-        var result [][]int
-    
-    
-    var dfs func(start, t int, c []int, paths []int)
-    dfs = func(start, t int, c []int, paths []int) {
-        
+    var result [][]int
+    var dfs func(paths []int, t int, start int)
+    dfs = func(paths []int, t int, start int) {
         // base
-        // when this combination works
         if t == 0 {
             newL := make([]int, len(paths))
             copy(newL, paths)
             result = append(result, newL)
             return
         }
-        // when this combination does not work
-        if t < 0 || start >= len(c) {
-            return
-        }
-        
+        if start == len(candidates) || t < 0 {return}
         
         // logic
-        // from this position, with current paths, 
-        for i := start; i < len(c); i++ {
-            // add new element to path to check if this combination works
-            // ACTION
-            paths = append(paths, c[i])         
+        // not choose
+        dfs(paths, t, start+1)
         
-            // RECURSE to evaluate whether we are going to save the paths or not
-            dfs(i, t-c[i], c,paths)
-            
-            // BACKTRACK
-            // Did/did-not workout, undo all the actions to restore ANY MODIFIED
-            // REFERENCE data structure state back to what it was in a parent recursion stack
-            paths = paths[:len(paths)-1]
-        }
+        // choose
+        paths = append(paths, candidates[start])
+        dfs(paths, t-candidates[start], start)
+        paths = paths[:len(paths)-1]
     }
-    
-    // actually call the func
-    dfs(0, target, candidates,nil)
-    
+    dfs(nil, target, 0)
     return result
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
