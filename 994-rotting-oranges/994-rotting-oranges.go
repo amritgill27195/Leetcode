@@ -30,65 +30,58 @@
     
     time: o(mn)
     space: o(mn) - if we start everything with rotten, we have enqueued all of the cells right away.
-    
-    
-    
-    
-
 */
 
 func orangesRotting(grid [][]int) int {
+    freshCount := 0
+    m := len(grid)
+    n := len(grid[0])
     
-    if grid == nil {
-        return 0
-    }
-    
-    fresh := 0
-    q := [][]int{}
-    time := 0
-    m := len(grid); n := len(grid[0])
+    rottenQueue := [][]int{}
     for i := 0; i < m; i++ {
         for j := 0; j < n; j++ {
             if grid[i][j] == 2 {
-                q = append(q, []int{i,j})
+                rottenQueue = append(rottenQueue, []int{i,j})
             } else if grid[i][j] == 1 {
-                fresh++
-            } 
+                freshCount++
+            }
         }
     }
-    
-    // if we have no fresh ones to rotten, return early OR if there are no rotten ones to start with
-    if fresh == 0  {
+    if freshCount == 0 {
         return 0
     }
-    initial := true
-    dirs := [][]int{ {1,0}, {-1,0}, {0,1}, {0,-1} }
-    for len(q) != 0 {
-        qSize := len(q)
+    dirs := [][]int{{1,0},{-1,0}, {0,-1},{0,1}}
+    var time int
+    for len(rottenQueue) != 0 {
+        qSize := len(rottenQueue) 
         for qSize != 0 {
-            dq := q[0]
-            q = q[1:]
+            dq := rottenQueue[0]
+            rottenQueue = rottenQueue[1:]
             for _, dir := range dirs {
                 r := dq[0] + dir[0]
                 c := dq[1] + dir[1]
                 if r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == 1 {
                     grid[r][c] = 2
-                    fresh--
-                    q = append(q, []int{r,c})
+                    freshCount--
+                    rottenQueue = append(rottenQueue, []int{r, c})
                 }
             }
-            qSize--
+            qSize--   
         }
-        if initial {
-            initial = false   
-        } else {
-            time++
-        }
-        
+        time++
     }
     
-    if fresh != 0 {
+    if freshCount != 0 {
         return -1
     }
-    return time
+    
+    return time-1
 }
+
+
+
+
+
+
+
+
