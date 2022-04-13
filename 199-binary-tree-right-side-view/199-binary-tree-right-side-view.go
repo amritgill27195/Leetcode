@@ -43,20 +43,20 @@
 
 // level order using BFS
 func rightSideView(root *TreeNode) []int {
-    
     if root == nil {
         return nil
     }
     result := []int{}
-    queue := []*TreeNode{root}
-    for len(queue) != 0 {
-        qSize := len(queue)
-        result = append(result, queue[qSize-1].Val)
+    q := []*TreeNode{root}
+    
+    for len(q) != 0 {
+        qSize := len(q)
+        result = append(result, q[qSize-1].Val)
         for qSize != 0 {
-            dq := queue[0]
-            queue = queue[1:]
-            if dq.Left != nil { queue = append(queue, dq.Left )}
-            if dq.Right != nil { queue = append(queue, dq.Right )}
+            dq := q[0]
+            q = q[1:]
+            if dq.Left != nil {q = append(q, dq.Left)}
+            if dq.Right != nil {q = append(q, dq.Right)}
             qSize--
         }
     }
