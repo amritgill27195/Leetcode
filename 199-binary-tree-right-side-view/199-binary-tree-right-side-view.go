@@ -42,66 +42,48 @@
 */
 
 // level order using BFS
-func rightSideView(root *TreeNode) []int {
-    if root == nil {
-        return nil
-    }
-    result := []int{}
-    q := []*TreeNode{root}
+// func rightSideView(root *TreeNode) []int {
+//     if root == nil {
+//         return nil
+//     }
+//     result := []int{}
+//     q := []*TreeNode{root}
     
-    for len(q) != 0 {
-        qSize := len(q)
-        result = append(result, q[qSize-1].Val)
-        for qSize != 0 {
-            dq := q[0]
-            q = q[1:]
-            if dq.Left != nil {q = append(q, dq.Left)}
-            if dq.Right != nil {q = append(q, dq.Right)}
-            qSize--
-        }
-    }
-    return result
-}
+//     for len(q) != 0 {
+//         qSize := len(q)
+//         result = append(result, q[qSize-1].Val)
+//         for qSize != 0 {
+//             dq := q[0]
+//             q = q[1:]
+//             if dq.Left != nil {q = append(q, dq.Left)}
+//             if dq.Right != nil {q = append(q, dq.Right)}
+//             qSize--
+//         }
+//     }
+//     return result
+// }
 
 
 // level order using DFS ( i.e maintain a level local state at each node )
 // this exists to scope down global to only this class/struct or else global pollution happens
-// type dfs struct {
-//     result []int
-// }
-// func rightSideView(root *TreeNode) []int {
-//     d := &dfs{result: []int{}}
-//     d.dfsRight(root, 0)
-//     return d.result
-// }
+func rightSideView(root *TreeNode) []int {
+    // right side first
+    var result []int
+    var dfs func(a *TreeNode, level int)
+    dfs = func(a *TreeNode, level int){
+        // base
+        if a == nil {return}
+        
+        // logic
+        if len(result) == level {
+            // this means this level idx does not exist 
+            // and since we traverse right side first, save this item
+            result = append(result, a.Val)
+        }
+        dfs(a.Right, level+1)
 
-
-// func (d *dfs) dfsRight(root *TreeNode, level int) {
-//     if root == nil {
-//         return
-//     }
-    
-//     // logic
-//     // if this level does not exist, add it
-//     // else skip because we already have the far most right side for this level
-//     if len(d.result) == level {
-//         d.result = append(d.result, root.Val)
-//     }
-//     d.dfsRight(root.Right, level+1)
-//     d.dfsRight(root.Left, level+1)
-// }
-
-// func (d *dfs) dfsLeft(root *TreeNode, level int) {
-//     if root == nil {
-//         return
-//     }
-    
-//     // logic
-//     if len(d.result) == level {
-//         d.result = append(d.result, root.Val)
-//     } else {
-//         d.result[level] = root.Val
-//     }
-//     d.dfsLeft(root.Left, level+1)
-//     d.dfsLeft(root.Right, level+1)
-// }
+        dfs(a.Left, level+1)
+    }
+    dfs(root, 0)
+    return result
+}
