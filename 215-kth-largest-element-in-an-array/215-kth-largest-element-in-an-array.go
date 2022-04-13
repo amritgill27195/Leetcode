@@ -112,7 +112,8 @@
 // }
 //-----------------------------------------------------------------------------------------------------------------------
 // container lib min heap implementation
-
+// sorting is always there -- sort nums and then return last kth element - but time would be o(nlogn)
+// instead we can use minHeap
 // time: o(nlogk)
 // we loop over all numbers in nums o(n)
 // we store them in heap but our insert/extract only ever has to deal with k items in heap therefore logk
