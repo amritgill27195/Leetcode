@@ -83,12 +83,16 @@ func intersect(nums1 []int, nums2 []int) []int {
         idx := binarySearch(left, right, nums2[i], nums1)
         if idx != -1 {
             out = append(out, nums2[i])
+            // why idx+1 and not left++ ?
+            // because we found the leftest idx of our target, which 
+            // means that our left boundary ( in sorted array ) shrinked
             left = idx+1
         }
     }
     return out
 }
 
+// search for the leftest possible idx of target ( yes target can exist multiple times )
 func binarySearch(left, right, target int, nums []int) int {
     for left <= right {
         mid := left + ((right-left))/2
