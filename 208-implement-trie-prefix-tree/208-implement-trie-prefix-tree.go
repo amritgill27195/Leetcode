@@ -1,20 +1,4 @@
-// to get index of a character in golang
-// use unit8-lowerCaseRune ( if looking for idx for lowercase character , upper case otherwise )
-// for example
-// uint8=97 - 'a' -- gives us idx 0
 
-/*
-w := "amrit"
-for i := 0; i < len(w); i++ {
-    char := w[i]
-    fmt.Printf("%v: %T %v\n", string(char), char, char-'a')
-}
-a: uint8 0
-m: uint8 12
-r: uint8 17
-i: uint8 8
-t: uint8 19
-*/
 
 type TrieNode struct {
     isEnd bool
@@ -76,10 +60,20 @@ func (this *Trie) StartsWith(prefix string) bool {
 }
 
 
-/**
- * Your Trie object will be instantiated and called as such:
- * obj := Constructor();
- * obj.Insert(word);
- * param_2 := obj.Search(word);
- * param_3 := obj.StartsWith(prefix);
- */
+// to get index of a character in golang
+// use unit8-lowerCaseRune ( if looking for idx for lowercase character , upper case otherwise )
+// for example
+// uint8=97 - 'a' -- gives us idx 0
+
+/*
+w := "amrit"
+for i := 0; i < len(w); i++ {
+    char := w[i]
+    fmt.Printf("%v: %T %v\n", string(char), char, char-'a')
+}
+a: uint8 0
+m: uint8 12
+r: uint8 17
+i: uint8 8
+t: uint8 19
+*/
