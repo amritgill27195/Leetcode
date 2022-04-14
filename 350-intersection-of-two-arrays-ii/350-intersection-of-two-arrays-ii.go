@@ -63,11 +63,17 @@
 
 
 // binary search
+// m = larger array
+// n = smaller array
+// time: o(nlogm) -- IF we do not count the sorting of array
+// time: (omlogm) + o(nlogn) + o(nlogm) -- IF we count sorting of both arrays
+// space: o(1)
 func intersect(nums1 []int, nums2 []int) []int {
     // to make sure nums1 is always bigger 
     if len(nums2) > len(nums1) {
         return intersect(nums2, nums1)
     }
+    
     sort.Ints(nums1)
     sort.Ints(nums2)
     
