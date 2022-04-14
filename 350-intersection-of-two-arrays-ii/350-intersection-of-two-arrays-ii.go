@@ -1,12 +1,15 @@
 
 // appraoch : freq map
+// m = larger array
+// n = smaller array
+// time: o(n+m) - loop over n array and store in a map, then loop over m array to find in nMap
+// space: o(n) - store the smaller array in map to keep space footprint small
 // func intersect(nums1 []int, nums2 []int) []int {
 //     m := map[int]int{}
 //     out := []int{}
 //     if len(nums1) < len(nums2) {
 //         for _, ele := range nums1 {
 //             m[ele]++
-            
 //         }
 //         for i := 0; i < len(nums2); i++ {
 //             if _, ok := m[nums2[i]]; ok {
