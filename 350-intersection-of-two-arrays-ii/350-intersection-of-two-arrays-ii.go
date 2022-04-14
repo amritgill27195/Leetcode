@@ -35,6 +35,9 @@
 // }
 
 // approach sort + two pointers
+// time: 
+//      o(n1logn1) + o(n2logn2) +  o(max(nums1,nums2)) -- since we sort both
+// space: o(1) if we do not count output array as part of space
 func intersect(nums1 []int, nums2 []int) []int {
     sort.Ints(nums1)
     sort.Ints(nums2)
