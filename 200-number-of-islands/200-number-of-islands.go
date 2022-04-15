@@ -80,6 +80,7 @@ func numIslands(grid [][]byte) int {
     num := 0
     m := len(grid)
     n := len(grid[0])
+    dirs := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
     var dfs func(r, c int)
     dfs = func (r,c int) {
         // base
@@ -88,10 +89,9 @@ func numIslands(grid [][]byte) int {
         }
         // logic
         grid[r][c] = '0'
-        dfs(r-1, c)
-        dfs(r+1, c)
-        dfs(r, c-1)
-        dfs(r, c+1)
+        for _, dir := range dirs {
+            dfs(r+dir[0], c+dir[1])
+        }
     }
    
     for i := 0; i < m; i++ {
