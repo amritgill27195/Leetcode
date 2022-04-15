@@ -28,17 +28,38 @@
 // dfs approach
 // time: o(n) - we visit all nodes
 // space: o(h) - max height of the tree will be in our recursion stack
-func maxDepth(root *TreeNode) int {
-    var dfs func(r *TreeNode) int
-    dfs = func(r *TreeNode) int {
-        // base
-        if r == nil {
-            return 0
-        }
+// func maxDepth(root *TreeNode) int {
+//     var dfs func(r *TreeNode) int
+//     dfs = func(r *TreeNode) int {
+//         // base
+//         if r == nil {
+//             return 0
+//         }
         
-        left := dfs(r.Left)
-        right := dfs(r.Right)
-        return int(math.Max(float64(left), float64(right)))+1
+//         left := dfs(r.Left)
+//         right := dfs(r.Right)
+//         return int(math.Max(float64(left), float64(right)))+1
+//     }
+//     return dfs(root)
+// }
+
+// bfs approach
+func maxDepth(root *TreeNode) int {
+    if root == nil {
+        return 0
     }
-    return dfs(root)
+    q := []*TreeNode{root}
+    h := 0
+    for len(q) != 0 {
+        qSize := len(q)
+        for qSize != 0 {
+            dq := q[0]
+            q = q[1:]
+            if dq.Left != nil {q = append(q, dq.Left)}
+            if dq.Right != nil {q = append(q, dq.Right)}
+            qSize--
+        }
+        h++
+    }
+    return h
 }
