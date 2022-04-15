@@ -43,71 +43,69 @@
 
 
 // bfs
-func numIslands(grid [][]byte) int {
-    
-    dirs := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
-    m := len(grid)
-    n := len(grid[0])
-    q := [][]int{}
-    num := 0
-    for i := 0; i < m; i++ {
-        for j := 0; j < n; j++ {
-            if grid[i][j] == '1' {
-                grid[i][j] = '0' // mark it visited and look for neighboring islands
-                q = append(q, []int{i,j})
-                for len(q) != 0 {
-                    dq := q[0]
-                    q = q[1:]
-                    for _, dir := range dirs {
-                        r := dq[0] + dir[0]
-                        c := dq[1] + dir[1]
-                        if r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == '1' {
-                            grid[r][c] = '0' // mark this neighboring land visited and enqueue to find its neighbours that may also be land
-                            q = append(q, []int{r,c})
-                        }
-                    }
-                }
-                num++
-            }
-        }
-    }
-    return num
-}
-
-
-// dfs
 // func numIslands(grid [][]byte) int {
     
-//     var num int
-//     var dfs func(r,c int)
 //     dirs := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
 //     m := len(grid)
 //     n := len(grid[0])
-    
-//     dfs = func(r,c int) {
-//         // base
-//         if r < 0 || r >= m || c < 0 || c >= n || grid[r][c] != '1' {return}
-        
-//         // logic
-//         // mark the land visited
-//         grid[r][c] = '0'
-//         // then find all connected lands ( connected components as far as we can )
-//         for _, dir := range dirs {
-//             dfs(r+dir[0], c+dir[1])
-//         }
-//     }
-    
+//     q := [][]int{}
+//     num := 0
 //     for i := 0; i < m; i++ {
-//         for j := 0; j < n ; j++ {
+//         for j := 0; j < n; j++ {
 //             if grid[i][j] == '1' {
-//                 dfs(i,j)
+//                 grid[i][j] = '0' // mark it visited and look for neighboring islands
+//                 q = append(q, []int{i,j})
+//                 for len(q) != 0 {
+//                     dq := q[0]
+//                     q = q[1:]
+//                     for _, dir := range dirs {
+//                         r := dq[0] + dir[0]
+//                         c := dq[1] + dir[1]
+//                         if r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == '1' {
+//                             grid[r][c] = '0' // mark this neighboring land visited and enqueue to find its neighbours that may also be land
+//                             q = append(q, []int{r,c})
+//                         }
+//                     }
+//                 }
 //                 num++
 //             }
 //         }
 //     }
-    
 //     return num
 // }
+
+
+// dfs
+func numIslands(grid [][]byte) int {
+    num := 0
+    m := len(grid)
+    n := len(grid[0])
+    var dfs func(r, c int)
+    dfs = func (r,c int) {
+        // base
+        if r < 0 || r == m || c < 0 || c == n || grid[r][c] != '1' {
+            return
+        }
+        // logic
+        grid[r][c] = '0'
+        dfs(r-1, c)
+        dfs(r+1, c)
+        dfs(r, c-1)
+        dfs(r, c+1)
+    }
+   
+    for i := 0; i < m; i++ {
+        for j := 0; j < n; j++ {
+            if grid[i][j] == '1' {
+                dfs(i,j)
+                num++
+            }
+        }
+    }
+    
+    
+    return num
+}
 
 
 
