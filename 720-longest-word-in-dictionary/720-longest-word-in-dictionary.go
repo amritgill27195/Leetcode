@@ -39,6 +39,7 @@ func longestWord(words []string) string {
         // logic
         for i := 0; i <= 25; i++ {
             if r.childrens[i] != nil && r.childrens[i].isEnd {
+                // TODO: find out how to backtrack in strings.Builder in golang ( still have no solution to this .. sigh )
                 pathBldr += string('a'+i)
                 backtrack(r.childrens[i], pathBldr)
                 pathBldr = pathBldr[:len(pathBldr)-1]
