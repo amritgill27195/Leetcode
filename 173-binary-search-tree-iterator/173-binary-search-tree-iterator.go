@@ -13,11 +13,11 @@ type BSTIterator struct {
 
 func Constructor(root *TreeNode) BSTIterator {
     b := BSTIterator{stack: []*TreeNode{}}
-    b.inorderDfs(root)
+    b.inorder(root)
     return b
 }
 
-func (this *BSTIterator) inorderDfs(root *TreeNode) {
+func (this *BSTIterator) inorder(root *TreeNode) {
     for root != nil {
         this.stack = append(this.stack, root)
         root = root.Left
@@ -26,13 +26,10 @@ func (this *BSTIterator) inorderDfs(root *TreeNode) {
 
 
 func (this *BSTIterator) Next() int {
-    if this.HasNext() {
-        top := this.stack[len(this.stack)-1]
-        this.stack = this.stack[:len(this.stack)-1]
-        this.inorderDfs(top.Right)
-        return top.Val
-    }
-    return -1
+    top := this.stack[len(this.stack)-1]
+    this.stack = this.stack[:len(this.stack)-1]
+    this.inorder(top.Right)
+    return top.Val
 }
 
 
