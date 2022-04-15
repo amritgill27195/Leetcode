@@ -26,6 +26,8 @@
 */
 
 // dfs approach
+// time: o(n) - we visit all nodes
+// space: o(h) - max height of the tree will be in our recursion stack
 func maxDepth(root *TreeNode) int {
     var dfs func(r *TreeNode) int
     dfs = func(r *TreeNode) int {
