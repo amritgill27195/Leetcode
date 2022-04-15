@@ -31,10 +31,10 @@ func (t *TrieNode) Search(word string) (bool, string) {
         if cur.childrens[char-'a'] == nil {return false, ""}
         cur = cur.childrens[char-'a']
         wordBldr.WriteByte(char)
-        if cur.isEnd {break}
+        if cur.isEnd {return true, wordBldr.String()}
     }
-    
-    return cur.isEnd, wordBldr.String()
+    // did not find a smaller word than the word itself 
+    return false, word
 
 }
 
