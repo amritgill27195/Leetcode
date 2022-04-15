@@ -56,7 +56,7 @@ func replaceWords(dictionary []string, sentence string) string {
     splitWords := strings.Split(sentence, " ")
     outBldr := new(strings.Builder)
     for idx, word := range splitWords {
-        if idx > 0 {
+        if idx != 0 {
             outBldr.WriteString(" ")
         }
         foundValidWord, replace := root.Search(word)
