@@ -30,14 +30,14 @@ func (this *Twitter) PostTweet(userId int, tweetId int)  {
 // space: o(n)
 func (this *Twitter) GetNewsFeed(userId int) []int {
 
-    users := this.followMap[userId]    
-    if users == nil {return nil}
+    usersSet := this.followMap[userId]    
+    if usersSet == nil {return nil}
     
     
     // time: o(n) * o(m) * o(10log10) -- where n is the number of users and m is the number of tweets for each nth user
     mh := &minHeap{tweets: []*tweet{}}
     // at worse we have n users
-    for uidKey, _ := range users.items {
+    for uidKey, _ := range usersSet.items {
         // and each nth user has posted m tweets
         for _, tid := range this.tweetMap[uidKey] {
             heap.Push(mh, tid)
