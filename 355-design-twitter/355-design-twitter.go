@@ -33,10 +33,8 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
     // at worse we have this user following n users
     // space: o(n)
     // time: o(1)
-    users := []int{}
-    if this.followMap[userId] != nil {
-        users = append(users, this.followMap[userId].list()...)
-    }
+    users := this.followMap[userId].list()
+    
     
     // min heap at worse will be storing 10 tweet objs, which is constant
     mh := &minHeap{tweets: []*tweet{}}
@@ -106,6 +104,7 @@ func (s *set) remove(item int){
     delete(s.items, item)
 }
 func (s *set) list() []int{
+    if s == nil || s.items == nil {return nil}
     out := []int{}
     for k, _ := range s.items{
         out = append(out, k)
