@@ -26,18 +26,19 @@ func (this *Twitter) PostTweet(userId int, tweetId int)  {
     this.tweetMap[userId] = append(this.tweetMap[userId], &tweet{id: tweetId, t: time.Now()})
 }
 
-// time: o(n) 
-// space: o(n) -
+// time: o(nm) 
+// space: o(n)
 func (this *Twitter) GetNewsFeed(userId int) []int {
 
-    // at worse we have this user is following n users
-    // space: o(n)
     users := this.followMap[userId]    
     if users == nil {return nil}
-    // min heap at worse will be storing 10 tweet objs, which is constant
+    
+    
+    // time: o(n) * o(m) * o(10log10) -- where n is the number of users and m is the number of tweets for each nth user
     mh := &minHeap{tweets: []*tweet{}}
     // at worse we have n users
     for uidKey, _ := range users.items {
+        // and each nth user has posted m tweets
         for _, tid := range this.tweetMap[uidKey] {
             heap.Push(mh, tid)
             if len(mh.tweets) > 10 {
@@ -46,6 +47,8 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
         }
     }
     
+    // time: worse case we have 10 tweets to output - so this loop at worse will be o(10) or in other words constant in worst case
+    // space : this is generating output, so we do not count output array as space
     out := make([]int, len(mh.tweets))
     for i := len(mh.tweets)-1; i>=0; i-- {
         out[i] = heap.Pop(mh).(*tweet).id
