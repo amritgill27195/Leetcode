@@ -2,6 +2,7 @@ type tweet struct {
     t int // time tweeted at
     id int
 }
+
 type Twitter struct {
     followMap map[int]*set
     tweetMap map[int][]*tweet
@@ -16,7 +17,8 @@ func Constructor() Twitter {
     }
 }
 
-
+// time: o(1)
+// space: o(1)
 func (this *Twitter) PostTweet(userId int, tweetId int)  {
     // when this user posts a tweet, 
     // we will make this user follow itself so we can 
@@ -29,23 +31,29 @@ func (this *Twitter) PostTweet(userId int, tweetId int)  {
     this.globalTime++
 }
 
-
+// time: o(n)
+// space: o(1)
 func (this *Twitter) GetNewsFeed(userId int) []int {
     // get users this userId is following
     userSet := this.followMap[userId]
     if userSet == nil {return []int{}}
     
+    // this user may be following n users
     mh := &minheap{items: []*tweet{}}
     for userKey, _ := range userSet.items {
-        // get the latest 10 tweets from this userKey
+        // get ONLY the latest 10 tweets from this nth user and push it to heap
         tweetsFromThisUser := this.tweetMap[userKey]
         for i := len(tweetsFromThisUser)-1; i >= 0 && i >= len(tweetsFromThisUser)-11; i-- {
+            // o(klogk) - here k is constant and it is 10
             heap.Push(mh, tweetsFromThisUser[i])
             if len(mh.items) > 10 {
+                // o(klogk) - here k is constant and it is 10
                 heap.Pop(mh)
             }
         }
     }
+    
+    // at worse this loop runs 10 times which is constant
     out := make([]int, len(mh.items))
     for i := len(mh.items)-1; i>=0; i-- {
         out[i] = heap.Pop(mh).(*tweet).id
@@ -53,7 +61,8 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
     return out
 }
 
-
+// time: o(1)
+// space: o(1)
 func (this *Twitter) Follow(followerId int, followeeId int)  {   
     if this.followMap[followerId] == nil {
         this.followMap[followerId] = newSet()
@@ -61,7 +70,8 @@ func (this *Twitter) Follow(followerId int, followeeId int)  {
     this.followMap[followerId].add(followeeId)
 }
 
-
+// time: o(1)
+// space: o(1)
 func (this *Twitter) Unfollow(followerId int, followeeId int)  {
     if this.followMap[followerId] == nil {
         return
