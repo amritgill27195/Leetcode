@@ -39,8 +39,10 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
     // at worse we have n users
     for uidKey, _ := range usersSet.items {
         // and each nth user has posted m tweets
-        for _, tid := range this.tweetMap[uidKey] {
-            heap.Push(mh, tid)
+        tweets := this.tweetMap[uidKey]
+        tSize := len(tweets)
+        for i := tSize-1; i >= 0 && i >= tSize-11; i-- {
+            heap.Push(mh, tweets[i])
             if len(mh.tweets) > 10 {
                 heap.Pop(mh)
             }
