@@ -2,11 +2,12 @@
 type Twitter struct {
     followMap map[int]*set
     tweetMap map[int][]*tweet
+    globalTime int
 }
 
 type tweet struct {
     id int
-    t time.Time
+    t int
 }
 
 func Constructor() Twitter {
@@ -23,10 +24,11 @@ func (this *Twitter) PostTweet(userId int, tweetId int)  {
         this.followMap[userId] = newSet()
     }
     this.followMap[userId].add(userId)    
-    this.tweetMap[userId] = append(this.tweetMap[userId], &tweet{id: tweetId, t: time.Now()})
+    this.tweetMap[userId] = append(this.tweetMap[userId], &tweet{id: tweetId, t: this.globalTime})
+    this.globalTime++
 }
 
-// time: o(nm) 
+// time: o(n) 
 // space: o(n)
 func (this *Twitter) GetNewsFeed(userId int) []int {
 
@@ -81,7 +83,7 @@ type minHeap struct {
 	tweets []*tweet
 }
 func (m *minHeap) Len() int {return len(m.tweets)}
-func (m *minHeap) Less(i, j int) bool {return m.tweets[i].t.Before(m.tweets[j].t)}
+func (m *minHeap) Less(i, j int) bool {return m.tweets[i].t < m.tweets[j].t}
 func (m *minHeap) Swap(i, j int) { m.tweets[i],m.tweets[j] = m.tweets[j], m.tweets[i]}
 func (m *minHeap) Push(x interface{}) {m.tweets = append(m.tweets, x.(*tweet))}
 func (m *minHeap) Pop() interface{} {
