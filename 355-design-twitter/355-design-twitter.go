@@ -38,7 +38,7 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
     mh := &minHeap{tweets: []*tweet{}}
     // at worse we have n users
     for uidKey, _ := range usersSet.items {
-        // and each nth user has posted m tweets
+        // For each user, we only care about the latest 10 so start from back and count 10
         tweets := this.tweetMap[uidKey]
         tSize := len(tweets)
         for i := tSize-1; i >= 0 && i >= tSize-11; i-- {
