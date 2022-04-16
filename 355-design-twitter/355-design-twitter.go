@@ -3,6 +3,7 @@ type Twitter struct {
     followMap map[int]*set
     tweetMap map[int][]*tweet
 }
+
 type tweet struct {
     id int
     t time.Time
@@ -15,19 +16,34 @@ func Constructor() Twitter {
     }
 }
 
-
+// time: o(1) 
+// space: o(1)
 func (this *Twitter) PostTweet(userId int, tweetId int)  {
+    if this.followMap[userId] == nil {
+        this.followMap[userId] = newSet()
+    }
+    this.followMap[userId].add(userId)    
     this.tweetMap[userId] = append(this.tweetMap[userId], &tweet{id: tweetId, t: time.Now()})
 }
 
-
+// time: o(n) 
+// space: o(n) -
 func (this *Twitter) GetNewsFeed(userId int) []int {
-    users := []int{userId}
+
+    // at worse we have this user following n users
+    // space: o(n)
+    // time: o(1)
+    users := []int{}
     if this.followMap[userId] != nil {
         users = append(users, this.followMap[userId].list()...)
     }
+    
+    // min heap at worse will be storing 10 tweet objs, which is constant
     mh := &minHeap{tweets: []*tweet{}}
+    // at worse we have n users
     for _, uid := range users {
+        // at worse we have m tweets for each n user
+        // there time: o(mn)
         for _, tid := range this.tweetMap[uid] {
             heap.Push(mh, tid)
             if len(mh.tweets) > 10 {
@@ -35,6 +51,7 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
             }
         }
     }
+    
     out := make([]int, len(mh.tweets))
     for i := len(mh.tweets)-1; i>=0; i-- {
         out[i] = heap.Pop(mh).(*tweet).id
