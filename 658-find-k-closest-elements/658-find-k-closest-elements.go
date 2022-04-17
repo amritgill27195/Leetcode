@@ -1,42 +1,71 @@
+/*
+    approach: store a pair(val, distAway) in a maxHeap
+    - For each n elements
+    - Calc the distance : arr[n] - x
+    - Create a pair {val, distAway}
+    - Store in maxHeap ( maxHeap sorted by distAway so the farthest pair will be on the top )
+    - If the maxHeap size > k heap.pop()
+    - Once all the elements are done,
+    - The maxHeap will be left with k pairs that are the closest to x
+    - Loop over maxHeap items and store them in result array and return
+    
+    time: o(n) * o(logk) = o(nlogk)
+    - why k? because in maxHeap we will only store k elements
+    - where did the n come from? We loop over all elements to store them in maxHeap therefore o(n) * o(logk)
+    space: o(k) - in maxHeap at worse, we will store k elements
+*/
+
+
+// maxHeap impl
+type pair struct {
+    dist int
+    val int
+}
 func findClosestElements(arr []int, k int, x int) []int {
-	if arr == nil {
-		return nil
-	}
-	mx := &maxHeap{items: []*item{}}
-	for _, e := range arr {
-		i := &item{val: e, distAway: int(math.Abs(float64(e-x)))}
-		heap.Push(mx, i)
-		if len(mx.items) > k {
-			heap.Pop(mx)
-		}
-	}
-	out := make([]int, k)
-	for i := len(out)-1 ; i >= 0; i-- {
-		out[i]= heap.Pop(mx).(*item).val
-	}
-	sort.Ints(out)
-	return out
+    if arr == nil || len(arr) == 0 {return nil}
+    
+    mx := &maxHeap{items: []*pair{}}
+    for i := 0; i < len(arr); i++ {
+        p := &pair{dist: abs(x-arr[i]), val: arr[i]}
+        heap.Push(mx, p)
+        if len(mx.items) > k {
+            heap.Pop(mx)
+        }
+    }
+    out := make([]int, len(mx.items))
+    for i := len(out)-1; i >= 0; i-- {
+        out[i] = heap.Pop(mx).(*pair).val
+    }
+    sort.Ints(out)
+    return out
+    
+}
+func abs(n int) int {
+    if n < 0 {
+        return n * -1
+    }
+    return n
 }
 
-type item struct {
-	distAway int
-	val int
-}
 
 type maxHeap struct {
-	items []*item
+	items []*pair
 }
-func (mn *maxHeap) Less(i, j int) bool {
-	if mn.items[i].distAway == mn.items[j].distAway {
-		return mn.items[i].val > mn.items[j].val
-	}
-	return mn.items[i].distAway > mn.items[j].distAway
+
+func (m *maxHeap) Len() int {return len(m.items)}
+func (m *maxHeap) Less(i, j int) bool {
+    if m.items[i].dist == m.items[j].dist {
+        return m.items[i].val > m.items[j].val
+    }
+    return m.items[i].dist > m.items[j].dist
+    
 }
-func (mn *maxHeap) Swap(i, j int) { mn.items[i] , mn.items[j] = mn.items[j] , mn.items[i]}
-func (mn *maxHeap) Len() int { return len(mn.items) }
-func (mn *maxHeap) Push(x interface{}) { mn.items = append(mn.items, x.(*item))}
-func (mn *maxHeap) Pop() interface{} {
-	out := mn.items[len(mn.items)-1]
-	mn.items = mn.items[:len(mn.items)-1]
-	return out
+func (m *maxHeap) Swap(i, j int) { m.items[i],m.items[j] = m.items[j], m.items[i]}
+func (m *maxHeap) Push(x interface{}) {m.items = append(m.items, x.(*pair))}
+func (m *maxHeap) Pop() interface{} {
+	i := m.items[len(m.items)-1]
+	m.items = m.items[:len(m.items)-1]
+	return i
 }
+
+
