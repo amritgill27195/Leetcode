@@ -1,3 +1,9 @@
+/*
+    time: o(nlogn) to sort + o(nlogk) for minHeap (avg case)
+    time: o(nlogn) to sort + o(nlogn) for minHeap (worst case all meetings started at the same time)
+    
+    space: o(n) for heap (worst case) and o(k) for avg case
+*/
 func minMeetingRooms(intervals [][]int) int {
     if intervals == nil || len(intervals) == 0 {
        return 0
