@@ -46,6 +46,7 @@
     - if we do not, then get the 
 */
 
+// two pointers 
 func findClosestElements(arr []int, k int, x int) []int {
     if arr == nil || len(arr) == 0 || k == 0 {return nil}
     left := 0
