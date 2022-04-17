@@ -13,8 +13,7 @@
     - why k? because in maxHeap we will only store k elements
     - where did the n come from? We loop over all elements to store them in maxHeap therefore o(n) * o(logk)
     space: o(k) - in maxHeap at worse, we will store k elements
-    
-    However I still had to sort the final result -- Did I do something wrong?  (+ o(klogk) to time)
+    However I still had to sort the final result -- Did I do something wrong?  (+ o(klogk) to time for sorting the final k size output list)
     
     
     approach: 2 pointers
@@ -40,36 +39,74 @@
     - We can search for the 'x' using binary search or closest to 'x'
     - This will be in o(logn) time with o(1) space
     - Then once we have the closest to 'x', then
+    - Make sure you pick closest between left vs right after binary search
     - We can start forming a window of size k
     - i.e start 2 pointers from the idx that is closest to x
     - if the dist between left and right ptr (right-left+1) == k - break - this means we have a valid window of size k 
     - if we do not, then get the 
 */
 
-// two pointers 
+
+// binary search + 2 pinters
 func findClosestElements(arr []int, k int, x int) []int {
-    if arr == nil || len(arr) == 0 || k == 0 {return nil}
+    // first find the closest to x element using binary search ( o(logN) )
     left := 0
     right := len(arr)-1
-    for right-left+1 != k {
-        leftDist := x-arr[left]
-        rightDist := arr[right]-x
-        if leftDist > rightDist{
-            left++
+    for left < right {
+        mid := left + (right-left)/2
+         if arr[mid] >= x {
+            right = mid
         } else {
-            // if rightDist is farther away from x compared to leftDist we move right--
-            // if the distances are equal, we move away from bigger value, and in sorted array, the bigger value will ALWAYS BE RIGHT VALUE COMPARED TO LEFT VALUE
-            // therefore no need of explicit "if checks"
-            right--
+            left = mid+1
         }
     }
-    
+    left = left-1
+    right = left+1
+
+    for right-left-1 < k {
+        if left == -1 {
+            right++
+            continue
+        }
+        if right == len(arr) || abs(arr[left]-x) <= abs(arr[right]-x) {
+            left--
+        } else {
+            right++
+        }
+        
+    }
     out := []int{}
-    for i := left; i <= right ; i++ {
+    for i := left+1; i < right; i++ {
         out = append(out, arr[i])
     }
     return out
 }
+
+
+// two pointers 
+// func findClosestElements(arr []int, k int, x int) []int {
+//     if arr == nil || len(arr) == 0 || k == 0 {return nil}
+//     left := 0
+//     right := len(arr)-1
+//     for right-left+1 != k {
+//         leftDist := x-arr[left]
+//         rightDist := arr[right]-x
+//         if leftDist > rightDist{
+//             left++
+//         } else {
+//             // if rightDist is farther away from x compared to leftDist we move right--
+//             // if the distances are equal, we move away from bigger value, and in sorted array, the bigger value will ALWAYS BE RIGHT VALUE COMPARED TO LEFT VALUE
+//             // therefore no need of explicit "if checks"
+//             right--
+//         }
+//     }
+    
+//     out := []int{}
+//     for i := left; i <= right ; i++ {
+//         out = append(out, arr[i])
+//     }
+//     return out
+// }
 
 // maxHeap impl
 // type pair struct {
