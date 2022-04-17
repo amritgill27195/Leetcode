@@ -3,7 +3,7 @@
     approach: brute force
     - Flatten the entire matrix in a 1D array
     - Sort it
-    - Return the k+1 idx element
+    - Return the k-1 idx element
     Time: o(mn) + o(nlogn)
     Space: o(mn)
 */
@@ -30,7 +30,7 @@
     approach: max heap of size k
     - For each element, store in maxHeap
     - If maxHeap size > k, pop to keep size <= k
-    - Return the last element from maxHeap
+    - Return the first element from maxHeap
     time : o(mnlogk)
     space: o(k)
 */
