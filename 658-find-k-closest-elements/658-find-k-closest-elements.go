@@ -33,54 +33,58 @@
     - space: o(1)
     
     
-    approach: Binary search + two pointers
-    - Since the array is sorted
-    - There is a potential for binary search and/or two pointers
-    - We can search for the 'x' using binary search or closest to 'x'
-    - This will be in o(logn) time with o(1) space
-    - Then once we have the closest to 'x', then
-    - Make sure you pick closest between left vs right after binary search
-    - We can start forming a window of size k
-    - i.e start 2 pointers from the idx that is closest to x
-    - if the dist between left and right ptr (right-left+1) == k - break - this means we have a valid window of size k 
-    - if we do not, then get the 
+    approach: Binary search to look for the starting point of the range
+    - left = 0
+    - right = len(arr)-k
+        - Why not last idx?
+        - BECAUSE we are doing binary search to look for THE STARTING IDX OF THE RANGE OF ELEMENTS
+        - THE LAST VALID STARTING IDX WITHIN ARR WOULD BE len(arr)-k right... therefore ( do not forget we are doing binary search to find a VALID starting point)
+    - Then we get the mid
+    - When we are doing binary search we always use mid to see if thats our target right?
+    - but since we are looking for a starting point from within our range, we will use mid to see IF mid is a potential starting point...
+    - but how do we check that?
+    - if mid == start point then that means mid+k-1 would be the k size range right?
+    - so if mid is truly the starting point, then distance from mid to x must be smaller than of distance from endPoint to x
+        - endPoint here is mid+k ( i.e the last element in this range )
+    - how do we get the distance from mid to x? -> x-arr[mid]
+    - how do we get the distance from endPoint to x -> arr[mid+k]-x
+    - In our two pointers, whichever distance was closer, we moved towards that, ( or whichever distance was farthest from x we moved away from that )
+    - Same principle applies here, if startDist > endDist - move away from startPtr ( left ptr ) 
+    - Otherwise move away from endDist (right ptr )
+    - What about when startDist == endDist?
+        - In two pointers and the question itself states, that if two distances are equal use the smaller value
+        - Then in our binary search we will do the same
+        - But how? and what would that look like...
+        - If startDist/leftDist == endDist/rightDist then we obv do not want to lean towards endDist/rightDist -- so right = mid ( move away from current right ptr )
+    - Once our binary search breaks out of the loop, then we can use the left ptr to pull out arr[left:left+k-1] elements (k closest elements)
+    
+    Time: o(logn-k) to search + o(k) for the final list generation
+    Space: o(1)
 */
 
-
-// binary search + 2 pinters
-func findClosestElements(arr []int, k int, x int) []int {
-    // first find the closest to x element using binary search ( o(logN) )
+func findClosestElements(arr []int, k int, x int) []int { 
+    // Remember we will be using binary search to look for STARTING POINT OF THE RANGE!   
     left := 0
-    right := len(arr)-1
+    right := len(arr)-k // the last valid starting point inorder to get a valid k size array
     for left < right {
-        mid := left + (right-left)/2
-         if arr[mid] >= x {
-            right = mid
-        } else {
+        mid := left+(right-left)/2
+        distStart := x-arr[mid]
+        distEnd := arr[mid+k]-x
+        if distStart > distEnd {
             left = mid+1
+        } else { 
+            // 2 cases here, distEnd is bigger than distStart OR distances are equal -- in both cases move away from right
+            right = mid
         }
     }
-    left = left-1
-    right = left+1
-
-    for right-left-1 < k {
-        if left == -1 {
-            right++
-            continue
-        }
-        if right == len(arr) || abs(arr[left]-x) <= abs(arr[right]-x) {
-            left--
-        } else {
-            right++
-        }
-        
-    }
+    
     out := []int{}
-    for i := left+1; i < right; i++ {
+    for i := left; i <= left+k-1; i++ {
         out = append(out, arr[i])
     }
     return out
 }
+
 
 
 // two pointers 
