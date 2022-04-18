@@ -13,7 +13,13 @@
     - Outcome: TLE
     
     approach: logN recursive
-    
+    - half the exponent in each recursive call
+    - once we reach the leaf of our recursion tree ( the base case when exponent will be 0)
+        - then return 1.00
+    - once we go back from leaf to a parent call
+    - we will check if n is an event nu
+        - if yes, return result * result * 1/x
+    - otherwise 
     
     
 */
@@ -31,17 +37,23 @@
 // }
 
 func myPow(x float64, n int) float64 {
-    // base
-    if n == 0 {return 1.00}
-    // logic
-    result := myPow(x, n/2)
-    if n % 2 == 0{
-        return result * result
-    } else {
-        if n < 0 {
-            return result * result * 1/x
+    if n < 0 {
+        x = 1/x
+        n = -n
+    }
+    var helper func(base float64, exp int) float64
+    helper = func(base float64, exp int) float64 {
+        // base
+        if exp == 0 {return 1.00}
+        // logic
+        result := helper(base, exp/2)
+        if exp % 2 == 0 {
+            return result * result
         } else {
-            return result * result * x
+            return result * result * base
         }
     }
+    
+    
+    return helper(x, n)
 }
