@@ -34,22 +34,23 @@ func exist(board [][]byte, word string) bool {
         if wordIdx == len(word) {
             return true
         }
-        if r < 0 || r == m || c < 0 || c == n || board[r][c] == '#' || board[r][c] != word[wordIdx] {
+        if r < 0 || r == m || c < 0 || c == n || board[r][c] == '#' {
             return false
         }
-        
-        // logic
-        // action ( save value and mark this position visited )
-        tmp := board[r][c]
-        board[r][c] = '#'
-        // recurse = check all 4 dirs for the next word ( wordIdx+1)
-        for _, dir := range dirs {
-            if backtrack(r+dir[0], c+dir[1], wordIdx+1){
-                return true
+        if board[r][c] == word[wordIdx] {
+            // logic
+            // action ( save value and mark this position visited )
+            tmp := board[r][c]
+            board[r][c] = '#'
+            // recurse = check all 4 dirs for the next word ( wordIdx+1)
+            for _, dir := range dirs {
+                if backtrack(r+dir[0], c+dir[1], wordIdx+1){
+                    return true
+                }
             }
+            // backtrack - undo the visiting action and restore state back in board
+            board[r][c] = tmp
         }
-        // backtrack - undo the visiting action and restore state back in board
-        board[r][c] = tmp
         return false
     }
     
