@@ -112,6 +112,8 @@ func findClosestElements(arr []int, k int, x int) []int {
 //     return out
 // }
 
+
+
 // maxHeap impl
 // type pair struct {
 //     dist int
@@ -164,9 +166,9 @@ func findClosestElements(arr []int, k int, x int) []int {
 
 
 
-func abs(n int) int {
-    if n < 0 {
-        return n * -1
-    }
-    return n
-}
+// func abs(n int) int {
+//     if n < 0 {
+//         return n * -1
+//     }
+//     return n
+// }
