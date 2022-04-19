@@ -23,7 +23,8 @@ func Constructor() Trie {
     }
 }
 
-
+// time: o(k) where k is the length of word
+// space: o(k)
 func (this *Trie) Insert(word string)  {
     curr := this.root
     for _, char := range word {
@@ -39,7 +40,8 @@ func (this *Trie) Insert(word string)  {
     curr.isEnd = true
 }
 
-
+// time: o(k) where k is the length of word
+// space: o(1)
 func (this *Trie) Search(word string) bool {
     // we are looking for FULL VALID WORD ( not prefix )
     curr := this.root
@@ -56,7 +58,8 @@ func (this *Trie) Search(word string) bool {
     return curr.isEnd
 }
 
-
+// time: o(k) where k is the length of word
+// space: o(1)
 func (this *Trie) StartsWith(prefix string) bool {
     // here we are searching for whether we have a prefix 
     // existance of a prefix and not all words that began with this $prefix
