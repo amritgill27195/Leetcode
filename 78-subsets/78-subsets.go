@@ -23,72 +23,28 @@
 */
 
 
-// no recursion
+// 0/1 based recursion
 func subsets(nums []int) [][]int {
-    if nums == nil {return nil}
-    result := [][]int{{}}
-    for i := 0; i < len(nums); i++ {
-        // because we append to result and we are looping over result size in inner for loop
-        // that result size keeps growing and never breaks, so we need to have a static boundry
-        size := len(result)
-        for j := 0; j < size; j++ {
-            newL := make([]int, len(result[j]))
-            copy(newL, result[j])
-            newL = append(newL, nums[i])
+    var result [][]int
+    var dfs func(start int, paths []int)
+    dfs = func(start int, paths []int) {
+        // base
+        if start >= len(nums) {
+            newL := make([]int, len(paths))
+            copy(newL, paths)
             result = append(result, newL)
+            return
         }
+        
+        // logic
+        // not choose
+        dfs(start+1, paths)
+        
+        // choose
+        paths = append(paths, nums[start])
+        dfs(start+1, paths)
+        paths = paths[:len(paths)-1]
     }
+    dfs(0, nil)
     return result
 }
-
-
-
-// for loop based
-// func subsets(nums []int) [][]int{
-//     var result [][]int
-//     var dfs func(paths []int, start int)
-//     dfs = func(paths []int, start int) {
-//         // base
-//         newL := make([]int, len(paths))
-//         copy(newL, paths)
-//         result = append(result, newL)
-        
-        
-//         // logic
-//         for i := start; i < len(nums); i++ {
-//             paths = append(paths, nums[i])
-//             dfs(paths, i+1)
-//             paths=paths[:len(paths)-1]
-//         }
-//     }
-//     dfs(nil, 0)
-//     return result
-// }
-
-// 0/1 based recursion
-// func subsets(nums []int) [][]int {
-    
-//     var result [][]int
-//     var dfs func(paths []int, idx int)
-//     dfs = func(paths []int, idx int) {
-//         // base
-//         if idx >= len(nums) {
-//             newL := make([]int, len(paths))
-//             copy(newL, paths)
-//             result=append(result, newL)
-//             return
-//         }
-        
-//         // logic
-//         // not choose 
-//         dfs(paths, idx+1)
-        
-//         // choose
-//         paths = append(paths, nums[idx])
-//         dfs(paths, idx+1)
-//         // backtrack
-//         paths = paths[:len(paths)-1]
-//     }
-//     dfs(nil, 0)
-//     return result
-// }
