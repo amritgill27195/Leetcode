@@ -23,32 +23,47 @@
 */
 
 
-// for loop based recursion
+// no recursion
 func subsets(nums []int) [][]int {
-    var result [][]int
-    var backtrack func(start int, paths []int)
-    backtrack = func(start int, paths []int) {
-        // base
-        newL := make([]int, len(paths))
-        copy(newL, paths)
-        result = append(result, newL)
-        if start == len(nums) {
-            return
-        }
-        
-        // logic
-        for i := start; i < len(nums); i++ {
-            // action
-            paths = append(paths, nums[i])
-            // recurse
-            backtrack(i+1, paths)
-            // backtrack
-            paths = paths[:len(paths)-1]
+    result := [][]int{{}}
+    for i := 0; i < len(nums); i++ {
+        for _, list := range result {
+            newL := make([]int, len(list))
+            copy(newL, list)
+            newL = append(newL, nums[i])
+            result = append(result, newL)
         }
     }
-    backtrack(0,nil)
     return result
 }
+
+
+// for loop based recursion
+// func subsets(nums []int) [][]int {
+//     var result [][]int
+//     var backtrack func(start int, paths []int)
+//     backtrack = func(start int, paths []int) {
+//         // base
+//         newL := make([]int, len(paths))
+//         copy(newL, paths)
+//         result = append(result, newL)
+//         if start == len(nums) {
+//             return
+//         }
+        
+//         // logic
+//         for i := start; i < len(nums); i++ {
+//             // action
+//             paths = append(paths, nums[i])
+//             // recurse
+//             backtrack(i+1, paths)
+//             // backtrack
+//             paths = paths[:len(paths)-1]
+//         }
+//     }
+//     backtrack(0,nil)
+//     return result
+// }
 
 
 // 0/1 based recursion
