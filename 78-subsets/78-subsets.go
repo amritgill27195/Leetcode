@@ -29,7 +29,7 @@ func subsets(nums []int) [][]int {
     var dfs func(start int, paths []int)
     dfs = func(start int, paths []int) {
         // base
-        if start >= len(nums) {
+        if start == len(nums) {
             newL := make([]int, len(paths))
             copy(newL, paths)
             result = append(result, newL)
