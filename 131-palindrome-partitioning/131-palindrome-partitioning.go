@@ -43,41 +43,44 @@
 */
 
 
+// can 0/1 based recursion not work here?
+// no, because we do not have a not choose case - we have to choose all characters and cannot skip a character while partitioning
 func partition(s string) [][]string {
-    
+    if s == "" {
+        return nil
+    }
     var result [][]string
-    var dfs func(paths []string, start int)
-    dfs = func(paths []string, start int) {
+    var backtrack func(start int, paths []string)
+    backtrack = func(start int, paths []string) {
         // base
-        if start >= len(s) {
+        if start == len(s) {
             newL := make([]string, len(paths))
             copy(newL, paths)
             result = append(result, newL)
             return
         }
+        
         // logic
         for i := start; i < len(s); i++ {
-            substr := string(s[start:i+1])
-            // check
-            if isPalindrome(substr) {
-                // action
-                paths = append(paths, substr)
-                // recurse
-                dfs(paths, i+1)
-                // backtrack
+            subStr := string(s[start:i+1])
+            if isPalindrome(subStr) {
+                paths = append(paths, subStr)
+                backtrack(i+1, paths)
                 paths = paths[:len(paths)-1]
             }
         }
     }
-    dfs(nil, 0)
+    backtrack(0, nil)
     return result
 }
 
+
 func isPalindrome(s string) bool {
-    for i := 0; i < len(s) ; i++ {
-        curChar := string(s[i])
-        lastChar := string(s[len(s)-i-1])
-        if curChar != lastChar {
+    if len(s) <= 1 {
+        return true
+    }
+    for i := 0 ; i < len(s); i++ {
+        if string(s[i]) != string(s[len(s)-1-i]) {
             return false
         }
     }
