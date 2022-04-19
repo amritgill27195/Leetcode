@@ -10,11 +10,12 @@ func findSubsequences(nums []int) [][]int {
         }
         
         // logic
-        vis := map[int]bool{}
+        set := map[int]struct{}{}
         for i := start; i < len(nums); i++ {
-            if (len(paths) == 0 || nums[i] >= paths[len(paths)-1]) && (!vis[nums[i]]){
+            _, seen := set[nums[i]]
+            if (len(paths) == 0 || nums[i] >= paths[len(paths)-1]) && (!seen){
                 // action
-                vis[nums[i]] = true
+                set[nums[i]] = struct{}{}
                 paths = append(paths, nums[i])
                 // recurse
                 backtrack(i+1, paths)
