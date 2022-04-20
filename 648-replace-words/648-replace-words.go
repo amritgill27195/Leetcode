@@ -1,48 +1,50 @@
-
 type trieNode struct {
     isEnd bool
     childrens [26]*trieNode
 }
 
-func insert(word string, root *trieNode) {
-    curr := root
-    for i := 0; i < len(word); i++ {
-        if curr.childrens[word[i]-'a'] == nil {
-            curr.childrens[word[i]-'a'] = new(trieNode)
+func insert(root *trieNode, word string) {
+    current := root
+    for _, char := range word {
+        if current.childrens[char-'a'] == nil {
+            current.childrens[char-'a'] = &trieNode{childrens: [26]*trieNode{}}
         }
-        curr = curr.childrens[word[i]-'a']
+        current = current.childrens[char-'a']
     }
-    curr.isEnd = true
+    current.isEnd = true
 }
 
-func search(word string, root *trieNode) (bool, string) {
-    curr := root
+
+func search(root *trieNode, word string) (bool, string) {
+    current := root
     out := new(strings.Builder)
-    for i := 0; i < len(word); i++ {
-        if curr.childrens[word[i]-'a'] == nil { return false, word}
-        out.WriteByte(word[i])
-        curr = curr.childrens[word[i]-'a']
-        if curr.isEnd {return true, out.String()}
+    for _, char := range word {
+        if current.childrens[char-'a'] == nil {return false, word}
+        current = current.childrens[char-'a']
+        out.WriteRune(char)
+        if current.isEnd {
+            return true, out.String()
+        }
     }
     return false, word
 }
 
 
+
 func replaceWords(dictionary []string, sentence string) string {
-    
-    root := new(trieNode)
-    for _, word := range dictionary{
-        insert(word, root)
+    root := &trieNode{childrens: [26]*trieNode{}}
+    for _, word := range dictionary {
+        insert(root, word)
     }
     out := new(strings.Builder)
-    splitSent := strings.Split(sentence, " ")
-    for idx, word := range splitSent{
+    splitSen := strings.Split(sentence, " ")
+    for idx, word := range splitSen {
         if idx != 0 {out.WriteString(" ")}
-        found, replace := search(word, root)
+        found, replace := search(root, word)
         if found {
-           splitSent[idx] = replace 
+            splitSen[idx] = replace
         }
-        out.WriteString(splitSent[idx])
+        out.WriteString(splitSen[idx])
     }
     return out.String()
 }
