@@ -52,7 +52,7 @@ func longestWord(words []string) string {
             if r.childrens[i] != nil && r.childrens[i].isEnd{
                 path += string('a'+i)
                 dfs(r.childrens[i], path)
-                path = string(path[:len(path)-1])
+                path = path[:len(path)-1]
             }
         }
     }
