@@ -1,51 +1,63 @@
-type TrieNode struct {
+/*
+    approach: trie + DFS
+    - Store all the words in a trie
+    - Then loop thru all childrens of trie
+        - 26 childrens because trie nodes contains characters ( for now )
+        - and there are 26 characters ( lower case )
+    - if a children is initialized and isEnd == true
+    - add this children to our path ( the output string we are building to return )
+    - Then recursively call the dfs on this child as the new root to explore other childs this child has initialized
+    - In our base case, if len(path) > maxLen - then update the len and save the current word as a potential result
+    - Finally once all the trie nodes are traversed, return the saved word
+*/
+
+type trieNode struct{
     isEnd bool
-    childrens [26]*TrieNode
+    childrens [26]*trieNode
 }
 
-func insertWord(word string, root *TrieNode) {
-    curr := root
-    for i := 0; i < len(word); i++ {
-        char := word[i]
-        idx := char-'a'
-        if curr.childrens[idx] == nil {
-            curr.childrens[idx] = &TrieNode{
-                childrens: [26]*TrieNode{},
-            }
+func insert(root *trieNode, word string) {
+    current := root
+    for _, char := range word {
+        if current.childrens[char-'a'] == nil {
+            current.childrens[char-'a'] = &trieNode{childrens: [26]*trieNode{}}
         }
-        curr = curr.childrens[idx]
+        current = current.childrens[char-'a']
     }
-    curr.isEnd = true
+    current.isEnd = true
+}
 
+func search(root *trieNode, word string) {
+    
 }
 
 func longestWord(words []string) string {
-    root := new(TrieNode)
-    root.childrens = [26]*TrieNode{}
-    root.isEnd = false
-    
+    root := &trieNode{childrens: [26]*trieNode{}}
     for _, word := range words {
-        insertWord(word, root)
+        insert(root, word)
     }
-    maxWord := ""
-    var backtrack func(r *TrieNode, pathBldr string)
-    backtrack = func(r *TrieNode, pathBldr string) {
+    var result string
+    maxLen := 0
+    var dfs func(r *trieNode, path string)
+    dfs = func(r *trieNode, path string) {
         // base
-        if len(pathBldr) > len(maxWord) { 
-            maxWord = pathBldr
+        if len(path) > maxLen {
+            maxLen = len(path)
+            result = path
         }
-
+        if r == nil {
+            return
+        }
         
         // logic
-        for i := 0; i <= 25; i++ {
-            if r.childrens[i] != nil && r.childrens[i].isEnd {
-                // TODO: find out how to backtrack in strings.Builder in golang ( still have no solution to this .. sigh )
-                pathBldr += string('a'+i)
-                backtrack(r.childrens[i], pathBldr)
-                pathBldr = pathBldr[:len(pathBldr)-1]
+        for i := 0 ; i < 26; i++ {
+            if r.childrens[i] != nil && r.childrens[i].isEnd{
+                path += string('a'+i)
+                dfs(r.childrens[i], path)
+                path = string(path[:len(path)-1])
             }
         }
     }
-    backtrack(root, "")
-    return maxWord
+    dfs(root, "")
+    return result
 }
