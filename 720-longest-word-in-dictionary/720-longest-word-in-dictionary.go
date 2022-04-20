@@ -37,12 +37,10 @@ func longestWord(words []string) string {
         insert(root, word)
     }
     var result string
-    maxLen := 0
     var dfs func(r *trieNode, path string)
     dfs = func(r *trieNode, path string) {
         // base
-        if len(path) > maxLen {
-            maxLen = len(path)
+        if len(path) > len(result) {
             result = path
         }
         if r == nil {
