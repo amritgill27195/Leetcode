@@ -9,6 +9,12 @@
     - Then recursively call the dfs on this child as the new root to explore other childs this child has initialized
     - In our base case, if len(path) > maxLen - then update the len and save the current word as a potential result
     - Finally once all the trie nodes are traversed, return the saved word
+    
+    time:
+    - let n be the number of words
+    - let k be the len of each word in words
+    - o(nk) - to insert each word in a trie
+    - 
 */
 
 type trieNode struct{
@@ -37,8 +43,8 @@ func longestWord(words []string) string {
         insert(root, word)
     }
     var result string
-    var dfs func(r *trieNode, path string)
-    dfs = func(r *trieNode, path string) {
+    var backtrack func(r *trieNode, path string)
+    backtrack = func(r *trieNode, path string) {
         // base
         if len(path) > len(result) {
             result = path
@@ -50,12 +56,15 @@ func longestWord(words []string) string {
         // logic
         for i := 0 ; i < 26; i++ {
             if r.childrens[i] != nil && r.childrens[i].isEnd{
+                // action
                 path += string('a'+i)
-                dfs(r.childrens[i], path)
+                // recurse
+                backtrack(r.childrens[i], path)
+                // backtrack
                 path = path[:len(path)-1]
             }
         }
     }
-    dfs(root, "")
+    backtrack(root, "")
     return result
 }
