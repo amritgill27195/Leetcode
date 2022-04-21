@@ -62,30 +62,55 @@
     Space: o(1)
 */
 
+// binary search to find the starting point of the range
+func findClosestElements(arr []int, k int, x int) []int {
+    left := 0
+    // the last valid starting point inorder to get a valid k size array
+    right := len(arr)-k
+    
+    for left < right {
+        mid := left + (right-left)/2
+        distStart := x-arr[mid]
+        distEnd := arr[mid+k]-x
+        if distStart > distEnd {
+            // move away from mid because start is way farther from end 
+            // so mid which is potential starting point is not correct, since the end of this range is alot closer than the start
+            left = mid+1
+        } else {
+            right = mid
+        }
+    }
+    
+    out := []int{}
+    for i := left; i < left+k; i++ {
+        out = append(out, arr[i])
+    }
+    return out
+}
 
 // two pointer linear approach
 // time: o(n-k)
 // why -k ? 
 //  because as soon as we hit our windowSize of k , we never loop over those inner k window elements, therefore we never looped over entire n length arr but rather n-k len array
 // space: o(1)
-func findClosestElements(arr []int, k int, x int) []int {
-    left := 0
-    right := len(arr)-1
-    for right-left+1 > k {
-        rightDist := abs(arr[right]-x)
-        leftDist := abs(arr[left]-x)
-        if (leftDist < rightDist) || (leftDist == rightDist) {
-            right--
-        } else if rightDist < leftDist {
-            left++
-        }
-    }
-    out := []int{}
-    for i := left; i <= right; i++ {
-        out = append(out, arr[i])
-    }
-    return out
-}
+// func findClosestElements(arr []int, k int, x int) []int {
+//     left := 0
+//     right := len(arr)-1
+//     for right-left+1 > k {
+//         rightDist := abs(arr[right]-x)
+//         leftDist := abs(arr[left]-x)
+//         if (leftDist < rightDist) || (leftDist == rightDist) {
+//             right--
+//         } else if rightDist < leftDist {
+//             left++
+//         }
+//     }
+//     out := []int{}
+//     for i := left; i <= right; i++ {
+//         out = append(out, arr[i])
+//     }
+//     return out
+// }
 
 
 // approach: max heap
