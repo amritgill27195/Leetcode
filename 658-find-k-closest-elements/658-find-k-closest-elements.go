@@ -64,6 +64,10 @@
 
 
 // two pointer linear approach
+// time: o(n-k)
+// why -k ? 
+//  because as soon as we hit our windowSize of k , we never loop over those inner k window elements, therefore we never looped over entire n length arr but rather n-k len array
+// space: o(1)
 func findClosestElements(arr []int, k int, x int) []int {
     left := 0
     right := len(arr)-1
