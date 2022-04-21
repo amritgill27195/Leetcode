@@ -62,113 +62,49 @@
     Space: o(1)
 */
 
-func findClosestElements(arr []int, k int, x int) []int { 
-    // Remember we will be using binary search to look for STARTING POINT OF THE RANGE!   
-    left := 0
-    right := len(arr)-k // the last valid starting point inorder to get a valid k size array
-    for left < right {
-        mid := left+(right-left)/2
-        distStart := x-arr[mid]
-        distEnd := arr[mid+k]-x
-        if distStart > distEnd {
-            left = mid+1
-        } else { 
-            // 2 cases here, distEnd is bigger than distStart OR distances are equal -- in both cases move away from right
-            right = mid
+
+// approach: max heap
+func findClosestElements(arr []int, k int, x int) []int {
+    mx := &maxHeap{items: []*item{}}
+    for i := 0; i < len(arr); i++ {
+        it := &item{dist: abs(arr[i]-x), val: arr[i]}
+        heap.Push(mx, it)
+        if mx.Len() > k {
+            heap.Pop(mx)
         }
     }
-    
     out := []int{}
-    for i := left; i <= left+k-1; i++ {
-        out = append(out, arr[i])
+    for mx.Len() != 0 {
+        out = append(out, heap.Pop(mx).(*item).val)
     }
+    sort.Ints(out)
     return out
 }
-
-
-
-// two pointers 
-// func findClosestElements(arr []int, k int, x int) []int {
-//     if arr == nil || len(arr) == 0 || k == 0 {return nil}
-//     left := 0
-//     right := len(arr)-1
-//     for right-left+1 != k {
-//         leftDist := x-arr[left]
-//         rightDist := arr[right]-x
-//         if leftDist > rightDist{
-//             left++
-//         } else {
-//             // if rightDist is farther away from x compared to leftDist we move right--
-//             // if the distances are equal, we move away from bigger value, and in sorted array, the bigger value will ALWAYS BE RIGHT VALUE COMPARED TO LEFT VALUE
-//             // therefore no need of explicit "if checks"
-//             right--
-//         }
-//     }
-    
-//     out := []int{}
-//     for i := left; i <= right ; i++ {
-//         out = append(out, arr[i])
-//     }
-//     return out
-// }
-
-
-
-// maxHeap impl
-// type pair struct {
-//     dist int
-//     val int
-// }
-// func findClosestElements(arr []int, k int, x int) []int {
-//     if arr == nil || len(arr) == 0 {return nil}
-    
-//     mx := &maxHeap{items: []*pair{}}
-//     for i := 0; i < len(arr); i++ {
-//         p := &pair{dist: abs(x-arr[i]), val: arr[i]}
-//         heap.Push(mx, p)
-//         if len(mx.items) > k {
-//             heap.Pop(mx)
-//         }
-//     }
-//     out := make([]int, len(mx.items))
-//     for i := len(out)-1; i >= 0; i-- {
-//         out[i] = heap.Pop(mx).(*pair).val
-//     }
-//     // With heap I still had to sort at the end -- did I do something wrong here?
-//     sort.Ints(out)
-//     return out
-    
-// }
-
-
-
-// type maxHeap struct {
-// 	items []*pair
-// }
-
-// func (m *maxHeap) Len() int {return len(m.items)}
-// func (m *maxHeap) Less(i, j int) bool {
-//     if m.items[i].dist == m.items[j].dist {
-//         // if distances are the same, then the bigger val takes precedence
-//         return m.items[i].val > m.items[j].val
-//     }
-//     // or else sort 
-//     return m.items[i].dist > m.items[j].dist
-    
-// }
-// func (m *maxHeap) Swap(i, j int) { m.items[i],m.items[j] = m.items[j], m.items[i]}
-// func (m *maxHeap) Push(x interface{}) {m.items = append(m.items, x.(*pair))}
-// func (m *maxHeap) Pop() interface{} {
-// 	i := m.items[len(m.items)-1]
-// 	m.items = m.items[:len(m.items)-1]
-// 	return i
-// }
-
-
-
-// func abs(n int) int {
-//     if n < 0 {
-//         return n * -1
-//     }
-//     return n
-// }
+type item struct {
+    dist, val int
+}
+type maxHeap struct {
+    items []*item
+}
+func(m *maxHeap) Len() int {return len(m.items)}
+func (m *maxHeap) Swap(i,j int) {m.items[i],m.items[j] = m.items[j],m.items[i]}
+func(m *maxHeap) Less(i, j int)bool{
+    if m.items[i].dist == m.items[j].dist {
+        return m.items[i].val > m.items[j].val
+    }
+    return m.items[i].dist > m.items[j].dist
+}
+func(m *maxHeap) Push(x interface{}) {
+    m.items = append(m.items, x.(*item))
+}
+func(m *maxHeap) Pop() interface{} {
+    out := m.items[len(m.items)-1]
+    m.items = m.items[:len(m.items)-1]
+    return out
+}
+func abs(n int) int {
+    if n < 0 {
+        return n * -1
+    }
+    return n
+}
