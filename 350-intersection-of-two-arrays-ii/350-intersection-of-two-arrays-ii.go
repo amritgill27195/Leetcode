@@ -68,34 +68,92 @@
     space: o(1)
 */
 
-func intersect(nums1 []int, nums2 []int) []int {
+// func intersect(nums1 []int, nums2 []int) []int {
+//     // make sure nums1 is larger 
+//     if len(nums1) < len(nums2) {
+//         return intersect(nums2, nums1)
+//     }
     
-    // make sure nums1 is larger 
+//     // sort ( implied )
+//     sort.Ints(nums1)
+//     sort.Ints(nums2)
+    
+    
+//     n1 := 0
+//     n2 := 0
+//     result := []int{}
+//     for n1 < len(nums1) && n2 < len(nums2) {
+//         n1Val := nums1[n1]
+//         n2Val := nums2[n2]
+//         if n1Val == n2Val {
+//             // we are looking for common elements
+//             result = append(result, n1Val)
+//             n1++
+//             n2++
+//         } else if n1Val > n2Val {
+//             n2++
+//         } else {
+//             n1++
+//         }
+//     }
+//     return result
+// }
+
+
+
+/*
+    We need to find the common elements between nums1 and nums2.
+    If we can imply that nums1 and nums2 are sorted, then
+    another potential solution is to explore binary search
+    
+    approach: 
+    - sort(nums1), sort(nums2)
+    - binary search on the bigger array ( nums1 )
+    - for every element in nums2
+    - we will search for THE LEFTEST IDX of this number in nums1 using binary search
+    - leftest ($x == target , not closest )
+    - If we find it, then we will shrink our binary search window and exclude this idx we just added to our result array ( we cannot include the same number again in our next binary search )
+
+
+    m = larger array
+    n = smaller array
+    
+    excluding sort time from below because I am implying the array will be sorted
+    if not then add o(mlogm) + o(nlogn) to the below time 
+    time: o(nlogm)
+    space: o(1)
+*/
+func intersect(nums1 []int, nums2 []int) []int {
     if len(nums1) < len(nums2) {
         return intersect(nums2, nums1)
     }
-    
-    // sort ( implied )
     sort.Ints(nums1)
     sort.Ints(nums2)
-    
-    
-    n1 := 0
-    n2 := 0
     result := []int{}
-    for n1 < len(nums1) && n2 < len(nums2) {
-        n1Val := nums1[n1]
-        n2Val := nums2[n2]
-        if n1Val == n2Val {
-            // we are looking for common elements
-            result = append(result, n1Val)
-            n1++
-            n2++
-        } else if n1Val > n2Val {
-            n2++
-        } else {
-            n1++
+    leftIdx := 0
+    for i := 0; i < len(nums2); i++ {
+        idxFoundAt := binarySearch(leftIdx, nums2[i], nums1)
+        if idxFoundAt != -1 {
+            result = append(result, nums2[i])
+            leftIdx = idxFoundAt+1
         }
     }
     return result
+}
+
+func binarySearch(left, target int, nums []int) int {
+    idx := -1
+    right  := len(nums)-1
+    for left <= right {
+        mid := left + (right-left)/2
+        if nums[mid] == target {
+            idx = mid
+            right = mid-1
+        } else if nums[mid] < target {
+            left = mid+1
+        } else {
+            right = mid-1
+        }
+    }
+    return idx
 }
