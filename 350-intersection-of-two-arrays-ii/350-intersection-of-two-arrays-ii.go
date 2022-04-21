@@ -147,11 +147,8 @@ func binarySearch(left, target int, nums []int) int {
     for left <= right {
         mid := left + (right-left)/2
         if nums[mid] == target {
-            if mid == left || nums[mid-1] != target {
-                return mid
-            } else {
-                right = mid-1
-            }
+            idx = mid
+            right = mid-1
         } else if nums[mid] < target {
             left = mid+1
         } else {
