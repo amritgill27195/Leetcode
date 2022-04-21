@@ -63,45 +63,66 @@
 */
 
 
-// approach: max heap
+// two pointer linear approach
 func findClosestElements(arr []int, k int, x int) []int {
-    mx := &maxHeap{items: []*item{}}
-    for i := 0; i < len(arr); i++ {
-        it := &item{dist: abs(arr[i]-x), val: arr[i]}
-        heap.Push(mx, it)
-        if mx.Len() > k {
-            heap.Pop(mx)
+    left := 0
+    right := len(arr)-1
+    for right-left+1 > k {
+        rightDist := abs(arr[right]-x)
+        leftDist := abs(arr[left]-x)
+        if (leftDist < rightDist) || (leftDist == rightDist) {
+            right--
+        } else if rightDist < leftDist {
+            left++
         }
     }
     out := []int{}
-    for mx.Len() != 0 {
-        out = append(out, heap.Pop(mx).(*item).val)
+    for i := left; i <= right; i++ {
+        out = append(out, arr[i])
     }
-    sort.Ints(out)
     return out
 }
-type item struct {
-    dist, val int
-}
-type maxHeap struct {
-    items []*item
-}
-func(m *maxHeap) Len() int {return len(m.items)}
-func (m *maxHeap) Swap(i,j int) {m.items[i],m.items[j] = m.items[j],m.items[i]}
-func(m *maxHeap) Less(i, j int)bool{
-    if m.items[i].dist == m.items[j].dist {
-        return m.items[i].val > m.items[j].val
-    }
-    return m.items[i].dist > m.items[j].dist
-}
-func(m *maxHeap) Push(x interface{}) {
-    m.items = append(m.items, x.(*item))
-}
-func(m *maxHeap) Pop() interface{} {
-    out := m.items[len(m.items)-1]
-    m.items = m.items[:len(m.items)-1]
-    return out
-}
+
+
+// approach: max heap
+// func findClosestElements(arr []int, k int, x int) []int {
+//     mx := &maxHeap{items: []*item{}}
+//     for i := 0; i < len(arr); i++ {
+//         it := &item{dist: abs(arr[i]-x), val: arr[i]}
+//         heap.Push(mx, it)
+//         if mx.Len() > k {
+//             heap.Pop(mx)
+//         }
+//     }
+//     out := []int{}
+//     for mx.Len() != 0 {
+//         out = append(out, heap.Pop(mx).(*item).val)
+//     }
+//     sort.Ints(out)
+//     return out
+// }
+// type item struct {
+//     dist, val int
+// }
+// type maxHeap struct {
+//     items []*item
+// }
+// func(m *maxHeap) Len() int {return len(m.items)}
+// func (m *maxHeap) Swap(i,j int) {m.items[i],m.items[j] = m.items[j],m.items[i]}
+// func(m *maxHeap) Less(i, j int)bool{
+//     if m.items[i].dist == m.items[j].dist {
+//         return m.items[i].val > m.items[j].val
+//     }
+//     return m.items[i].dist > m.items[j].dist
+// }
+// func(m *maxHeap) Push(x interface{}) {
+//     m.items = append(m.items, x.(*item))
+// }
+// func(m *maxHeap) Pop() interface{} {
+//     out := m.items[len(m.items)-1]
+//     m.items = m.items[:len(m.items)-1]
+//     return out
+// }
 func abs(n int) int {
     if n < 0 {
         return n * -1
