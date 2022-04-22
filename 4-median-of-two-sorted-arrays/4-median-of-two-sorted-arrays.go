@@ -56,7 +56,6 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
     if n2 < len(nums2) {
         merged = append(merged, nums2[n2:]...)
     }
-    fmt.Println(merged)
     
     midIdx := len(merged) / 2
     if len(merged) % 2 != 0 {
