@@ -1,3 +1,6 @@
+// worst problem desc ever...
+// time: o(logn)
+// space: o(1)
 func hIndex(citations []int) int {
     left := 0
     right := len(citations)-1
