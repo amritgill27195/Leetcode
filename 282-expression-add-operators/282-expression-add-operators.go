@@ -1,40 +1,28 @@
 func addOperators(num string, target int) []string {
     
+    var result []string
     
-    result := []string{}
-    
-    var dfs func(start int, path string, calc int, tail int)
-    dfs = func(start int, path string, calc int, tail int) {
-        
-        
+    var dfs func(path string, start, calc, tail int)
+    dfs = func(path string, start, calc, tail int) {
         // base
         if start == len(num) && calc == target {
             result = append(result, path)
             return
         }
         
-        // logic
         for i := start; i < len(num); i++ {
-            currNumStr := string(num[start:i+1])
-            currNum, _ := strconv.Atoi(currNumStr)
             if string(num[start]) == "0" && start != i {continue}
+            currStr := string(num[start:i+1])
+            currStrNum, _ := strconv.Atoi(currStr)
             if start == 0 {
-                dfs(i+1, path + currNumStr, currNum, currNum)
+                dfs(path+currStr, i+1, currStrNum, currStrNum)
             } else {
-                // recurse
-                // +
-                dfs(i+1, fmt.Sprintf("%v+%v",path,currNumStr), calc+currNum, currNum)
-                
-                // -
-                dfs(i+1, fmt.Sprintf("%v-%v",path,currNumStr), calc-currNum, -currNum)
-    
-                // *
-                dfs(i+1, fmt.Sprintf("%v*%v",path,currNumStr), calc-tail+(tail*currNum), tail*currNum)
-            }   
+                dfs(path+"+"+currStr, i+1, calc+currStrNum,currStrNum)
+                dfs(path+"-"+currStr, i+1, calc-currStrNum,-currStrNum)
+                dfs(path+"*"+currStr, i+1, calc-tail+(tail*currStrNum), tail*currStrNum)
+            }
         }
     }
-    
-    dfs(0, "",0,0)
+    dfs("", 0,0,0)
     return result
-    
 }
