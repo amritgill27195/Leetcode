@@ -9,8 +9,8 @@ func calculate(s string) int {
         if unicode.IsDigit(char) {
             curr = curr * 10 + n
         }
-        if !unicode.IsDigit(char) && stringChar != " "  || i == len(s)-1 {
-            // we have a new Op
+        if (!unicode.IsDigit(char) && stringChar != " ")  || i == len(s)-1 {
+            // we either have a new Op or we have reached the last number in string
             // process current op before changing to new op
             if lastOp == "+" {
                 stack = append(stack, curr)
