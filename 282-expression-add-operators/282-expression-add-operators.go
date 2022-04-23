@@ -29,7 +29,7 @@ func addOperators(num string, target int) []string {
                 dfs(i+1, fmt.Sprintf("%v-%v",path,currNumStr), calc-currNum, -currNum)
     
                 // *
-                dfs(i+1, fmt.Sprintf("%v*%v",path,currNumStr), calc-tail+tail*currNum, tail*currNum)
+                dfs(i+1, fmt.Sprintf("%v*%v",path,currNumStr), calc-tail+(tail*currNum), tail*currNum)
             }   
         }
     }
