@@ -6,10 +6,10 @@ func calculate(s string) int {
         stringChar := string(char)
         n, _ := strconv.Atoi(stringChar)
 
-        if stringChar >= "0" && stringChar <= "9" {
+        if isDigit(stringChar) {
             curr = curr * 10 + n
         }
-        if (!unicode.IsDigit(char) && stringChar != " ")  || i == len(s)-1 {
+        if (!isDigit(stringChar) && stringChar != " ")  || i == len(s)-1 {
             // we either have a new Op or we have reached the last number in string
             // process current op before changing to new op
             if lastOp == "+" {
@@ -38,4 +38,8 @@ func calculate(s string) int {
         stack = stack[:len(stack)-1]
     }
     return result
+}
+
+func isDigit(s string) bool {
+    return s >= "0" && s <= "9"
 }
