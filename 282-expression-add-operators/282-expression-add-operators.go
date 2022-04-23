@@ -58,8 +58,16 @@
         - Nothing in golang ( techincally need to backtrack the path string expression )
         - Golang passes by value, so recursion will have its own NEW path string in memory and will not be a shared array in memory
         - if we used strings.Builder in golang, there is not a method to remove the last character in strings.Builder :sad-face
-        
-    time: 3^
+    
+    - Edge case:
+        - If startIdx != i, and value at startIdx == 0, we need to continue or else our path string to int conversion will remove the preceding 0
+        - 1 0 5
+            s i
+        - the substring we form is using s[start:i+1]
+        - this will create "05"
+        - but converting this to an int will result into just 5
+    
+    time: o(n*3^Len(num))
 
 */
 func addOperators(num string, target int) []string {
