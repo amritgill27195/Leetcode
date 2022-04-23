@@ -81,6 +81,8 @@
 /*
     approach: maintain the mess(tail) of new calculated value
     - same thing as expression add operator problem
+        - When multiplying : calc - tail + tail x current;  tail = tail * currentNum
+        - When dividing : calc - tail + (tail / currentNum); tail = tail / currentNum
     - Maintain a current number ( running number until we hit a operator )
     - Maintain a lastOp ( last operator ) - start with "+"
     - Maintain a tail = 0
@@ -97,6 +99,9 @@
         - if lastOp == "-", calc -= currentNum, tail = -currentNum
         - if lastOp == "*", calc = calc - tail + (tail * currentNum), tail = tail * currentNum
         - if lastOp == "/", calc = calc - tail + (tail / currentNum), tail = tail / currentNum
+    
+    time: o(n)
+    space: o(1)
 */
 func calculate(s string) int {
     calc := 0
