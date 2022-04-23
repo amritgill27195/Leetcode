@@ -6,7 +6,7 @@ func calculate(s string) int {
         stringChar := string(char)
         n, _ := strconv.Atoi(stringChar)
 
-        if unicode.IsDigit(char) {
+        if stringChar >= "0" && stringChar <= "9" {
             curr = curr * 10 + n
         }
         if (!unicode.IsDigit(char) && stringChar != " ")  || i == len(s)-1 {
