@@ -1,33 +1,41 @@
 func calculate(s string) int {
-    calc := 0
-    current := 0
-    tail := 0
-    op := "+"
-    
-    for i := 0; i < len(s); i++ {
-        charString := string(s[i])
-        if unicode.IsDigit(rune(s[i])) {
-            n, _ := strconv.Atoi(charString)
-            current = current * 10 + n
-            
+    stack := []int{}
+    lastOp := "+"
+    curr := 0
+    for i, char := range s {
+        stringChar := string(char)
+        n, _ := strconv.Atoi(stringChar)
+
+        if unicode.IsDigit(char) {
+            curr = curr * 10 + n
         }
-        if (!unicode.IsDigit(rune(s[i])) && charString != " ") || i == len(s)-1 {
-            if op == "+" {
-                calc += current
-                tail = current
-            } else if op == "-" {
-                calc -= current
-                tail = -current
-            } else if op == "*" {
-                calc = calc - tail + (tail*current)
-                tail = tail * current
-            } else if op == "/" {
-                calc = calc - tail + (tail/current)
-                tail = tail / current
+        if !unicode.IsDigit(char) && stringChar != " "  || i == len(s)-1 {
+            // we have a new Op
+            // process current op before changing to new op
+            if lastOp == "+" {
+                stack = append(stack, curr)
+            } else if lastOp == "-" {
+                stack = append(stack, -curr)
+            } else if lastOp == "*" {
+                // pop top, multiply with curr and push the new result
+                stack[len(stack)-1] = stack[len(stack)-1] * curr
+            } else if lastOp == "/" {
+                // pop top, divide with curr and push the new result
+                stack[len(stack)-1] = stack[len(stack)-1] / curr
             }
-            current = 0
-            op = charString
+            // reset current
+            curr = 0
+            // change the lastOp to new op
+            lastOp = stringChar
         }
     }
-    return calc
+    
+   
+    
+    result := 0
+    for len(stack) != 0 {
+        result += stack[len(stack)-1]
+        stack = stack[:len(stack)-1]
+    }
+    return result
 }
