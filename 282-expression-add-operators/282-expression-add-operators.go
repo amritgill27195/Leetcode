@@ -68,6 +68,7 @@
         - but converting this to an int will result into just 5
     
     time: o(n*3^Len(num))
+    space: o(n)
 
 */
 func addOperators(num string, target int) []string {
