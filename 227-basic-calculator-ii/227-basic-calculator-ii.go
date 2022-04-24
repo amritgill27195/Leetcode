@@ -18,7 +18,22 @@
         - if lastOp == "/", pop the top, divide top with currentNum and push the result to stack
         - finally, after processing, change the current number to 0 ( reset )
         - and change the lastOp to new operator
-    
+    - Why Stack tho???
+        - firstly, if we need to enforce multiplication and or division first, we need to know the prev number
+        - for example : 2x3 
+            - when we get to 3, we need to multiply 2 with 3
+            - we can easily get to 3 IF we did not have spaces in the middle by doing idxOf3-2 ( go 2 steps back )
+                - sure we can santize if we do have spaces but that takes space to create a sanitized string
+                - or we can go back until we get a valid digit
+            - however, its not guranteed that the 2 will be a single digit, it could be N digit...
+                - so just for loop from where you first got a valid digit and keep going back until you no longer have a valid digit?
+                - sure, but this increases time.. 
+                - why increase time when we can concatanate as we are traversing
+                - we just need an easy way to get the last concatanated number while processing multiplication and division
+            - if we concatnate them as we are traversing, we can store the concatnated value in the stack
+            - then we need to process a multi/div operator, we can use the top of the stack ( last concatnated number )
+            - and easily perform our operation... 
+            - therefore the use of stack.
     time: o(n)
     space: o(n)
 */
