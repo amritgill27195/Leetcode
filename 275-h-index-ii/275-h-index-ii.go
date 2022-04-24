@@ -1,36 +1,34 @@
 // worst problem desc ever...
-// time: o(logn)
-// space: o(1)
-// func hIndex(citations []int) int {
-//     left := 0
-//     right := len(citations)-1
+// brute force
+// doing this question brute force first makes me understand why binary search helps...
+// time: o(c) where c is the number of citations
+// func hIndex(citations []int) int { 
 //     n := len(citations)
-//     for left <= right {
-//         mid := left+(right-left)/2
-//         if n-mid == citations[mid] {
-//             return n-mid
-//         } else if citations[mid] > n-mid {
-//             right = mid-1
-//         } else {
-//             left = mid+1
+//     for i := 0; i < len(citations); i++ {
+//         diff := n-i
+//         if diff <= citations[i] {
+//             return diff
 //         }
 //     }
-//     return n-left
+//     return 0
 // }
 
 
-func hIndex(citations []int) int { 
+// time: o(logn)
+// space: o(1)
+func hIndex(citations []int) int {
+    left := 0
+    hIdx := 0
     n := len(citations)
-    for i := 0; i < len(citations); i++ {
-        diff := n-i
-        if diff <= citations[i] {
-            return diff
+    right := len(citations)-1
+    for left <= right {
+        mid := left + (right-left)/2
+        if n-mid <= citations[mid] {
+            hIdx = n-mid
+            right = mid-1
+        } else {
+            left = mid+1
         }
     }
-    return 0
-}
-
-func abs(n int) int {
-    if n < 0 {return n * -1}
-    return n
+    return hIdx
 }
