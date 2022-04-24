@@ -26,17 +26,9 @@
 
 func updateMatrix(mat [][]int) [][]int {
     
-    
-    if mat == nil {
-        return nil
-    }
-    dirs := [][]int{{1,0}, {-1,0}, {0,-1}, {0,1}}
+    q := [][]int{}
     m := len(mat)
     n := len(mat[0])
-    q := [][]int{}
-   
-     // enqueue all 0s and mark all 1s -1 so we can distinguish between visited and non-visited
-    // -1s are the non-visited ones, so when processing initial 0s, we will always search for non-visited nodes (i.e : -1)
     for i := 0; i < m; i++ {
         for j := 0; j < n; j++ {
             if mat[i][j] == 0 {
@@ -47,24 +39,18 @@ func updateMatrix(mat [][]int) [][]int {
         }
     }
     
-    
-    // each node we add while processing 0s, ( the -1s ), they are 1 distance away from 0
-    // since our intial queue will be all 0s, any -1s found around them will be 1 distance away ( or other words, currentNodeVal + 1)
-    // once we add the 1's to our queue, their neighbors will also be currentNodeVal + 1 distance away from nearest 0.
-    // if a parent (1) is 1 distance away from a 0, and if its childs which are 1 distance away from parent, then those childs are automatically parentDist+1 distance away from nearest 0. 
+    dirs := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
     for len(q) != 0 {
         dq := q[0]
         q = q[1:]
-        
         for _, dir := range dirs {
             r := dq[0] + dir[0]
             c := dq[1] + dir[1]
-            if r >= 0 && r < m && c >= 0 && c < n && mat[r][c] == -1 {
+            if r >= 0 && r < m && c >=0 && c < n && mat[r][c] == -1 {
                 mat[r][c] = mat[dq[0]][dq[1]] + 1
                 q = append(q, []int{r,c})
             }
         }
-        
-    }
+    } 
     return mat
 }
