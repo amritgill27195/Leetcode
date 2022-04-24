@@ -12,7 +12,10 @@
     - but continue looking right, as we may have undershot our mid
     - so look right for a greater if possible
         - no need to search left since anything left mid ( thats is already < target will be smaller ) and we want smallest but greater/closest to target
-        
+    - if we did not find the exact target 
+        - finally return idx+1 because we were looking for smallest/closest from left side to target
+        - and we need the next position where its suitable for this target to be inserted
+        - and target is best suitable after the largest floor we find
     time: o(logn)
     space: o(1)
     
