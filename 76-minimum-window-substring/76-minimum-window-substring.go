@@ -1,4 +1,5 @@
 func minWindow(s string, t string) string {
+    if len(t) > len(s) {return ""} 
     tMap := map[string]int{}
     for _, char := range t {
         tMap[string(char)]++
