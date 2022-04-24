@@ -5,9 +5,8 @@ func minWindow(s string, t string) string {
     }
     count := 0
     left := 0
-    startIdx := -1
-    endIdx := -1
-    smallestWinSize := len(s)+1
+    startIdx := 0
+    endIdx := len(s)+1
     for right := 0; right < len(s); right++ {
         rightChar := string(s[right])
         if _, ok := tMap[rightChar]; ok {
@@ -18,8 +17,7 @@ func minWindow(s string, t string) string {
         }
         for count == len(tMap) {
             windowSize := right-left+1
-            if windowSize < smallestWinSize {
-                smallestWinSize = windowSize
+            if windowSize < endIdx-startIdx+1 {
                 startIdx = left
                 endIdx = right
             }
@@ -33,6 +31,6 @@ func minWindow(s string, t string) string {
             left++
         }
     }
-    if startIdx == -1 {return "" }
+    if endIdx == len(s)+1 {return "" }
     return string(s[startIdx:endIdx+1])
 }
