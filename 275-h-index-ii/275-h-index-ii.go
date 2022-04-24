@@ -14,8 +14,19 @@
 // }
 
 
-// time: o(logn)
-// space: o(1)
+/*
+    approach: binary search
+    - basically search for the same EXACT thing we searched for in brute force
+    - if n-idx <= citations[idx]
+        - in brute force ( linear traverse, we returned right away because its the first element from left side )
+        - but in binary search, we will save it as it may NOT be the first element and so we will save it and search left
+    - otherwise
+        - search right
+    
+time: o(logn)
+space: o(1)
+
+*/
 func hIndex(citations []int) int {
     left := 0
     hIdx := 0
