@@ -7,36 +7,78 @@
  * }
  */
 
-func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-    var dfs func(a *TreeNode, target *TreeNode, paths []*TreeNode) []*TreeNode
-    dfs = func(a *TreeNode, target *TreeNode, paths []*TreeNode) []*TreeNode {
-        // base
-        if a == nil || target == nil {
-            return nil
-        }
-        paths = append(paths, a)
-        
-        // logic
-        if a.Val == target.Val {
-            return paths
-        }
-        if target.Val < a.Val {
-            return dfs(a.Left, target, paths)
-        }
-        return dfs(a.Right, target, paths)
-    }
-    pPaths := dfs(root, p, nil)
-    qPaths := dfs(root, q, nil)
+/*
+    Approach: Brute force
+    - Initial naive brute force
+    - Get paths to p in logn
+    - Get paths to q in logn
+    - Then grab the last common between 2 paths
     
-    var out *TreeNode
-    pPtr := 0
-    qPtr := 0
-    for pPtr < len(pPaths) && qPtr < len(qPaths) {
-        if pPaths[pPtr] == qPaths[qPtr] {
-            out = pPaths[pPtr] 
-        }
-        pPtr++
-        qPtr++
+    time:   o(logN) +   o(logn) +   o(n)
+            ToSearchP   ToSearchQ   ToFindLastCommonBetween2Paths
+    Space: o(n)
+*/
+
+// func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+//     var dfs func(a *TreeNode, target *TreeNode, paths []*TreeNode) []*TreeNode
+//     dfs = func(a *TreeNode, target *TreeNode, paths []*TreeNode) []*TreeNode {
+//         // base
+//         if a == nil || target == nil {
+//             return nil
+//         }
+//         paths = append(paths, a)
+        
+//         // logic
+//         if a.Val == target.Val {
+//             return paths
+//         }
+//         if target.Val < a.Val {
+//             return dfs(a.Left, target, paths)
+//         }
+//         return dfs(a.Right, target, paths)
+//     }
+//     pPaths := dfs(root, p, nil)
+//     qPaths := dfs(root, q, nil)
+    
+//     var out *TreeNode
+//     pPtr := 0
+//     qPtr := 0
+//     for pPtr < len(pPaths) && qPtr < len(qPaths) {
+//         if pPaths[pPtr] == qPaths[qPtr] {
+//             out = pPaths[pPtr] 
+//         }
+//         pPtr++
+//         qPtr++
+//     }
+//     return out
+// }
+
+
+
+/*
+    Approach: Optimized
+    - Instead of checking p and q ( 1 at a time ), check them both in the same recursion
+    - This is a BST, keeping that in mind
+    - We can check if both p and q are > root , then go right
+    - If both p and q are < root , then go left
+    - otherwise return root -- because this is the common ancestor
+    
+    time:   o(logN)
+    space:  o(1)
+*/
+
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+    // base 
+    if root == nil {
+        return nil
     }
-    return out
+    
+    // logic
+    if p.Val > root.Val && q.Val > root.Val {
+        return lowestCommonAncestor(root.Right, p,q)
+    }
+    if p.Val < root.Val && q.Val < root.Val {
+        return lowestCommonAncestor(root.Left, p,q)
+    }
+    return root
 }
