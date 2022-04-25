@@ -129,7 +129,7 @@ func calculate(s string) int {
         if isDigit(stringChar) {
             current = current * 10 + n
         }
-        if (!isDigit(stringChar) && stringChar != " ") || i == len(s)-1 {
+        if (stringChar == "+" || stringChar == "-" || stringChar == "*" || stringChar == "/") || i == len(s)-1 {
             if lastOp == "+" {
                 calc = calc + current
                 tail = current
