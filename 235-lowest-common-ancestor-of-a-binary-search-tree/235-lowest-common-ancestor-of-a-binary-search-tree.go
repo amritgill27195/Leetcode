@@ -14,7 +14,7 @@
     - Get paths to q in logn
     - Then grab the last common between 2 paths
     
-    time:   o(logN) +   o(logn) +   o(n)
+    time:   o(logN) +   o(logn) +   o(n) == 2o(logn) + o(n) == o(n)
             ToSearchP   ToSearchQ   ToFindLastCommonBetween2Paths
     Space: o(n)
 */
