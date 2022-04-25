@@ -9,16 +9,15 @@
 
 /*
     approach: brute force
-    - Find paths that lead to p
-    - Find paths that lead to q
+    - Find paths that lead to p and q
     - Find the last common node between the 2 paths
     - The last common node is the lowest common ancestor
     
     time: o(n)
         - worse case our recursion goes left first and p and q are located in the right subtree as leaf nodes
-    space: 
-        - o(h) to find p + o(h) to find q + o(h) path to p + o(h) path to q
-        - o(h)
+        - plus we never exit early in 
+    space: o(p+q)
+        - o(h) for recursion stack + o(p+q) the paths array for both p and q which would be larger compared to o(h)
 */
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
@@ -28,10 +27,12 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	var backtrack func(r *TreeNode, paths []*TreeNode)
 	backtrack = func(r *TreeNode, paths []*TreeNode) {
 		// base
-		if r == nil {
+        if r == nil{
 			return
 		}
-
+        
+        // exit early
+        if len(pPaths) != 0 && len(qPaths) != 0 {return }
 		// logic
 		// action
         paths = append(paths, r)
