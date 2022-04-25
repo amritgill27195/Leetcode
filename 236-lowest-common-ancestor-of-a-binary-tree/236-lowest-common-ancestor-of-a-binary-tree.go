@@ -36,6 +36,7 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 		// action
         paths = append(paths, r)
         if r.Val == p.Val {
+            // new list since we backtrack paths arr so that we dont end up with empty list ( since we remove last element from paths )
 			newP := make([]*TreeNode, len(paths))
 			copy(newP, paths)
 			pPaths = newP
