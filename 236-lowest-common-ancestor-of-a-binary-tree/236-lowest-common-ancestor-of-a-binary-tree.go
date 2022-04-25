@@ -34,8 +34,7 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 
 		// logic
 		// action
-		paths = append(paths, r)
-
+        paths = append(paths, r)
         if r.Val == p.Val {
 			newP := make([]*TreeNode, len(paths))
 			copy(newP, paths)
@@ -46,7 +45,6 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 			copy(newQ, paths)
 			qPaths = newQ
 		}
-
 		// recurse
 		backtrack(r.Left, paths)
 		backtrack(r.Right, paths)
@@ -59,7 +57,6 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	pPtr := 0
 	qPtr := 0
 	for pPtr < len(pPaths) && qPtr < len(qPaths) {
-        fmt.Println(pPaths[pPtr].Val, qPaths[qPtr].Val)
         if pPaths[pPtr] == qPaths[qPtr] {
 			out = pPaths[pPtr]
 		}
