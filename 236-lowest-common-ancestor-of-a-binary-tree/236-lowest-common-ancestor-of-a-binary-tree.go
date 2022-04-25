@@ -102,5 +102,7 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
     if left == nil && right == nil {return nil}
     if left != nil && right == nil {return left}
     if left == nil && right != nil {return right}
+    // otherwise if left and right are both NOT NIL, return the current root node 
+    // because if a parent recieves 2 not nulls from left and right, it means this node is lowest common ancestor
     return root
 }
