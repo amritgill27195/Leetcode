@@ -50,31 +50,64 @@
     time: o(h+k) -- worse case we visit max height ( all left nodes ) and then +k more nodes to get the kth smallest
     space: o(h)
 */
+// func kthSmallest(root *TreeNode, k int) int {
+//     count := 0
+//     var inorder func(r *TreeNode) int
+//     inorder = func(r *TreeNode) int {
+//         // base
+//         if r == nil {
+//             return -1
+//         }    
+        
+//         // logic
+//         left := inorder(r.Left)
+//         if left != -1 {
+//             return left
+//         }
+        
+//         count++
+//         if k == count {
+//             return r.Val 
+//         }
+        
+        
+//         right := inorder(r.Right)
+//         return right
+//     }
+    
+//     return inorder(root)
+    
+// }
+
+
+
+/*
+    BST == running inorder gives us a sorted output  ( as long as its a valid bst )
+    
+    approach: inorder (iterative) + decrement k instead of a aux var like count 
+    - inorder iteratively
+    - when we "fake pop" from stack, decrement k
+    - if k == 0 , then we have found our kth smallest
+        - return that val and exit early
+    - otherwise go right 
+    
+    time: o(h+k) -- worse case we visit max height ( all left nodes ) and then +k more nodes to get the kth smallest
+    space: o(h)
+*/
 func kthSmallest(root *TreeNode, k int) int {
-    count := 0
-    var inorder func(r *TreeNode) int
-    inorder = func(r *TreeNode) int {
-        // base
-        if r == nil {
-            return -1
-        }    
-        
-        // logic
-        left := inorder(r.Left)
-        if left != -1 {
-            return left
+    s := []*TreeNode{}
+    for root != nil || len(s) != 0 {
+        for root != nil {
+            s = append(s, root)
+            root = root.Left
         }
-        
-        count++
-        if k == count {
-            return r.Val 
+        root = s[len(s)-1]
+        s = s[:len(s)-1]
+        k--
+        if k == 0 {
+            return root.Val
         }
-        
-        
-        right := inorder(r.Right)
-        return right
+        root = root.Right
     }
-    
-    return inorder(root)
-    
+    return root.Val
 }
