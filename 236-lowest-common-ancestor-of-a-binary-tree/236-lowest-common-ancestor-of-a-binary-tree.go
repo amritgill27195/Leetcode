@@ -21,36 +21,60 @@
         - o(h)
 */
 
- func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-     var dfs func(r *TreeNode, target *TreeNode, paths []*TreeNode) (bool,[]*TreeNode)
-     dfs = func(r *TreeNode, target *TreeNode, paths []*TreeNode) (bool, []*TreeNode) {
-         // base
-         if r == nil {
-             return false, nil
-         }
-         
-         // logic
-         paths = append(paths, r)
-         if r.Val == target.Val {
-             return true, paths
-         }
-         foundInLeft, left := dfs(r.Left, target, paths)
-         if foundInLeft {
-             return true, left
-         }
-         return dfs(r.Right, target, paths)
-     }
-     _, pPaths := dfs(root, p, nil)
-     _, qPaths := dfs(root, q, nil)
-     var out *TreeNode
-     pPtr := 0
-     qPtr := 0
-     for pPtr < len(pPaths) && qPtr < len(qPaths) {
-         if pPaths[pPtr] == qPaths[qPtr] {
-             out = pPaths[pPtr]
-         }
-         pPtr++
-         qPtr++
-     }
-     return out
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+    var pPaths []*TreeNode
+	var qPaths []*TreeNode
+
+	var backtrack func(r *TreeNode, paths []*TreeNode)
+	backtrack = func(r *TreeNode, paths []*TreeNode) {
+		// base
+		if r == nil {
+			return
+		}
+
+		// logic
+		// action
+		paths = append(paths, r)
+
+        if r.Val == p.Val {
+			newP := make([]*TreeNode, len(paths))
+			copy(newP, paths)
+			pPaths = newP
+		}
+		if r.Val == q.Val {
+			newQ := make([]*TreeNode, len(paths))
+			copy(newQ, paths)
+			qPaths = newQ
+		}
+
+		// recurse
+		backtrack(r.Left, paths)
+		backtrack(r.Right, paths)
+		// backtrack
+		paths = paths[:len(paths)-1]
+	}
+	backtrack(root, nil)
+
+	var out *TreeNode
+	pPtr := 0
+	qPtr := 0
+	for pPtr < len(pPaths) && qPtr < len(qPaths) {
+        fmt.Println(pPaths[pPtr].Val, qPaths[qPtr].Val)
+        if pPaths[pPtr] == qPaths[qPtr] {
+			out = pPaths[pPtr]
+		}
+		pPtr++
+		qPtr++
+	}
+	return out
 }
+
+
+/*
+    approach:
+    time:
+    space:
+*/
+// func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+    
+// }
