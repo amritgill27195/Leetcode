@@ -8,6 +8,9 @@
  */
 
 // dfs approach
+// iterative inorder approach
+// time: o(k)
+// space: o(h)
 // func kthSmallest(root *TreeNode, k int) int {
 //     count := 0
 //     var inorder func(r *TreeNode, k int) int
@@ -38,9 +41,10 @@
 
 
 // iterative inorder approach
+// time: o(k)
+// space: o(1)
 func kthSmallest(root *TreeNode, k int) int {
     s := []*TreeNode{}
-    count := 0
     for root != nil || len(s) != 0 {
         for root != nil {
             s = append(s, root)
@@ -48,8 +52,8 @@ func kthSmallest(root *TreeNode, k int) int {
         }
         root = s[len(s)-1]
         s = s[:len(s)-1]
-        count++
-        if count == k {
+        k--
+        if k == 0 {
             return root.Val
         }
         root = root.Right
