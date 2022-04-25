@@ -91,6 +91,7 @@
     - We can check if both p and q are > root , change root to root.Right
     - If both p and q are < root , change root to root.Left
     - otherwise return root -- because this is the common ancestor
+    - We do not need recursion here as we do not need to go back up the tree - I would have never thought of this .... 
     
     time:   o(logN)
     space:  o(1)
