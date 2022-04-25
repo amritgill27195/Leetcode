@@ -71,8 +71,24 @@
 
 /*
     approach:
-    time:
-    space:
+    - The implied logic in this approach only works IF ITS GURANTEED THAT BOTH P AND Q EXISTS
+    - Instead of maintaining paths that lead to both p and q ( top down recursion )
+    - We will do bottom up recursion
+        - Remember bottom up recursion is when we get an answer from childs to process parent node
+        - Example: max height of tree, get height of two childs, pass them back to parent, parent takes max and adds 1
+            - In this parent relied on answers from both left and right childs ( bottom up processing )
+    - For this case, as soon as we find either p or q when we are on specific root node, we will return that root node itself
+    - i.e the child will return back the child node it was on back to its parent ( left and/or right )
+    - If a parent sees that both of its childs ( left and right ) has returned a node (i.e not null )
+        - then that parent must pass back itself!
+    - If left == nil && right is not, return right response
+    - If left is not nil and right is nil, return left response
+    - If both childs returned nil, return nil
+    
+    TLDR is; if we find p or q, return that node itself and parent should propagate the same node
+    
+    time: o(n)
+    space: o(h)
 */
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
     // base
