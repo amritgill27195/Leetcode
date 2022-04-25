@@ -56,11 +56,40 @@
 
 
 /*
-    Approach: Optimized
+    Approach: Recursion
     - Instead of checking p and q ( 1 at a time ), check them both in the same recursion
     - This is a BST, keeping that in mind
-    - We can check if both p and q are > root , then go right
-    - If both p and q are < root , then go left
+    - We can check if both p and q are > root , recurse right
+    - If both p and q are < root , recurse left
+    - otherwise return root -- because this is the common ancestor
+    
+    time:   o(logN)
+    space:  o(h)
+*/
+
+// func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+//     // base 
+//     if root == nil {
+//         return nil
+//     }
+    
+//     // logic
+//     if p.Val > root.Val && q.Val > root.Val {
+//         return lowestCommonAncestor(root.Right, p,q)
+//     }
+//     if p.Val < root.Val && q.Val < root.Val {
+//         return lowestCommonAncestor(root.Left, p,q)
+//     }
+//     return root
+// }
+
+
+/*
+    Approach: Iterative 
+    - Instead of checking p and q ( 1 at a time ), check them both in the same recursion
+    - This is a BST, keeping that in mind
+    - We can check if both p and q are > root , change root to root.Right
+    - If both p and q are < root , change root to root.Left
     - otherwise return root -- because this is the common ancestor
     
     time:   o(logN)
@@ -68,17 +97,14 @@
 */
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-    // base 
-    if root == nil {
-        return nil
-    }
-    
-    // logic
-    if p.Val > root.Val && q.Val > root.Val {
-        return lowestCommonAncestor(root.Right, p,q)
-    }
-    if p.Val < root.Val && q.Val < root.Val {
-        return lowestCommonAncestor(root.Left, p,q)
+    for true {
+        if p.Val < root.Val && q.Val < root.Val {
+            root = root.Left
+        } else if p.Val > root.Val && q.Val > root.Val {
+            root = root.Right
+        } else {
+            break
+        }
     }
     return root
 }
