@@ -21,12 +21,27 @@
    
     */
 
-// square them in place and sort them at the end
+
+// square each number and store into a new array
+// sort the new array and return the new array
+// time: o(nlogn)
+// space: o(1)
 func sortedSquares(nums []int) []int {
-    
+    out := []int{}
     for i := 0; i < len(nums); i++ {
-        nums[i] = nums[i] * nums[i]
+        out = append(out, nums[i] * nums[i])
     }
-    sort.Ints(nums)
-    return nums
+    sort.Ints(out)
+    return out
 }
+
+// square them in place and sort them at the end
+// time: o(nlogn)
+// space: o(1)
+// func sortedSquares(nums []int) []int {
+//     for i := 0; i < len(nums); i++ {
+//         nums[i] = nums[i] * nums[i]
+//     }
+//     sort.Ints(nums)
+//     return nums
+// }
