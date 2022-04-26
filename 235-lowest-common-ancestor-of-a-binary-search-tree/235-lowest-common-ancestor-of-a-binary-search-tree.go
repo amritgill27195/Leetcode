@@ -99,10 +99,10 @@
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
     for true {
-        if p.Val < root.Val && q.Val < root.Val {
-            root = root.Left
-        } else if p.Val > root.Val && q.Val > root.Val {
-            root = root.Right
+        if p.Val > root.Val && q.Val > root.Val {
+            root = root.Right // ( go right )
+        } else if p.Val < root.Val && q.Val < root.Val {
+            root = root.Left // ( go left )
         } else {
             break
         }
