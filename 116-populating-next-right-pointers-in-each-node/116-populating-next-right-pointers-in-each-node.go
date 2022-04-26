@@ -46,8 +46,56 @@
 
 
 /*
-    approach : level order traversal without any extra space ( no queue )
+    approach : BFS level order traversal without any extra space ( no queue )
+    - Using two pointers, one pointing to start of level ( left most node )
+    - and another "curr" be used to go next element in the current level ( like a fake queue )
+    - We are processing the nodes level by level from left to right
+        - level ptr == level by level
+        - curr ptr = used to go next node in a level
+    - Once we start with a root level ,
+        - this parent has access to both of its left and right child
+        - then parent.Left.Next = parent.Right
+            1(parent)(current)(level)
+           / \
+          2---3
+         - Once a curr ptr hits a nil, we tell our level ptr to go to next level = level.Left
+                  1
+                 / \
+(level)(current)2---3
+               /\   /\
+              4  5 6  7
+        - now current ptr can repeat and connect its child in its subtree ( 4-5 )
+                  1
+                 / \
+(level)(current)2---3
+               /\   /\
+              4--5 6  7
+        - now because curr has a next ref set, we can connect nodes accross 2 subtrees ( 5-6 )
+        - how? curr.next != nil ? curr.right.next = curr.next.left : otherwise-do-nothing
+                  1
+                 / \
+(level)(current)2---3
+               /\   /\
+              4--5-6  7
+        - now because curr has a next ref set, we can go to next element within this level
+                  1
+                 / \
+         (level)2---3(current)
+               /\   /\
+              4--5-6  7
     
+        - now current ptr can repeat and connect its child in its subtree ( 6-7 )
+                  1
+                 / \
+         (level)2---3(current)
+               /\   /\
+              4--5-6--7
+        - now current hits nil and we go to next level
+                   1
+                  / \
+                 2---3
+                /\   /\
+(level)(current)4--5-6--7
 */
 func connect(root *Node) *Node {
     var curr *Node = root
@@ -56,7 +104,8 @@ func connect(root *Node) *Node {
         curr = level
         for curr != nil {
             curr.Left.Next = curr.Right
-            if curr.Next != nil {
+            // the and is unecessary because we are given a PERFECT binary tree
+            if curr.Next != nil && curr.Right != nil {
                 curr.Right.Next = curr.Next.Left
             }
             curr = curr.Next
