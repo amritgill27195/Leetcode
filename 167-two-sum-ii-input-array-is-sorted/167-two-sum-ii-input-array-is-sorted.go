@@ -12,14 +12,47 @@
 
 */
 
-func twoSum(numbers []int, target int) []int {
-    m := map[int]int{}
-    for i := 0; i < len(numbers); i++ {
-        diff := target - numbers[i]
-        if idx, ok := m[diff]; ok {
-            return []int{idx+1, i+1}
+// func twoSum(numbers []int, target int) []int {
+//     m := map[int]int{}
+//     for i := 0; i < len(numbers); i++ {
+//         diff := target - numbers[i]
+//         if idx, ok := m[diff]; ok {
+//             return []int{idx+1, i+1}
+//         }
+//         m[numbers[i]]=i
+//     }
+//     return []int{-1,-1}
+// }
+
+
+/*
+    Sorted array, then we should consider binary search and or two pointers
+    
+    approach: complement search using binary search
+    - for each num in numbers
+    - calc the diff, target - num ( complement )
+    - search for that diff using binary search
+    
+    time: o(nlogn)
+    spaceL o(1)
+
+*/
+
+func twoSum(nums []int, target int) []int {
+    for i := 0; i < len(nums); i++ {
+        diff := target - nums[i]
+        left := i+1
+        right := len(nums)-1
+        for left <= right {
+            mid := left + (right-left)/2
+            if nums[mid] == diff {
+                return []int{i+1, mid+1}
+            } else if nums[mid] > diff {
+                right = mid-1
+            } else {
+                left = mid+1
+            }
         }
-        m[numbers[i]]=i
     }
     return []int{-1,-1}
 }
