@@ -18,6 +18,7 @@ func flatten(root *TreeNode)  {
     
     //logic
     flatten(root.Left)
+    flatten(root.Right)
     if root.Left != nil {
         tmp := root.Right
         root.Right = root.Left
@@ -29,6 +30,5 @@ func flatten(root *TreeNode)  {
         // once we have reached the tail end, set the tail.Right to tmp ( prev right )
         root.Right = tmp
     }
-    flatten(root.Right)
     
 }
