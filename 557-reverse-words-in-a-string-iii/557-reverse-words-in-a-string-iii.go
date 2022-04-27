@@ -7,7 +7,7 @@ func reverseWords(s string) string {
             for j := i-1; j >= start; j-- {
                 out.WriteString(string(s[j])) 
             }
-                out.WriteString(" ")
+            out.WriteString(" ")
             start = i+1
         }
     }
