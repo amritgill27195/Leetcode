@@ -1,37 +1,54 @@
+
+/*
+    sliding window + a freqMap for the pattern to look for in a window
+    - keep in mind, we are looking for the smallest possible window
+    
+    time: o(s) + o(t)
+    space: o(t) -- freqMap
+*/
 func minWindow(s string, t string) string {
-    if len(t) > len(s) {return ""} 
     tMap := map[string]int{}
-    for _, char := range t {
-        tMap[string(char)]++
+    for _, ele := range t {
+        tMap[string(ele)]++
     }
+    
+    windowStart := 0
     count := 0
-    left := 0
     startIdx := 0
-    endIdx := len(s)+1
-    for right := 0; right < len(s); right++ {
-        rightChar := string(s[right])
-        if _, ok := tMap[rightChar]; ok {
-            tMap[rightChar]--
-            if val := tMap[rightChar]; val == 0 {
+    endIdx := 0
+    minWinSize := len(s)+1
+    
+    for windowEnd := 0; windowEnd < len(s); windowEnd++ {
+        char := string(s[windowEnd])
+        _, ok := tMap[char]
+        if ok {
+            tMap[char]--
+            if val := tMap[char]; val == 0{
                 count++
             }
         }
         for count == len(tMap) {
-            windowSize := right-left+1
-            if windowSize < endIdx-startIdx+1 {
-                startIdx = left
-                endIdx = right
+            cl := windowEnd - windowStart + 1
+            if cl < minWinSize {
+                minWinSize = cl
+                startIdx = windowStart
+                endIdx = windowEnd
             }
-            leftChar := string(s[left])
-            if val, ok := tMap[leftChar]; ok {
-                tMap[leftChar]++
+            
+            leftChar := string(s[windowStart])
+            val, ok := tMap[leftChar]
+            if ok {
                 if val == 0 {
-                    count--
+                    count--   
                 }
+                tMap[leftChar]++
             }
-            left++
+            windowStart++
+            
         }
     }
-    if endIdx == len(s)+1 {return "" }
+    if minWinSize == len(s)+1 {
+        return ""
+    }
     return string(s[startIdx:endIdx+1])
 }
