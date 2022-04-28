@@ -28,6 +28,9 @@
     13. Then subtract new window sum from totalSum
     14. That gives you the answer for what if you picked all k cards from front
     15. Return the max out from each window evaluation
+    
+    time: o(n)
+    space: o(1)
 */
 
 
