@@ -1,7 +1,7 @@
 
 // map solution
 // time: o(s+t)
-// space: o(min(s,t))
+// space: o(1) -- there are only 26 alphabets
 func isAnagram(s string, t string) bool {
     // make sure s is the smaller string
     if len(t) < len(s) {
