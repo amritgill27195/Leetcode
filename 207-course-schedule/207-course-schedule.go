@@ -31,8 +31,8 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
         dq := q[0]
         q = q[1:]
         coursesTakenSuccessfully++
-        unlockedDependencies := adjList[dq]
-        for _, dep := range unlockedDependencies {
+        affectedDependencies := adjList[dq]
+        for _, dep := range affectedDependencies {
             indegrees[dep]--
             if indegrees[dep] == 0  {
                 // enqueue this source/independent node
