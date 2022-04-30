@@ -52,6 +52,10 @@
 // }
 
 
+// Time: o(n) , space: o(1)
+// Create a copy of each node within the same LL
+// Connect the copy nodes to their corresponding copy nodes ( random ref )
+// Finally take out the copy nodes into its own LL and restore the original LL
 func copyRandomList(head *Node) *Node {
     
     // make a copy of each node in input list
