@@ -33,6 +33,7 @@ func updateBoard(board [][]byte, click []int) [][]byte {
             }
         }   
     }
+    
     return board
 }
 var dirs = [][]int{
@@ -56,9 +57,11 @@ func countMinesAndReturnUnVisitedCells(r,c int, board [][]byte) (int, [][]int) {
         newC := c + dir[1]
 
         if newR >= 0 && newR < m && newC >= 0 && newC < n && (board[newR][newC] == 'M' || board[newR][newC] == 'E') {
-            unvisitedCells = append(unvisitedCells, []int{newR,newC})
             if board[newR][newC] == 'M' {
                 numMinesFound++
+            } else {
+                unvisitedCells = append(unvisitedCells, []int{newR,newC})
+
             }
         }
     }
