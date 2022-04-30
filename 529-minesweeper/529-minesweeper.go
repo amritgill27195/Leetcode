@@ -1,6 +1,7 @@
 func updateBoard(board [][]byte, click []int) [][]byte {
     
-    
+    m := len(board)
+    n := len(board[0])
     sr := click[0]
     sc := click[1]
     if board[sr][sc] == 'M' {
@@ -19,17 +20,19 @@ func updateBoard(board [][]byte, click []int) [][]byte {
         currCol := dq[1]
         
         // check for adjacent mines
-        numMines, univistedCells := countMinesAndReturnUnVisitedCells(currRow, currCol, board)
+        numMines := countMinesAround(currRow, currCol, board)
         if numMines > 0 {
             board[currRow][currCol] = byte(numMines + '0')
         } else {
             board[currRow][currCol] = 'B'
-            // enqueue univistedCells and mark them visited 
-            for _, pos := range univistedCells {
-                r := pos[0]
-                c := pos[1]
-                board[r][c] = 'V'
-                q = append(q, pos)
+            // enqueue univistedCells around them and mark them visited
+            for _, dir := range dirs {
+                r := currRow + dir[0]
+                c := currCol + dir[1]
+                if r >= 0 && r < m && c >= 0 && c < n && board[r][c] == 'E' {
+                    board[r][c] = 'V'
+                    q = append(q, []int{r,c})
+                }
             }
         }   
     }
@@ -47,23 +50,18 @@ var dirs = [][]int{
         {1,1}, // diag-down-right
     }
 
-func countMinesAndReturnUnVisitedCells(r,c int, board [][]byte) (int, [][]int) {
-    unvisitedCells := [][]int{}
-    numMinesFound := 0
+
+func countMinesAround(r,c int, board[][]byte) int {
     m := len(board)
     n := len(board[0])
+
+    numMinesFound := 0
     for _, dir := range dirs {
         newR := r + dir[0]
         newC := c + dir[1]
-
-        if newR >= 0 && newR < m && newC >= 0 && newC < n && (board[newR][newC] == 'M' || board[newR][newC] == 'E') {
-            if board[newR][newC] == 'M' {
-                numMinesFound++
-            } else {
-                unvisitedCells = append(unvisitedCells, []int{newR,newC})
-
-            }
+        if newR >= 0 && newR < m && newC >= 0 && newC < n && board[newR][newC] == 'M' {
+            numMinesFound++
         }
     }
-    return numMinesFound, unvisitedCells
+    return numMinesFound
 }
