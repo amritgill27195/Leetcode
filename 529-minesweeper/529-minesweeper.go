@@ -1,5 +1,49 @@
-func updateBoard(board [][]byte, click []int) [][]byte {
+// bfs
+// func updateBoard(board [][]byte, click []int) [][]byte {
     
+//     m := len(board)
+//     n := len(board[0])
+//     sr := click[0]
+//     sc := click[1]
+//     if board[sr][sc] == 'M' {
+//         board[sr][sc] = 'X'
+//         return board
+//     }
+    
+//     board[sr][sc] = 'V' // visited
+//     q := [][]int{{sr,sc}}
+ 
+//     for len(q) != 0 {
+//         // process current cell
+//         dq := q[0]
+//         q = q[1:]
+//         currRow := dq[0]
+//         currCol := dq[1]
+        
+//         // check for adjacent mines
+//         numMines := countMinesAround(currRow, currCol, board)
+//         if numMines > 0 {
+//             board[currRow][currCol] = byte(numMines + '0')
+//         } else {
+//             board[currRow][currCol] = 'B'
+//             // enqueue univistedCells around them and mark them visited
+//             for _, dir := range dirs {
+//                 r := currRow + dir[0]
+//                 c := currCol + dir[1]
+//                 if r >= 0 && r < m && c >= 0 && c < n && board[r][c] == 'E' {
+//                     board[r][c] = 'V'
+//                     q = append(q, []int{r,c})
+//                 }
+//             }
+//         }   
+//     }
+    
+//     return board
+// }
+
+// dfs
+func updateBoard(board [][]byte, click []int) [][]byte {
+    var dfs func(r,c int)
     m := len(board)
     n := len(board[0])
     sr := click[0]
@@ -9,36 +53,28 @@ func updateBoard(board [][]byte, click []int) [][]byte {
         return board
     }
     
-    board[sr][sc] = 'V' // visited
-    q := [][]int{{sr,sc}}
- 
-    for len(q) != 0 {
-        // process current cell
-        dq := q[0]
-        q = q[1:]
-        currRow := dq[0]
-        currCol := dq[1]
+    dfs = func(r, c int) {
+        // base
+        if r < 0 || r == m || c < 0 || c == n || board[r][c] != 'E' {
+            return
+        }
         
-        // check for adjacent mines
-        numMines := countMinesAround(currRow, currCol, board)
-        if numMines > 0 {
-            board[currRow][currCol] = byte(numMines + '0')
+        // logic
+        num := countMinesAround(r,c, board)
+        if num > 0 {
+            board[r][c] = byte(num+'0')
         } else {
-            board[currRow][currCol] = 'B'
-            // enqueue univistedCells around them and mark them visited
+            board[r][c] = 'B'
             for _, dir := range dirs {
-                r := currRow + dir[0]
-                c := currCol + dir[1]
-                if r >= 0 && r < m && c >= 0 && c < n && board[r][c] == 'E' {
-                    board[r][c] = 'V'
-                    q = append(q, []int{r,c})
-                }
+                dfs(r+dir[0], c+dir[1])
             }
-        }   
+        }
     }
-    
+    dfs(sr,sc)
     return board
 }
+
+
 var dirs = [][]int{
         {-1,0}, // up
         {1,0}, // down
