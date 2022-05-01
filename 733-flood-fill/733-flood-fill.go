@@ -25,6 +25,33 @@
 
 
 // DFS ( recursive )
+// func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
+//     oldColor := image[sr][sc]
+//     if newColor == oldColor {
+//         return image
+//     }
+//     m := len(image)
+//     n := len(image[0])
+//     dirs := [][]int{{1,0},{-1,0},{0,-1},{0,1}}
+//     var dfs func(r, c int) 
+//     dfs = func(r, c int) {
+//         // base
+//         if r < 0 || r == m || c < 0 || c == n || image[r][c] == newColor || image[r][c] != oldColor {
+//             return
+//         }
+        
+//         // logic
+//         image[r][c] = newColor
+//         for _, dir := range dirs {
+//             dfs(r+dir[0],c+dir[1])
+//         }
+//     }
+//     dfs(sr, sc)
+//     return image
+// }
+
+
+// BFS approach
 func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
     oldColor := image[sr][sc]
     if newColor == oldColor {
@@ -32,22 +59,23 @@ func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
     }
     m := len(image)
     n := len(image[0])
-    
     dirs := [][]int{{1,0},{-1,0},{0,-1},{0,1}}
-    var dfs func(r, c int) 
-    dfs = func(r, c int) {
-        // base
-        if r < 0 || r == m || c < 0 || c == n || image[r][c] == newColor || image[r][c] != oldColor {
-            return
-        }
-        
-        // logic
-        image[r][c] = newColor
+    q := [][]int{{sr,sc}}
+    image[sr][sc] = newColor
+    
+    for len(q) != 0 {
+        dq := q[0]
+        q = q[1:]
+        cr := dq[0]
+        cc := dq[1]
         for _, dir := range dirs {
-            dfs(r+dir[0],c+dir[1])
+            r := cr + dir[0]
+            c := cc + dir[1]
+            if r >= 0 && r < m && c >= 0 && c < n && image[r][c] == oldColor {
+                image[r][c] = newColor 
+                q = append(q, []int{r,c})
+            }
         }
     }
-    dfs(sr, sc)
     return image
 }
-
