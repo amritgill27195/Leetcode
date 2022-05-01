@@ -32,26 +32,50 @@
 //     return root 
 // }
 
-// DFS
-func connect(root *Node) *Node {
-    var dfs func(r *Node)
-    dfs = func(r *Node) {
-        // base
-        if r == nil {
-            return
-        }
-        // logic
-        if r.Left != nil {
-            r.Left.Next = r.Right
-        }
+// // DFS
+// // time: o(n), space: o(h)
+// func connect(root *Node) *Node {
+//     var dfs func(r *Node)
+//     dfs = func(r *Node) {
+//         // base
+//         if r == nil {
+//             return
+//         }
+//         // logic
+//         if r.Left != nil {
+//             r.Left.Next = r.Right
+//         }
         
-        if r.Next != nil && r.Right != nil {
-            r.Right.Next = r.Next.Left
-        }
+//         if r.Next != nil && r.Right != nil {
+//             r.Right.Next = r.Next.Left
+//         }
     
-        dfs(r.Left)
-        dfs(r.Right)
+//         dfs(r.Left)
+//         dfs(r.Right)
+//     }
+//     dfs(root)
+//     return root
+// }
+
+
+// level order in o(1) space
+func connect(root *Node) *Node {
+    level := root
+    current := root
+    
+    for level != nil && level.Left != nil {
+        current = level
+        
+        for current != nil {
+            if current.Left != nil && current.Right != nil {
+                current.Left.Next = current.Right
+            }
+            if current.Next != nil {
+                current.Right.Next = current.Next.Left
+            }
+            current = current.Next 
+        }
+        level = level.Left
     }
-    dfs(root)
     return root
 }
