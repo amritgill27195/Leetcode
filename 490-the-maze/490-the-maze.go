@@ -16,9 +16,12 @@
     - How do we make sure we do not revisit the same cell thats is already being processed?
         - Once we enqueue a cell, we will mark it visited by changing its value to -1
     
-    Time: 
+    Time: o(mn) -- each node is processed only once since we are marking cells visited
+    Space: o(mn) 
+    
+    
 */
-
+// BFS
 // func hasPath(maze [][]int, start []int, destination []int) bool {
 //     m := len(maze)
 //     n := len(maze[0])
@@ -60,6 +63,29 @@
 
 
 
+/*
+    Should use DFS when we are simply trying to find a yes/no answer
+    Should use BFS when looking for shortest path
+    
+    But BFS works in finding a yes/no answer too
+    
+    approach: DFS
+    - We have connected components
+    - We are given a start position
+    - We are given a destination position
+    - The ball can be kicked to any 4 dirs ( up, down, left, right )
+    - When the ball is kicked in a direction
+        - The ball cannot stop until it hits a wall or hits the edge of the maze
+        - So which means our childs to explore are not the immediate childs but the childs were its possible for the ball to stop
+        - Although we will be used immediate childs to figure out whether we can even go in this direction or not..
+    - How do we make sure we do not revisit the same cell thats is already being processed?
+        - Once we start exploring a cell, we will mark it visited by changing its value to -1
+    
+    Time: o(mn)
+    Space:  o(mn)
+    
+    
+*/
 // approach: DFS
 func hasPath(maze [][]int, start []int, destination []int) bool {
     m := len(maze)
