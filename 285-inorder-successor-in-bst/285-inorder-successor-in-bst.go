@@ -8,6 +8,7 @@
  */
 
 // simple inorder until you hit p, once you hit p, return the next node after p
+// brute force without using BST properties :shrugging
 func inorderSuccessor(root *TreeNode, p *TreeNode) *TreeNode {
     var dfs func(r *TreeNode) *TreeNode
     dfs = func(r *TreeNode) *TreeNode {
