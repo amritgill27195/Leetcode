@@ -1,5 +1,4 @@
 
-// PUKE.... horrible horrible -- TODO: revisit this dumbass
 func letterCasePermutation(s string) []string {
     var result []string
     var helper func(i int, path string)
