@@ -1,3 +1,5 @@
+
+// PUKE.... horrible horrible -- TODO: revisit this dumbass
 func letterCasePermutation(s string) []string {
     res := map[string]bool{}
     var result []string
