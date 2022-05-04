@@ -24,8 +24,5 @@ func letterCasePermutation(s string) []string {
         helper(i+1, path+lower)
     }
     helper(0, "")
-    // for k , _ := range res {
-    //     result = append(result, k)
-    // }
     return result
 }
