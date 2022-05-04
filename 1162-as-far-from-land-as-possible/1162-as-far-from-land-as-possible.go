@@ -6,14 +6,17 @@ func maxDistance(grid [][]int) int {
     n := len(grid[0])
     
     // enqueue all 1's and mark them negative to distinguish between distance 1 and univisted 1
+    numOnes := 0
     for i := 0; i < m; i++ {
         for j := 0; j < n; j++ {
             if grid[i][j] == 1 {
+                numOnes++
                 grid[i][j] = -1
                 q = append(q, []int{i,j})
             }
         }
     }
+    if numOnes == 0 {return -1}
     
     // classic bfs processing of queue
     dirs := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
