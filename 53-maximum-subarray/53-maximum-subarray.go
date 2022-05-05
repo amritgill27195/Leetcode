@@ -5,8 +5,13 @@ func maxSubArray(nums []int) int {
     max := math.MinInt64
     for i := 0; i < len(nums); i++ {
         running += nums[i]
-        running = int(math.Max(float64(running),float64(nums[i])))
-        max = int(math.Max(float64(max), float64(running)))
+        running = getMax(running, nums[i])
+        max = getMax(running, max)
     }
     return max
+}
+
+func getMax(n,m int) int {
+    if n > m {return n}
+    return m
 }
