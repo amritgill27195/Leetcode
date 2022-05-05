@@ -23,6 +23,11 @@
         - after swapping - 3,1,6,8,7,4,2,1
         - But the next permutation is 3,1,6,1,2,4,7,8
         - So all numbers after breach must be reversed
+    
+    time: o(n)
+    space: o(1)
+
+
 */
 
 func nextPermutation(nums []int)  {    
@@ -40,6 +45,8 @@ func nextPermutation(nums []int)  {
     i := len(nums)-1 
     nextAvailIdx := -1
     if breachIdx != -1 {
+        // if we found a breach ( i.e breach < numsToRight )
+        // there is 100% a number greater than breach towards the right
         for i > breachIdx {
             if nums[i] > nums[breachIdx] {
                 if nextAvailIdx == -1 {
@@ -52,8 +59,7 @@ func nextPermutation(nums []int)  {
             }
             i--
         }
-            nums[breachIdx], nums[nextAvailIdx] = nums[nextAvailIdx], nums[breachIdx] 
-        
+        nums[breachIdx], nums[nextAvailIdx] = nums[nextAvailIdx], nums[breachIdx] 
     }
     
     // reverse after breach ( if there was one, otherwise reverse the whole thing )
