@@ -1,16 +1,12 @@
 
 
 func maxSubArray(nums []int) int {
-    maxSum := math.MinInt64
     running := 0
+    max := math.MinInt64
     for i := 0; i < len(nums); i++ {
         running += nums[i]
-        if nums[i] > running {
-            running = nums[i]
-        }
-        if running > maxSum {
-            maxSum = running
-        }
+        running = int(math.Max(float64(running),float64(nums[i])))
+        max = int(math.Max(float64(max), float64(running)))
     }
-    return maxSum
+    return max
 }
