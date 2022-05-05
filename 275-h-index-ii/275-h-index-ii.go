@@ -35,6 +35,9 @@ func hIndex(citations []int) int {
     for left <= right {
         mid := left + (right-left)/2
         if n-mid <= citations[mid] {
+            if n-mid == citations[mid] {
+                return n-mid
+            }
             hIdx = n-mid
             right = mid-1
         } else {
