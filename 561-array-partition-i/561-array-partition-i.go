@@ -1,3 +1,5 @@
+// time: o(nlogn) + o(n/2) = o(nlogn)
+// space: o(1)
 func arrayPairSum(nums []int) int {
     sort.Ints(nums)
     result := 0
