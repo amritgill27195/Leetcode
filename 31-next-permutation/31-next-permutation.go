@@ -40,7 +40,6 @@ func nextPermutation(nums []int)  {
     i := len(nums)-1 
     nextAvailIdx := -1
     if breachIdx != -1 {
-        // fmt.Println("BreachIdx: ", breachIdx)
         for i > breachIdx {
             if nums[i] > nums[breachIdx] {
                 if nextAvailIdx == -1 {
@@ -53,11 +52,8 @@ func nextPermutation(nums []int)  {
             }
             i--
         }
-        // fmt.Println("Swap idxs: ", breachIdx, nextAvailIdx)
-        if nextAvailIdx != -1 {
             nums[breachIdx], nums[nextAvailIdx] = nums[nextAvailIdx], nums[breachIdx] 
-        }
-        // fmt.Println("After swap: ", nums)
+        
     }
     
     // reverse after breach ( if there was one, otherwise reverse the whole thing )
