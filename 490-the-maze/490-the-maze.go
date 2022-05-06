@@ -20,7 +20,6 @@ func hasPath(maze [][]int, start []int, destination []int) bool {
         cc := dq[1]
         
         if cr == dr && cc == dc {return true}
-        
         for _, dir := range dirs {
             r := cr + dir[0]
             c := cc + dir[1]
