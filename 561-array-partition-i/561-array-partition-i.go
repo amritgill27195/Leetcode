@@ -1,17 +1,3 @@
-// time: o(nlogn) + o(n/2) = o(nlogn)
-// space: o(1)
-func arrayPairSum(nums []int) int {
-    sort.Ints(nums)
-    result := 0
-    for i := 0; i < len(nums); i+=2 {
-        min := int(math.Min(float64(nums[i]), float64(nums[i+1])))
-        result += min
-    }
-    return result
-}
-
-
-
 /*
     approach: Form and evaluate every single permutation 
     - Using DFS+Backtracking, form every single permutation
@@ -56,3 +42,26 @@ func arrayPairSum(nums []int) int {
 //     backtrack(0)
 //     return maxSum
 // }
+
+
+/*
+    approach: Sort + Linear scan
+    - We can sort the array
+    - So that the bigger numbers are paired together
+    - Thereby increasing our chances of getting a max sum when picking min from bigger pairs
+    
+    time:
+        sort : o(nlogn)
+         +
+        linear scan: o(n)
+        o(nlogn)
+    space: o(1)
+*/
+func arrayPairSum(nums []int) int {
+    sort.Ints(nums)
+    sum := 0
+    for i := 0; i < len(nums); i+=2 {
+        sum += int(math.Min(float64(nums[i]), float64(nums[i+1]))) 
+    }
+    return sum
+}
