@@ -5,20 +5,24 @@
     then whichever node has exactly n-1 value, thats the node with the most amount
     of incoming egdes 
     
+    outdegrees array to track number of outgoing edges from a node,
+    
     if we do not find a n-1 value, then that means there is no trusted person, return -1
     
     remember indegrees array counts the number of incoming edges to $this node ( i.e this translates to idx which is a node )
     
     in this case, we will track number of trusts given to a node 
     then look for a node with exactly n-1 value
+    and only return that node if this node does not have any outgoing edges
+    in other words, this person does not trust anyone else.
     
     time: o(n)
-    space: o(n) -- for indegrees array
+    space: o(2n) or simply o(n) -- for indegrees array
 */
 
 func findJudge(n int, trust [][]int) int {
-    indegrees := make([]int, n+1)
-    outdegrees := make([]int, n+1)
+    indegrees := make([]int, n+1) // count number of incoming edges to a node
+    outdegrees := make([]int, n+1) // count number of outgoing edges from a node
     
     for _, ele := range trust {
         person := ele[0]
