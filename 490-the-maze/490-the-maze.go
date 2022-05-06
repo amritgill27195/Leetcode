@@ -30,7 +30,7 @@ func hasPath(maze [][]int, start []int, destination []int) bool {
             }
             r -= dir[0]
             c -= dir[1]
-            if maze[r][c] == 0 {
+            if maze[r][c] != -1 {
                 maze[r][c] = -1                
                 q = append(q, []int{r,c})   
             }
