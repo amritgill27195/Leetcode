@@ -17,19 +17,20 @@
 */
 
 func findJudge(n int, trust [][]int) int {
-    indegrees := make([]int, n)
+    indegrees := make([]int, n+1)
+    outdegrees := make([]int, n+1)
     
     for _, ele := range trust {
         person := ele[0]
         trusts := ele[1]
         
-        indegrees[trusts-1]++
-        indegrees[person-1]--
+        indegrees[trusts]++
+        outdegrees[person]++
     }
     
-    for i := 0; i < len(indegrees); i++ {
-        if indegrees[i] == n-1 {
-            return i+1
+    for i := 1; i < len(indegrees); i++ {
+        if indegrees[i] == n-1 && outdegrees[i] == 0 {
+            return i
         }
     }
     return -1
