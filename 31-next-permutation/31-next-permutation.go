@@ -64,9 +64,7 @@ func nextPermutation(nums []int)  {
     
     // reverse after breach ( if there was one, otherwise reverse the whole thing )
     upToIdx := breachIdx+1
-    if upToIdx == -1 {
-        upToIdx = 0
-    }
+   
     nums = reverse(upToIdx, len(nums)-1, nums)
 }
 
