@@ -1,7 +1,7 @@
 
 /*
     We can do as many transactions as possible...
-    This is when we will compare buying on i and selling on i+1 price
+    Greedy: This is when we will compare buying on i and selling on i+1 price
     if there is any profit, add to total profit..
     
     Question becomes, if you sold it on a day, can you buy it again after selling it?
