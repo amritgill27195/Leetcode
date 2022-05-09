@@ -22,13 +22,17 @@
 func maxProfit(prices []int) int {
     max := 0
     buy := prices[0]
+    
     for i := 1; i < len(prices); i++ {
-        if prices[i]-buy > max {
-            max = prices[i]-buy
+        sell := prices[i]
+        profit := sell-buy
+        if profit > max {
+            max = profit
         }
-        if prices[i] < buy {
-            buy = prices[i]
-        }
+        if sell < buy {
+            buy = sell
+        }   
     }
+    
     return max
 }
