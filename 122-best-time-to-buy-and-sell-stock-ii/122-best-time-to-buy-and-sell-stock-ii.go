@@ -14,6 +14,7 @@
 func maxProfit(prices []int) int {
     totalProfit := 0
     for i := 1; i < len(prices); i++ {
+                 //sellPrice - buyPrice
         profit := prices[i] - prices[i-1]
         if profit > 0 {
             totalProfit += profit
