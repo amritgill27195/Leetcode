@@ -8,6 +8,14 @@
     
     ( also this is essentially, find the next greater element on right but instead of value, save the distance between two points )
     approach: monotonic increasing stack
+    - Loop over the list
+    - if the stack is not empty, and this item resolves previous its immediate previous neighbour ( top of the stack )
+        - resolve in this context means, its warmer than previous day
+        - Then pop the top of the stack 
+        - Calculate distance between top and current item ( currentIdx - idxPoppedFromTopOfStack )
+        - Save the distance in the output array at idxPoppedFromTopOfStack
+    - Otherwise save the currentIdx in the stack
+    
     time: o(n)
     space: o(n)
 
