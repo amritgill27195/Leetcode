@@ -6,7 +6,7 @@
     time: o(n^2)
     space: o(1)
     
-    
+    ( also this is essentially, find the next greater element on right but instead of value, save the distance between two points )
     approach: monotonic increasing stack
     time: o(n)
     space: o(n)
