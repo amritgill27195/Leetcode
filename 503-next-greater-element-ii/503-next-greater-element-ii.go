@@ -1,5 +1,8 @@
 /*
     approach: brute force
+    - nested for loop on doubled array len and use % n to get relative idx within array size
+    - the nested for loop goes until 
+    time: o(n^2)
     
 */
 
@@ -12,7 +15,7 @@ func nextGreaterElements(nums []int) []int {
     n := len(nums)
     
     for i := 0; i < len(nums); i++ {
-        for j := i+1; j < 2 * len(nums) && j % n != i; j++ {
+        for j := i+1;  j % n != i; j++ {
             if nums[j%n] > nums[i] {
                 out[i] = nums[j%n]
                 break
