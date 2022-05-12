@@ -23,13 +23,12 @@
 // }
 
 func canJump(nums []int) bool { 
-    dest := len(nums)-1
-    // fmt.Println("dest: ", dest)
+    destIdx := len(nums)-1
     for i := len(nums)-2; i >= 0; i-- {
         numJumpsAvail := nums[i]
-        if i+numJumpsAvail >= dest {
-            dest = i
+        if i+numJumpsAvail >= destIdx {
+            destIdx = i
         }
     }
-    return dest == 0
+    return destIdx == 0
 }
