@@ -1,15 +1,15 @@
 func candy(ratings []int) int {
     
     candies := make([]int, len(ratings))
-    for i := 0; i < len(candies); i++ {
-        candies[i] = 1
-    }
+    candies[0] = 1
     
     // left pass - if element is greater than its
     // immediate left element, then leftElementVal + 1 is the value for this position
     for i := 1; i < len(ratings); i++ {
         if ratings[i] > ratings[i-1] {
             candies[i] = candies[i-1]+1
+        } else {
+            candies[i] = 1
         }
     }
     
