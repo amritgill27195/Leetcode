@@ -14,7 +14,8 @@ func Constructor(maxNumbers int) PhoneDirectory {
     }
 }
 
-
+// time: o(1)
+// space: o(1)
 func (this *PhoneDirectory) Get() int {
     if len(this.reserved) == this.max {
         return -1
@@ -24,13 +25,15 @@ func (this *PhoneDirectory) Get() int {
     return dq
 }
 
-
+// time: o(1)
+// space: o(1)
 func (this *PhoneDirectory) Check(number int) bool {
     _, ok := this.reserved[number]
     return !ok
 }
 
-
+// time: o(1)
+// space: o(1)
 func (this *PhoneDirectory) Release(number int)  {
     _, ok := this.reserved[number]
     if ok {
