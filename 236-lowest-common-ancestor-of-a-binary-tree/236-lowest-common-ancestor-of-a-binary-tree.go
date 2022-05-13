@@ -37,6 +37,7 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
         }
         dfs(r.Left, paths)
         dfs(r.Right, paths)
+        paths = paths[:len(paths)-1]
     }
     dfs(root, nil)
     var out *TreeNode
