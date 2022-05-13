@@ -9,44 +9,16 @@
 
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-    var pPaths []*TreeNode
-    var qPaths []*TreeNode
-
-    var dfs func(r *TreeNode, paths []*TreeNode)
-    dfs = func(r *TreeNode, paths []*TreeNode)  {
-        // base
-        if r == nil {
-            return
-        }
-        if pPaths != nil && qPaths != nil {
-            return
-        }
-        
-        // logic
-        paths = append(paths, r)
-        if r.Val == p.Val {
-            newL := make([]*TreeNode, len(paths))
-            copy(newL, paths)
-            pPaths = newL
-        }
-        
-        if r.Val == q.Val {
-            newL := make([]*TreeNode, len(paths))
-            copy(newL, paths)
-            qPaths = newL
-        }
-        dfs(r.Left, paths)
-        dfs(r.Right, paths)
-        paths = paths[:len(paths)-1]
+    if root == nil || root.Val == p.Val || root.Val == q.Val {
+        return root
     }
-    dfs(root, nil)
-    var out *TreeNode
-    i := 0
-    for i < len(pPaths) && i < len(qPaths) {
-        if pPaths[i] == qPaths[i] {
-            out = pPaths[i]
-        }
-        i++
+    left := lowestCommonAncestor(root.Left, p, q)
+    right := lowestCommonAncestor(root.Right, p, q)
+    
+    if left != nil && right != nil {
+        return root
     }
-    return out
+    if left != nil {return left}
+    if right != nil {return right}
+    return nil
 }
