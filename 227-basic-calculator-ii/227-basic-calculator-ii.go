@@ -1,7 +1,8 @@
 func calculate(s string) int {
     op := "+"
+    calc := 0
     curr := 0
-    st := []int{}
+    tail := 0
     for idx, char := range s {
         charString := string(char)
         charN, _ := strconv.Atoi(charString)
@@ -11,24 +12,24 @@ func calculate(s string) int {
         }
         if (charString == "+" || charString == "-" || charString == "*" || charString == "/") || idx == len(s)-1 {
             if op == "+" {
-                st = append(st, curr)
+                calc += curr
+                tail = curr
             } else if op == "-" {
-                st = append(st, -curr)
+                calc -= curr
+                tail = -curr
             } else if op == "*" {
-                st[len(st)-1] *= curr
+                calc = calc - tail + (tail*curr)
+                tail = tail * curr
             } else if op == "/" {
-                st[len(st)-1] = st[len(st)-1]/curr
+                calc = calc - tail + (tail/curr)
+                tail = tail / curr
             }
             curr = 0
             op = charString
         }
     }
     
-    total := 0
-    for i := 0; i < len(st); i++ {
-        total += st[i]
-    }
-    return total
+return calc
 }
 
 func isDigit(s string) bool {
