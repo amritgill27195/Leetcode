@@ -1,71 +1,54 @@
-
-/*
-    approach: brute force
-    - using a freqMap
-*/
 type AutocompleteSystem struct {
+    freqMap map[string]int
     input *strings.Builder
-    m map[string]int
 }
 
 
 func Constructor(sentences []string, times []int) AutocompleteSystem {
     m := map[string]int{}
     for i := 0; i < len(sentences); i++ {
-        sentence := sentences[i]
-        freq := times[i]
-        m[sentence] += freq
+        m[sentences[i]] += times[i] 
     }
-    return AutocompleteSystem{
-        m: m,
-        input: new(strings.Builder),
-    }
+    return AutocompleteSystem{freqMap: m,input: new(strings.Builder)} 
 }
 
 
-// time: o(nk) + o(nlogn)
-// avg time: o(nlogn)
-// space: o(n) 
+
+
 func (this *AutocompleteSystem) Input(c byte) []string {
     if c == '#' {
-        this.m[this.input.String()]++
+        this.freqMap[this.input.String()]++
         this.input = new(strings.Builder)
         return nil
     }
     this.input.WriteByte(c)
-    
-    type pair struct {
-        s string
-        t int
+    type ansPair struct{
+        word string
+        times int
     }
-    
-    tmp := []*pair{}
-    // time: o(n) -- we loop thru entire map AND
-    for key, val := range this.m {
-        // time: o(k) - where k is the length of this.input...
-        if strings.HasPrefix(key, this.input.String()) {
-            tmp = append(tmp, &pair{s: key, t: val})
+    ans := []*ansPair{}
+    for k, v := range this.freqMap {
+        in := this.input.String()
+        if strings.HasPrefix(k, in) {
+            ans = append(ans, &ansPair{word: k, times: v})
         }
     }
-    // so above time is o(nk) - k will likely be a smaller term on avg so o(n) on avg
     
-    // sorting the entire tmp result -- o(nlogn)
-    sort.Slice(tmp, func(i,j int)bool{
-        if tmp[i].t == tmp[j].t {
-            return tmp[i].s < tmp[j].s
+    sort.Slice(ans, func(i, j int)bool {
+        if ans[i].times == ans[j].times {
+            return ans[i].word < ans[j].word
         }
-        return tmp[i].t > tmp[j].t
+        return ans[i].times > ans[j].times
     })
-    
-    // time: o(1) -- its constant -- 3 -- we break as soon as we have 3 results...
-    result := []string{}
-    for j := 0; j < len(tmp); j++ {
-        result = append(result, tmp[j].s)
-        if len(result) == 3 {
+   
+    out := []string{}
+    for i := 0; i < len(ans); i++ {
+        out = append(out, ans[i].word)
+        if len(out) == 3 {
             break
         }
     }
-    return result
+    return out
 }
 
 
