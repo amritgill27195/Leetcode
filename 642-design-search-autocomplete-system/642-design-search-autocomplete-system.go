@@ -1,3 +1,24 @@
+/*
+    approach: brute force
+    - We need a way to make sentences and times array query-able
+    - as in how many times a word repeats 
+    - so to correlate a word with numberOfTimes searched, we will use a map
+    - in our constructor, we will turn the input args into a freqMap
+    - We also need a way to keep on appending the input string to input char
+    - so we will have a strings.builder() thats appending characters of input until we the input char is #
+    - when the input char is #, then we will take the string from stringBuilder and add it back to freqMap
+    - Now to searching...
+    - we will loop thru our freqMap and check if each word starts with our input stringBuilder
+    - if it does we will add it to a list as a pair [word, numTimes]
+    - Then we will sort the list by numTimes ( descending order - large number first )
+        - if the numTimes for i,j are the same, then we will sort by alphabetically
+        - whichever alphabet comes first will be first
+    
+    time: o(nk) -- to populate ans list --  + o(nlogn) -- to sort ans list --- + o(1) to populate a 3 len output list
+    space: o(n) 
+          
+*/
+
 type AutocompleteSystem struct {
     freqMap map[string]int
     input *strings.Builder
