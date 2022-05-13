@@ -9,30 +9,36 @@
 
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-    
-    var dfs func(r *TreeNode, paths []*TreeNode, t *TreeNode) []*TreeNode
-    dfs = func(r *TreeNode, paths []*TreeNode, t *TreeNode) []*TreeNode {
+    var pPaths []*TreeNode
+    var qPaths []*TreeNode
+
+    var dfs func(r *TreeNode, paths []*TreeNode)
+    dfs = func(r *TreeNode, paths []*TreeNode)  {
         // base
         if r == nil {
-            return nil
+            return
         }
-        // logic
-        paths = append(paths, r)
-        if r.Val == t.Val {
-            newL := make([]*TreeNode, len(paths))
-            copy(newL, paths)
-            return newL
+        if pPaths != nil && qPaths != nil {
+            return
         }
         
-        left := dfs(r.Left, paths, t)
-        if left != nil {
-            return left
+        // logic
+        paths = append(paths, r)
+        if r.Val == p.Val {
+            newL := make([]*TreeNode, len(paths))
+            copy(newL, paths)
+            pPaths = newL
         }
-        return dfs(r.Right, paths, t)
+        
+        if r.Val == q.Val {
+            newL := make([]*TreeNode, len(paths))
+            copy(newL, paths)
+            qPaths = newL
+        }
+        dfs(r.Left, paths)
+        dfs(r.Right, paths)
     }
-    
-    var pPaths []*TreeNode = dfs(root, nil, p)
-    var qPaths []*TreeNode = dfs(root, nil, q)
+    dfs(root, nil)
     var out *TreeNode
     i := 0
     for i < len(pPaths) && i < len(qPaths) {
