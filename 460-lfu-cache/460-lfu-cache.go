@@ -21,7 +21,11 @@ func (this *LFUCache) Get(key int) int {
     if !ok {
         return -1
     }
-    
+    this.update(nodeRef)
+    return nodeRef.val
+}
+
+func (this *LFUCache) update(nodeRef *listNode) {
     currUseCount := nodeRef.count
     currDll := this.useCountToDll[currUseCount]
     currDll.removeNode(nodeRef)
@@ -37,7 +41,6 @@ func (this *LFUCache) Get(key int) int {
     } else {
         targetDll.addToHead(nodeRef)
     }
-    return nodeRef.val
 }
 
 
@@ -47,20 +50,7 @@ func (this *LFUCache) Put(key int, value int)  {
     nodeRef, ok := this.keyToNode[key]
     if ok {
         nodeRef.val = value
-        currUseCount := nodeRef.count
-        currDll := this.useCountToDll[currUseCount]
-        currDll.removeNode(nodeRef)
-        if currUseCount == this.min && currDll.size == 0 {
-            this.min++
-        }
-        nodeRef.count++
-        targetDll, exists := this.useCountToDll[nodeRef.count]
-        if !exists {
-            this.useCountToDll[nodeRef.count] = new(dll)
-            this.useCountToDll[nodeRef.count].addToHead(nodeRef)
-        } else {
-            targetDll.addToHead(nodeRef)  
-        }
+        this.update(nodeRef)
     } else {
         if len(this.keyToNode) == this.capacity {
             targetDll := this.useCountToDll[this.min]
