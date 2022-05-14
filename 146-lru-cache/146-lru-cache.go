@@ -1,120 +1,119 @@
-
-
-type Node struct {
-	Key int
-	Val int
-	Next *Node
-	Prev *Node
-}
-
 type LRUCache struct {
-	Head *Node
-	Tail *Node
-	Cap int
-	Size int
-	Lookup map[int]*Node
+    cache map[int]*listNode
+    dll *dll
+    max int
 }
 
-func Constructor(cap int) LRUCache {
-	return LRUCache{
-		Head: nil,
-		Tail: nil,
-		Cap:  cap,
-		Size: 0,
-		Lookup: map[int]*Node{},
-	}
+
+func Constructor(capacity int) LRUCache {
+    return LRUCache{
+        cache: map[int]*listNode{},
+        dll: &dll{},
+        max: capacity,
+    }
 }
 
-func (l *LRUCache) isEmpty() bool {
-	if l.Size == 0 {
-		return true
-	}
-	return false
+
+func (this *LRUCache) Get(key int) int {
+    nodeRef, ok := this.cache[key]
+    if !ok {
+        return -1
+    }
+    this.update(nodeRef)
+    return nodeRef.val
 }
 
-func (l *LRUCache) maxedOut() bool {
-	return l.Size == l.Cap
+func (this *LRUCache) update(nodeRef *listNode) {
+    // move this node to head
+    // 1-2-3 move 3
+    // 1-2-3 move 2
+    if this.dll.head == nodeRef {
+        return
+    }
+    this.dll.deleteNode(nodeRef)
+    this.dll.addNodeToHead(nodeRef)
 }
 
-func (l *LRUCache) moveNodeToTail(n *Node) {
-	if n == nil || l.Head == nil || l.Tail == n {
-		return
-	}
-	// 1-2-3-4 ( move 2 ) 1-3-4-2
-	// 1 2-3-4 ( move 1 ) 2-3-4-1
-	prev := n.Prev
-	next := n.Next
-	if prev == nil {
-		//  i.e the current n is head
-		newHead := n.Next
-		l.Head = newHead
-		n.Next = nil
-		next.Prev = nil
-		l.Tail.Next = n
-		n.Prev = l.Tail
-		l.Tail = n
-		return
-	}
-	prev.Next = next
-	next.Prev = prev
-	n.Next = nil
-	n.Prev = l.Tail
-	l.Tail.Next = n
-	l.Tail = n
+
+func (this *LRUCache) Put(key int, value int)  {
+    nodeRef, ok := this.cache[key]
+    if ok {
+        nodeRef.val = value
+        this.update(nodeRef)
+    } else {
+        if len(this.cache) == this.max {
+            nodeToDelete := this.dll.tail
+            this.dll.deleteNode(nodeToDelete)
+            delete(this.cache, nodeToDelete.key)
+        }
+        newNode := &listNode{key: key, val: value}
+        this.dll.addNodeToHead(newNode)
+        this.cache[key] = newNode
+    }
 }
 
-func (l *LRUCache) Get(key int) int {
-	n, found := l.Lookup[key]
-	if !found {
-		return -1
-	}
-	l.moveNodeToTail(n)
-	return n.Val
+type listNode struct {
+    key int
+    val int
+    next *listNode
+    prev *listNode
 }
 
-func (l *LRUCache) deleteHead() {
-	if l.Head == nil {
-		return
-	}
-	if l.Head.Next == nil {
-		// i.e head is the only node
-		l.Head = nil
-		l.Tail = nil
-		return
-	}
-	// 1-2-3 - 2-3
-	// 1<->2 - 2
-	newHead := l.Head.Next
-	newHead.Prev = nil
-	l.Head.Next = nil
-	l.Head = newHead
+type dll struct {
+    head *listNode
+    tail *listNode
+    size int
 }
 
-func (l *LRUCache) Put(key, val int) {
-	existingNode, ok := l.Lookup[key]
-	if ok {
-		existingNode.Val = val
-		l.moveNodeToTail(existingNode)
-		return
-	}
-	if l.maxedOut() {
-		delete(l.Lookup, l.Head.Key)
-		l.deleteHead()
-		l.Size--
-	}
-
-	node := &Node{Val: val, Key: key}
-	if l.Head == nil {
-		l.Head = node
-		l.Tail = node
-	} else {
-		node.Prev = l.Tail
-		l.Tail.Next = node
-		l.Tail = node
-	}
-	l.Size++
-	l.Lookup[key] = node
+func (d *dll) addNodeToHead(nodeRef *listNode) {
+    if d.head == nil {
+        d.head = nodeRef
+        d.tail = nodeRef
+        d.size = 1
+        return
+    }
+    
+    nodeRef.next = d.head
+    d.head.prev = nodeRef
+    d.head = nodeRef
+    d.size++
 }
+
+func (d *dll) deleteNode(nodeRef *listNode) {
+    if d.head == nil || nodeRef == nil {
+        return
+    }
+    next := nodeRef.next
+    prev := nodeRef.prev
+    
+    // 1 -- if nodeRef is the node to delete
+    if next == nil && prev == nil {
+        d.head = nil
+        d.tail = nil
+        d.size = 0
+        return
+    }
+    
+    if prev == nil {
+        // this is the head node
+        // 1<->2<->3 ( deleting head )     
+        newHead := next
+        d.head.next = nil
+        newHead.prev = nil
+        d.head = newHead
+    } else {
+        // 1-2-3 ( deleting tail )
+        // 1-2-3 ( deleting node in the middle )
+        prev.next = next
+        if next != nil {
+            next.prev = prev
+        } else {
+            d.tail = prev
+        }
+    }
+    d.size--
+}
+
 /**
  * Your LRUCache object will be instantiated and called as such:
  * obj := Constructor(capacity);
