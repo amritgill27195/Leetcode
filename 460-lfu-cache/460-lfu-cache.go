@@ -5,7 +5,6 @@ type LFUCache struct {
     capacity int
 }
 
-
 func Constructor(capacity int) LFUCache {
     return LFUCache{
         keyToNode: map[int]*listNode{},
@@ -14,7 +13,6 @@ func Constructor(capacity int) LFUCache {
         capacity: capacity,
     }
 }
-
 
 func (this *LFUCache) Get(key int) int {
     nodeRef, ok := this.keyToNode[key]
@@ -43,7 +41,6 @@ func (this *LFUCache) update(n *listNode) {
         targetFreqDLL.addToHead(n)
     }
 }
-
 
 func (this *LFUCache) Put(key int, value int)  {
     nodeRef, ok := this.keyToNode[key]
@@ -82,7 +79,6 @@ func (this *LFUCache) Put(key int, value int)  {
  * obj.Put(key,value);
  */
 
-
 type listNode struct {
     key int
     val int
@@ -90,7 +86,6 @@ type listNode struct {
     prev *listNode
     count int
 }
-
 
 type dll struct {
     head *listNode
@@ -115,7 +110,6 @@ func (d *dll) addToHead(n *listNode) {
     d.size++
 }
 
-
 func (d *dll) deleteNode(n *listNode) {
     // head is nil
     if d.head == nil || n == nil {
@@ -130,7 +124,6 @@ func (d *dll) deleteNode(n *listNode) {
         d.tail = nil
         return
     }
-    
     if prev != nil {    
         prev.next = next
         if next != nil {
@@ -154,5 +147,3 @@ func (d *dll) removeLastNode() *listNode {
     d.deleteNode(toRemove)
     return toRemove
 }
-
-
