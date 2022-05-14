@@ -1,87 +1,86 @@
 type LFUCache struct {
     keyToNode map[int]*listNode
-    freqToDll map[int]*dll
-    min int
+    useCountToDll map[int]*dll
     capacity int
+    min int
 }
+
 
 func Constructor(capacity int) LFUCache {
     return LFUCache{
         keyToNode: map[int]*listNode{},
-        freqToDll: map[int]*dll{},
-        min: -1,
+        useCountToDll: map[int]*dll{},
         capacity: capacity,
+        min: 0,
     }
 }
 
-// time: o(1)
-// space: o(1)
+
 func (this *LFUCache) Get(key int) int {
     nodeRef, ok := this.keyToNode[key]
     if !ok {
         return -1
     }
-    this.update(nodeRef)
-    return nodeRef.val
-}
-
-// time: o(1)
-// space: o(1)
-func (this *LFUCache) update(n *listNode) {
-    currFreq := n.count
-    currDll := this.freqToDll[currFreq]
-    currDll.deleteNode(n)
-    if currFreq == this.min && currDll.size == 0 {
+    
+    currUseCount := nodeRef.count
+    currDll := this.useCountToDll[currUseCount]
+    currDll.removeNode(nodeRef)
+    if currUseCount == this.min && currDll.size == 0 {
         this.min++
     }
     
-    n.count++
-    targetFreqDLL, exists := this.freqToDll[n.count]
+    nodeRef.count++
+    targetDll, exists := this.useCountToDll[nodeRef.count]
     if !exists {
-        ndll := newDLL()
-        ndll.addToHead(n)
-        this.freqToDll[n.count] = ndll
+        this.useCountToDll[nodeRef.count] = new(dll)
+        this.useCountToDll[nodeRef.count].addToHead(nodeRef)
     } else {
-        targetFreqDLL.addToHead(n)
+        targetDll.addToHead(nodeRef)
     }
+    return nodeRef.val
 }
 
+
+
 func (this *LFUCache) Put(key int, value int)  {
+    if this.capacity == 0 {return}
     nodeRef, ok := this.keyToNode[key]
     if ok {
         nodeRef.val = value
-        this.update(nodeRef)
+        currUseCount := nodeRef.count
+        currDll := this.useCountToDll[currUseCount]
+        currDll.removeNode(nodeRef)
+        if currUseCount == this.min && currDll.size == 0 {
+            this.min++
+        }
+        nodeRef.count++
+        targetDll, exists := this.useCountToDll[nodeRef.count]
+        if !exists {
+            this.useCountToDll[nodeRef.count] = new(dll)
+            this.useCountToDll[nodeRef.count].addToHead(nodeRef)
+        } else {
+            targetDll.addToHead(nodeRef)  
+        }
     } else {
-        // brand new node
-        if this.capacity == 0 {
-            return 
-        }
         if len(this.keyToNode) == this.capacity {
-            targetDll := this.freqToDll[this.min]
-            lastNodeRmd := targetDll.removeLastNode()
-            delete(this.keyToNode, lastNodeRmd.key)
+            targetDll := this.useCountToDll[this.min]
+            toDelete := targetDll.tail
+            targetDll.removeNode(toDelete)
+            delete(this.keyToNode, toDelete.key)
         }
-        this.min=1
+        this.min = 1
         newNode := &listNode{key: key, val: value, count: 1}
         this.keyToNode[key] = newNode
-        targetDll, exists := this.freqToDll[1]
+        targetDll, exists := this.useCountToDll[1]
         if !exists {
-            ndll := newDLL()
-            ndll.addToHead(newNode)
-            this.freqToDll[1] = ndll
+            this.useCountToDll[1] = new(dll)
+            this.useCountToDll[1].addToHead(newNode)
         } else {
             targetDll.addToHead(newNode)
         }
     }
 }
 
-
-/**
- * Your LFUCache object will be instantiated and called as such:
- * obj := Constructor(capacity);
- * param_1 := obj.Get(key);
- * obj.Put(key,value);
- */
 
 type listNode struct {
     key int
@@ -97,38 +96,36 @@ type dll struct {
     size int
 }
 
-func newDLL() *dll {
-    return new(dll)
-}
-
 func (d *dll) addToHead(n *listNode) {
     if d.head == nil {
         d.head = n
         d.tail = n
-        d.size++
+        d.size = 1
         return
     }
-    n.next = d.head
-    d.head.prev = n
-    d.head = n
+    newHead := n
+    newHead.next = d.head
+    d.head.prev = newHead
+    d.head = newHead
     d.size++
 }
 
-func (d *dll) deleteNode(n *listNode) {
-    // head is nil
+
+func (d *dll) removeNode(n *listNode) {
     if d.head == nil || n == nil {
         return
     }
-    prev := n.prev
     next := n.next
+    prev := n.prev
     
-    if prev == nil && next == nil {
-        d.size = 0
+    if next == nil && prev == nil {
         d.head = nil
         d.tail = nil
+        d.size = 0
         return
     }
-    if prev != nil {    
+    
+    if prev != nil {
         prev.next = next
         if next != nil {
             next.prev = prev
@@ -136,18 +133,18 @@ func (d *dll) deleteNode(n *listNode) {
             d.tail = prev
         }
     } else {
-        // this is head
-        next.prev = nil
-        d.head = next
+        newHead := next
+        newHead.prev = nil
+        d.head.next = nil
+        d.head = newHead
     }
     d.size--
     n.next = nil
     n.prev = nil
-
 }
-
-func (d *dll) removeLastNode() *listNode {
-    toRemove := d.tail
-    d.deleteNode(toRemove)
-    return toRemove
-}
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * obj := Constructor(capacity);
+ * param_1 := obj.Get(key);
+ * obj.Put(key,value);
+ */
