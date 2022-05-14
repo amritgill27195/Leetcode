@@ -26,6 +26,7 @@ func (this *SnakeGame) Move(direction string) int {
     snakeRow := this.snake.tail.r
     snakeCol := this.snake.tail.c
 
+    // move the snake to new direction first
     if direction == "U" {
         snakeRow--
     } else if direction == "D" {
@@ -36,10 +37,13 @@ func (this *SnakeGame) Move(direction string) int {
         snakeCol++
     }
     
-    // check if the snake tail ll position is out of bounds
+    // then run checks to validate the move
+    
+    // check if the snake is out of bounds
     if snakeRow < 0 || snakeRow == this.m || snakeCol < 0 || snakeCol == this.n {
         return -1
     }
+    
     
     // check if snake is hitting itself
     curr := this.snake.head.next
@@ -64,6 +68,7 @@ func (this *SnakeGame) Move(direction string) int {
         }
     }
     
+    // otherwise when a snake moves in a normal case, just add the new snakeRow and snakeCol to ll tail, and rm head node and move head pointer to next node
     this.snake.removeHead()
     this.snake.addToTail(snakeRow, snakeCol)
     return this.snake.size -1
