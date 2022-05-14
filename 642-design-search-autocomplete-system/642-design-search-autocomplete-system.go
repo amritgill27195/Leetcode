@@ -63,6 +63,8 @@ func (acs *AutocompleteSystem) Less(i, j int) bool {
 	jWordWeight := acs.freqMap[jWord]
 
 	if iWordWeight == jWordWeight {
+        // I am an idiot and I have been comparing strings lexicographically incorrectly...
+        // the correct way is this.. https://ispycode.com/GO/Strings/Compare-strings-lexicographically
 		return strings.Compare(jWord, iWord) == -1
 	}
 	return iWordWeight < jWordWeight
