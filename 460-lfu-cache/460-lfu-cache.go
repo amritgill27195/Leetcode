@@ -14,6 +14,8 @@ func Constructor(capacity int) LFUCache {
     }
 }
 
+// time: o(1)
+// space: o(1)
 func (this *LFUCache) Get(key int) int {
     nodeRef, ok := this.keyToNode[key]
     if !ok {
@@ -23,6 +25,8 @@ func (this *LFUCache) Get(key int) int {
     return nodeRef.val
 }
 
+// time: o(1)
+// space: o(1)
 func (this *LFUCache) update(n *listNode) {
     currFreq := n.count
     currDll := this.freqToDll[currFreq]
