@@ -5,6 +5,8 @@
         - what data structure helps us add to end the in o(1) time and remove from the front in o(1) time
         - linkedlist
         - using an array would be more time expensive,
+        - LL head will be the tail of snake and LL tail will be head of the snake
+        - When we move snake into a new empty cell, then we will add a new node to tail and update tail to point to new node and we will move our head pointer in LL to head.next and remove the old head node -- when a snake moves, if its not growing, its head moves to new cell and its tail follows therefore the above action..
     - Then when we are trying to move to a direction, we will verify a few things
         - is the new cell out of bounds? if yes, return -1, game over
         - if the new cell already occupied by snake body ?
