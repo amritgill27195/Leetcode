@@ -14,7 +14,7 @@ func removeKdigits(num string, k int) string {
         st = st[:len(st)-1]
         k--
     }
-        if len(st) == 0 {return "0"}
+    if len(st) == 0 {return "0"}
 
     return string(st)
 }
