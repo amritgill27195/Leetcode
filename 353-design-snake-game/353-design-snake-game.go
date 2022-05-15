@@ -1,35 +1,63 @@
+/*
+    approach: 
+    - To represent snake, we will use a linked list
+        - why? because when a snake moves from cell to other
+        - what data structure helps us add to end the in o(1) time and remove from the front in o(1) time
+        - linkedlist
+        - using an array would be more time expensive,
+    - Then when we are trying to move to a direction, we will verify a few things
+        - is the new cell out of bounds? if yes, return -1, game over
+        - if the new cell already occupied by snake body ?
+            - if the new cell is occupied by snake tail, thats acceptable beacause when the snake has fully moved, its tail wont be new cell so it wont clash
+            - however if its some other middle part of the body, return -1, game over
+        - if the new cell has food, then eat the food by
+            - add new cell position to LL
+        - if the new cell is a blank cell and none of the above rules were met, then
+            - add new cell position to snake LL
+            - remove the head of the snake LL to fully move the snake
+            - Head of LL is the tail of the snake
+            - Tail of LL is the head of the snake
+    - All of that is fine, what about the scores.... 
+        - The size of the snake - 1 is the score we will return after processing a input key stroke
+            - Why the -1 ?
+            - because the snake LL will ALWAYS start 1 size long, it has a start position of 0,0
+            - so any new node we add, will increase the size by 1
+            - but when the game ends, we need to remove the starting snake node from the final size of the LL
+            - Therefore the -1
+*/
+
 type SnakeGame struct {
-    m int
-    n int
-    foodQueue *ll
+    foodQ *ll
     snake *ll
+    m, n int
 }
 
 
 func Constructor(width int, height int, food [][]int) SnakeGame {
     foodQ := new(ll)
     for _, pos := range food {
-        foodQ.addToTail(pos[0],pos[1])
+        foodQ.addToTail(pos[0], pos[1])
     }
     snake := new(ll)
     snake.addToTail(0,0)
     return SnakeGame{
-        m: height,
-        n: width,
-        foodQueue: foodQ,
+        foodQ: foodQ,
         snake: snake,
+        m : height,
+        n : width,
     }
 }
 
 
 func (this *SnakeGame) Move(direction string) int {
+    // current snake head position
     snakeRow := this.snake.tail.r
     snakeCol := this.snake.tail.c
-
-    // move the snake to new direction first
+    
+    // apply the direction change to snakeRow and snakeCol
     if direction == "U" {
         snakeRow--
-    } else if direction == "D" {
+    } else if direction == "D"{
         snakeRow++
     } else if direction == "L" {
         snakeCol--
@@ -37,50 +65,40 @@ func (this *SnakeGame) Move(direction string) int {
         snakeCol++
     }
     
-    // then run checks to validate the move
+    // now verify new snake head position
     
-    // check if the snake is out of bounds
-    if snakeRow < 0 || snakeRow == this.m || snakeCol < 0 || snakeCol == this.n {
+    // end the game if the new snake is going out of matrix
+    if snakeRow == this.m || snakeRow < 0 || snakeCol == this.n || snakeCol < 0 {
         return -1
     }
     
-    
-    // check if snake is hitting itself
+    // end the game if the new snake head hits one of its body nodes, excluding its tail ( or head of LL in this case )
     curr := this.snake.head.next
     for curr != nil {
-        if curr.r == snakeRow && curr.c == snakeCol {
+        if snakeRow == curr.r && snakeCol == curr.c {
             return -1
         }
         curr = curr.next
     }
     
-    
-    // check if current position is a food position
-    if !this.foodQueue.isEmpty() {
-        // peek food queue
-        foodRow := this.foodQueue.head.r
-        foodCol := this.foodQueue.head.c
-        
+    // otherwise
+    // if the new cell has food, make the snake bigger
+    if this.foodQ.size != 0 {
+        foodRow := this.foodQ.head.r
+        foodCol := this.foodQ.head.c
         if snakeRow == foodRow && snakeCol == foodCol {
-            this.foodQueue.removeHead()
-            this.snake.addToTail(foodRow,foodCol)
-            return this.snake.size - 1
+            this.foodQ.removeHead()
+            this.snake.addToTail(snakeRow, snakeCol)
+            return this.snake.size-1
         }
     }
     
-    // otherwise when a snake moves in a normal case, just add the new snakeRow and snakeCol to ll tail, and rm head node and move head pointer to next node
-    this.snake.removeHead()
+    // if no food, simply move by adding new position to tail end of the LL
+    // and removing head of the LL
     this.snake.addToTail(snakeRow, snakeCol)
-    return this.snake.size -1
+    this.snake.removeHead()
+    return this.snake.size-1
 }
-
-
-/**
- * Your SnakeGame object will be instantiated and called as such:
- * obj := Constructor(width, height, food);
- * param_1 := obj.Move(direction);
- */
-
 
 
 type listNode struct {
@@ -95,23 +113,19 @@ type ll struct {
     size int
 }
 
-
-func (l *ll) addToTail(r, c int) {
-    n := &listNode{r:r,c:c}
+func (l *ll) addToTail(r,c int) {
+    newNode := &listNode{r: r, c: c}
     if l.head == nil {
-        l.head = n
-        l.tail = n
-        l.size= 1
+        l.head = newNode
+        l.tail = newNode
+        l.size = 1
         return
     }
-    l.tail.next = n
-    l.tail = n
+    l.tail.next = newNode
+    l.tail = newNode
     l.size++
 }
 
-func (l *ll) isEmpty() bool {
-    return l.size == 0
-}
 
 func (l *ll) removeHead() {
     if l.head == nil {
@@ -119,11 +133,17 @@ func (l *ll) removeHead() {
     }
     if l.head.next == nil {
         l.head = nil
+        l.tail = nil
         l.size = 0
         return
     }
     newHead := l.head.next
-    l.head.next = nil
+    l.head.next = nil 
     l.head = newHead
     l.size--
 }
+/**
+ * Your SnakeGame object will be instantiated and called as such:
+ * obj := Constructor(width, height, food);
+ * param_1 := obj.Move(direction);
+ */
