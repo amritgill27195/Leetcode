@@ -50,34 +50,33 @@
     time: o(h+k) -- worse case we visit max height ( all left nodes ) and then +k more nodes to get the kth smallest
     space: o(h)
 */
-// func kthSmallest(root *TreeNode, k int) int {
-//     count := 0
-//     var inorder func(r *TreeNode) int
-//     inorder = func(r *TreeNode) int {
-//         // base
-//         if r == nil {
-//             return -1
-//         }    
+func kthSmallest(root *TreeNode, k int) int {
+    var inorder func(r *TreeNode) int
+    inorder = func(r *TreeNode) int {
+        // base
+        if r == nil {
+            return -1
+        }    
         
-//         // logic
-//         left := inorder(r.Left)
-//         if left != -1 {
-//             return left
-//         }
+        // logic
+        left := inorder(r.Left)
+        if left != -1 {
+            return left
+        }
         
-//         count++
-//         if k == count {
-//             return r.Val 
-//         }
+        k--
+        if k == 0 {
+            return r.Val 
+        }
         
         
-//         right := inorder(r.Right)
-//         return right
-//     }
+        right := inorder(r.Right)
+        return right
+    }
     
-//     return inorder(root)
+    return inorder(root)
     
-// }
+}
 
 
 
@@ -94,20 +93,20 @@
     time: o(h+k) -- worse case we visit max height ( all left nodes ) and then +k more nodes to get the kth smallest
     space: o(h)
 */
-func kthSmallest(root *TreeNode, k int) int {
-    s := []*TreeNode{}
-    for root != nil || len(s) != 0 {
-        for root != nil {
-            s = append(s, root)
-            root = root.Left
-        }
-        root = s[len(s)-1]
-        s = s[:len(s)-1]
-        k--
-        if k == 0 {
-            return root.Val
-        }
-        root = root.Right
-    }
-    return root.Val
-}
+// func kthSmallest(root *TreeNode, k int) int {
+//     s := []*TreeNode{}
+//     for root != nil || len(s) != 0 {
+//         for root != nil {
+//             s = append(s, root)
+//             root = root.Left
+//         }
+//         root = s[len(s)-1]
+//         s = s[:len(s)-1]
+//         k--
+//         if k == 0 {
+//             return root.Val
+//         }
+//         root = root.Right
+//     }
+//     return root.Val
+// }
