@@ -15,6 +15,9 @@ func jump(nums []int) int {
                 nextIdx := i+dq
                 if _, ok := visited[nextIdx]; ok {continue}
                 visited[nextIdx] = struct{}{}
+                if nextIdx >= len(nums)-1 {
+                                return jumps+1
+                            }
                 q = append(q, nextIdx)
             }
             qSize--
