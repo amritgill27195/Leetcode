@@ -1,81 +1,69 @@
-
-/*
-    Connected components  == BFS/DFS
-    - We need starting point(s) -- all independant nodes 
-    There is a domino effect of changing 1 cell color to new color 
-    """
-        plus any pixels connected 4-directionally to the starting pixel of the same color as the starting pixel, 
-        plus any pixels connected 4-directionally to those pixels (also with the same color), and so on.
-    """
-    
-    approach : using BFS
-    - We are given a starting point ( sr, sc )
-    - Enqueue that starting
-    - Save the color we are changing from ( oldColor, so we can compare with its neighbors )
-    - Change the sr,sc to new color
-    - Start processing the queue
-    - As soon as we add an item to our queue, we will change the color right away to newColor
-    - So that we do not visit this node again
-    - if we are not allowed to modify the matrix ( save the visited poins in a set )
-    time: o(mn)
-    space: o(mn) - for the queue
-    
-
-*/
-
-
-// DFS ( recursive )
 func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
     oldColor := image[sr][sc]
-    if newColor == oldColor {
-        return image
-    }
+    if oldColor == newColor {return image}
+    dirs := [][]int{{1,0},{-1,0},{0,-1},{0,1}}
     m := len(image)
     n := len(image[0])
-    dirs := [][]int{{1,0},{-1,0},{0,-1},{0,1}}
-    var dfs func(r, c int) 
-    dfs = func(r, c int) {
-        // base
-        if r < 0 || r == m || c < 0 || c == n || image[r][c] == newColor || image[r][c] != oldColor {
-            return
-        }
-        
-        // logic
-        image[r][c] = newColor
+    
+    q := new(queue)
+    image[sr][sc] = newColor
+    q.enqueue(sr,sc)
+
+    for !q.isEmpty() {
+        r,c := q.dequeue()
         for _, dir := range dirs {
-            dfs(r+dir[0],c+dir[1])
+            nr := r+dir[0]
+            nc := c+dir[1]
+            if nr >= 0 && nr < m && nc >=0 && nc < n && image[nr][nc] == oldColor {
+                image[nr][nc] = newColor
+                q.enqueue(nr,nc)
+            }
         }
     }
-    dfs(sr, sc)
+    
     return image
 }
 
 
-// BFS approach
-// func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
-//     oldColor := image[sr][sc]
-//     if newColor == oldColor {
-//         return image
-//     }
-//     m := len(image)
-//     n := len(image[0])
-//     dirs := [][]int{{1,0},{-1,0},{0,-1},{0,1}}
-//     q := [][]int{{sr,sc}}
-//     image[sr][sc] = newColor
+type listNode struct {
+    r,c int
+    next *listNode
+}
+type queue struct {
+    head *listNode
+    tail *listNode
+}
+
+
+func (q *queue) isEmpty() bool {
+    return q.head == nil
+}
+func (q *queue) enqueue(r,c int) {
+    newNode := &listNode{r:r,c:c}
+    if q.head == nil {
+        q.head = newNode
+        q.tail = newNode
+        return
+    }
+    q.tail.next = newNode
+    q.tail = newNode
+}
+
+func (q *queue) dequeue() (int,int) {
+    if q.head == nil {
+        return -1,-1
+    }
+    r := q.head.r
+    c := q.head.c
     
-//     for len(q) != 0 {
-//         dq := q[0]
-//         q = q[1:]
-//         cr := dq[0]
-//         cc := dq[1]
-//         for _, dir := range dirs {
-//             r := cr + dir[0]
-//             c := cc + dir[1]
-//             if r >= 0 && r < m && c >= 0 && c < n && image[r][c] == oldColor {
-//                 image[r][c] = newColor 
-//                 q = append(q, []int{r,c})
-//             }
-//         }
-//     }
-//     return image
-// }
+    if q.head.next == nil {
+        q.head = nil
+        q.tail = nil
+        return r,c
+    }
+    
+    newHead := q.head.next
+    q.head.next = nil 
+    q.head = newHead
+    return r,c
+}
