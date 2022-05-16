@@ -19,5 +19,4 @@ class Solution:
                         return True
             
             return False
-        print("Calling dfs...")
         return dfs(0)
