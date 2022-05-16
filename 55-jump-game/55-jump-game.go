@@ -50,31 +50,64 @@
     
     time: exponential ( n^N - i think, there are n elements each have their own distince N value )
     space: exponential - i think
-    Result: Still TLE
+    Result: actually passes.... but still very slow
+    
+**/
+// func canJump(nums []int) bool {
+//     var dfs func(startIdx int) bool
+//     memo := map[int]bool{}
+
+//     dfs = func(startIdx int) bool {
+//         // base
+//         if startIdx >= len(nums)-1 {
+//             return true
+//         }
+        
+//         // logic
+//         for i := nums[startIdx]; i >= 1; i-- {
+//             nextIdx := i + startIdx
+//             if res, ok := memo[nextIdx]; ok {
+//                 if res {return true}
+//             }else {
+//                 res := dfs(nextIdx)
+//                 memo[nextIdx] = res
+//                 if res { return true }
+//             }
+//         }
+//         return false
+//     }
+//     return dfs(0)
+// }
+
+
+/**
+    Each value in the array list represents the jump distance we can jump ( 1 thru N where N is the ith val in array list)
+    
+    approach: Greedy, explore single path
+    - Starting from the start of the list, we end up with multiple choices
+        - How? if val at idx 0 is 2, then we can take 1 jump or 2 jumps
+    - Instead to explore ONLY 1 path, we will
+    - make the last element as our destination
+    - and start our i from len(nums)-2 ( 2nd last element )
+    - and check whether we can reach destination from ith element
+    - if we can, then make the current i the new destination and move i ptr back by 1
+    - then for instance, we cannot, move your i ptr back but leave the destination ptr where it is,
+    - because it may not be reachable from where current i is , but maybe possible from i-1 element
+    - if our destination reaches idx 0, we can gurantee a path with current number of jumps avail from start to end
+    
+    
+    time: o(n)
+    space: o(1)
+    Result: ofcourse this passes
     
 **/
 func canJump(nums []int) bool {
-    var dfs func(startIdx int) bool
-    memo := map[int]bool{}
-
-    dfs = func(startIdx int) bool {
-        // base
-        if startIdx >= len(nums)-1 {
-            return true
+    destIdx := len(nums)-1
+    for i := len(nums)-2; i >= 0; i-- {
+        numJumpsAvail := nums[i]
+        if i + numJumpsAvail >= destIdx {
+            destIdx = i
         }
-        
-        // logic
-        for i := nums[startIdx]; i >= 1; i-- {
-            nextIdx := i + startIdx
-            if res, ok := memo[nextIdx]; ok {
-                if res {return true}
-            }else {
-                res := dfs(nextIdx)
-                memo[nextIdx] = res
-                if res { return true }
-            }
-        }
-        return false
     }
-    return dfs(0)
+    return destIdx == 0
 }
