@@ -1,3 +1,29 @@
+/*
+    approach: Brute force, BFS
+    - usually we have used BFS for connected components on matrixes and or trees
+    - but BFS can also be used for arrays
+    - We have a start position and we also have a desintation
+    - We have to get to the destination in minimum num of jumps as possible
+        - almost looking for the shortest/smallest path to a destination
+    - How do we figure out the jump count?
+        - Thats each level, every level we process, if we did not reach destination in that level, jumps++
+    - How and what do we add in our queue?
+        - Since we are dealing with numbers in arrays that can be duplicated,
+        - we will store index of each number
+        - How would we get an index ?
+        - We know our starting index is 0, so initially that will be added
+        - Now we have to add 0's babies
+        - in this context, the babies are all the babies that idx 0 can reach to
+        - that would be all indicies from
+            - 1..valueAtThatIdx + idx
+            - so we enqueue all indicies that we can jump to from idx 0 (while being greedy and starting from the farthest jump first)
+            - while we are adding each child index into our queue, how do we make sure, the same child does not get added back again?
+            - we could do 2 things
+                - maintain a visited set that maintains all the indicies we have in our queue so far
+                    - why not just search the queue? because searching in queue takes o(n) time while searching in set will be o(1) time
+                - or mark the number negative and have the adding of indicies to queue, filter our negative values at a idx we are evaluating
+
+*/
 // func jump(nums []int) int {
 //     visited := map[int]struct{}{
 //         0: struct{}{},
