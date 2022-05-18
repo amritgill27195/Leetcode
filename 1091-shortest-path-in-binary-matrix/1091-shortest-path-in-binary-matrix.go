@@ -33,6 +33,8 @@ func shortestPathBinaryMatrix(grid [][]int) int {
                 c := dir[1] + dq[1]
                 if r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == 0 {
                     grid[r][c] = 1
+                    // to exit early ... 
+                    if r == destRow && c == destCol {return level+2}
                     q = append(q, []int{r,c})
                 }
             }
@@ -40,6 +42,5 @@ func shortestPathBinaryMatrix(grid [][]int) int {
         }
         level++
     }
-    
     return -1
 }
