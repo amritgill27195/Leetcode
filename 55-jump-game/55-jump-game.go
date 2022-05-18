@@ -80,6 +80,42 @@
 // }
 
 
+/*
+    approach: BFS 
+    - We have a start position
+    - We have a destination
+    - We have to find whether if its even possible to reach to the destination
+    - Enqueue our start idx 0
+    - Then 0's childs are all the indicies 0th idx can reach to
+        - i.e use val at idx 0 in a greedy manner and enqueue all the childs our jump would land to 
+    - if the dq'd idx == destination, return true,
+    - otherwise if queue did not find an answer, return false
+*/
+func canJump(nums []int) bool {
+    visited := map[int]struct{}{0:struct{}{}}
+    q := []int{0}
+    n := len(nums)
+    
+    for len(q) != 0 {
+        dqIdx := q[0]
+        q = q[1:]
+        if dqIdx >= n-1 {
+            return true
+        }
+        for i := nums[dqIdx]; i >= 1; i-- {
+            nextIdx := dqIdx+i
+            if nextIdx >= n-1 {return true}
+            _, alreadyEnqueued := visited[nextIdx]
+            if alreadyEnqueued {continue}
+            visited[nextIdx] = struct{}{}
+            q = append(q, nextIdx)
+        }
+    }
+    return false
+}
+
+
+
 /**
     Each value in the array list represents the jump distance we can jump ( 1 thru N where N is the ith val in array list)
     
@@ -101,13 +137,13 @@
     Result: ofcourse this passes
     
 **/
-func canJump(nums []int) bool {
-    destIdx := len(nums)-1
-    for i := len(nums)-2; i >= 0; i-- {
-        numJumpsAvail := nums[i]
-        if i + numJumpsAvail >= destIdx {
-            destIdx = i
-        }
-    }
-    return destIdx == 0
-}
+// func canJump(nums []int) bool {
+//     destIdx := len(nums)-1
+//     for i := len(nums)-2; i >= 0; i-- {
+//         numJumpsAvail := nums[i]
+//         if i + numJumpsAvail >= destIdx {
+//             destIdx = i
+//         }
+//     }
+//     return destIdx == 0
+// }
