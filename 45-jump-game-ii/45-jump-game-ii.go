@@ -28,6 +28,23 @@
 //     return jumps
 // } 
 
+/*
+    approach: greedy
+    - Using 2 intervals
+    - Current interval = nums[0]
+    - Next interval = num[0]
+    - We will only increase our jump count once we have reached the current interval
+    - While our i is headed towards current interval,
+        - we will look for the next number that makes us jump the farthest distance possible
+        - and we will maintain that with nextInterval
+    - Once our i has reached the current interval idx, then we will increase our jump count by 1
+    - and we will promote our next interval to current interval -- i.e do not increase the jump count until i == current interval and i has not reached the end
+    - Finally return the jump count
+    
+    time: o(n)
+    space: 0(1)
+
+*/
 func jump(nums []int) int {
     currInt := nums[0]
     nextInt := nums[0]
