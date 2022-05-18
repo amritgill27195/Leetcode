@@ -1,5 +1,5 @@
 func shortestPathBinaryMatrix(grid [][]int) int {
-    level := 0
+    level := 1
     m := len(grid)
     n := len(grid[0])
     destRow := m-1
@@ -26,7 +26,7 @@ func shortestPathBinaryMatrix(grid [][]int) int {
             q = q[1:]
             
             if dq[0] == destRow && dq[1] == destCol {
-                return level+1
+                return level
             }
             for _, dir := range dirs {
                 r := dir[0] + dq[0]
