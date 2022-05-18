@@ -1,7 +1,7 @@
 /**
     Each value in the array list represents the jump distance we can jump ( 1 thru N where N is the ith val in array list)
     
-    approach: DFS, explore all paths
+    approach: Brute force DFS, explore all paths
     - We can start from idx 0
     - suppose the value at idx 0 is N
     - Then we explore whether jumping 1..N is possible
@@ -81,7 +81,7 @@
 
 
 /*
-    approach: BFS 
+    approach: Brute force BFS 
     - We have a start position
     - We have a destination
     - We have to find whether if its even possible to reach to the destination
@@ -91,28 +91,28 @@
     - if the dq'd idx == destination, return true,
     - otherwise if queue did not find an answer, return false
 */
-func canJump(nums []int) bool {
-    visited := map[int]struct{}{0:struct{}{}}
-    q := []int{0}
-    n := len(nums)
+// func canJump(nums []int) bool {
+//     visited := map[int]struct{}{0:struct{}{}}
+//     q := []int{0}
+//     n := len(nums)
     
-    for len(q) != 0 {
-        dqIdx := q[0]
-        q = q[1:]
-        if dqIdx >= n-1 {
-            return true
-        }
-        for i := nums[dqIdx]; i >= 1; i-- {
-            nextIdx := dqIdx+i
-            if nextIdx >= n-1 {return true}
-            _, alreadyEnqueued := visited[nextIdx]
-            if alreadyEnqueued {continue}
-            visited[nextIdx] = struct{}{}
-            q = append(q, nextIdx)
-        }
-    }
-    return false
-}
+//     for len(q) != 0 {
+//         dqIdx := q[0]
+//         q = q[1:]
+//         if dqIdx >= n-1 {
+//             return true
+//         }
+//         for i := nums[dqIdx]; i >= 1; i-- {
+//             nextIdx := dqIdx+i
+//             if nextIdx >= n-1 {return true}
+//             _, alreadyEnqueued := visited[nextIdx]
+//             if alreadyEnqueued {continue}
+//             visited[nextIdx] = struct{}{}
+//             q = append(q, nextIdx)
+//         }
+//     }
+//     return false
+// }
 
 
 
@@ -137,13 +137,13 @@ func canJump(nums []int) bool {
     Result: ofcourse this passes
     
 **/
-// func canJump(nums []int) bool {
-//     destIdx := len(nums)-1
-//     for i := len(nums)-2; i >= 0; i-- {
-//         numJumpsAvail := nums[i]
-//         if i + numJumpsAvail >= destIdx {
-//             destIdx = i
-//         }
-//     }
-//     return destIdx == 0
-// }
+func canJump(nums []int) bool {
+    destIdx := len(nums)-1
+    for i := len(nums)-2; i >= 0; i-- {
+        numJumpsAvail := nums[i]
+        if i + numJumpsAvail >= destIdx {
+            destIdx = i
+        }
+    }
+    return destIdx == 0
+}
