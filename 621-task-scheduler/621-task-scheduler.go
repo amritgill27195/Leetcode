@@ -1,3 +1,5 @@
+// time: o(n)
+// space: o(1)
 func leastInterval(tasks []byte, n int) int {
     if n == 0 {return len(tasks)}
     maxCount := 0 // total number times maxFreq was seen
