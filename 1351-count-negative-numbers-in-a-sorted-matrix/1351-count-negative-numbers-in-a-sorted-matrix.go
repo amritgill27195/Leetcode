@@ -2,6 +2,10 @@
     This is a classic stair case search
     - Outline the staircase that holds all negatives
     
+    time: o(m+n)
+    space: o(1)
+    
+    
 */
 func countNegatives(grid [][]int) int {   
     
