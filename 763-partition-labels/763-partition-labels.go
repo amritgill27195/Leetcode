@@ -1,3 +1,5 @@
+// time: o(n)
+// space: o(1) because the map will only contain 26 alphabets
 func partitionLabels(s string) []int {
     charLastIdx := map[rune]int{}
     for idx, char := range s {
