@@ -10,7 +10,7 @@
         
 */
 func canReach(arr []int, start int) bool {
-    visited := map[int]struct{}{start: struct{}{}}
+    // visited := map[int]struct{}{start: struct{}{}}
     q := []int{start}
     n := len(arr)
     for len(q) != 0 {
@@ -21,24 +21,32 @@ func canReach(arr []int, start int) bool {
         forward := idx + numJumps
         backward := idx-numJumps
         
-        if forward <= n-1 {
+        if forward <= n-1 && forward >= 0 {
             if arr[forward] == 0 {
                 return true
             }
-            if _, ok := visited[forward]; !ok {
+            if arr[forward] > 0 {
                 q = append(q, forward)
-                visited[forward] = struct{}{}
+                arr[forward] *= -1
             }
+            // if _, ok := visited[forward]; !ok {
+            //     q = append(q, forward)
+            //     visited[forward] = struct{}{}
+            // }
         }
         
-        if backward >= 0 {
+        if backward >= 0 && backward <= n-1 {
             if arr[backward] == 0 {
                 return true
             }
-            if _, ok := visited[backward]; !ok {
+            if arr[backward] > 0 {
                 q = append(q, backward)
-                visited[backward] = struct{}{}
+                arr[backward] *= -1
             }
+            // if _, ok := visited[backward]; !ok {
+            //     q = append(q, backward)
+            //     visited[backward] = struct{}{}
+            // }
         }
         
     }
