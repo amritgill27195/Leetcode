@@ -22,12 +22,12 @@ func canReach(arr []int, start int) bool {
         backward := idx-numJumps
         
         if forward <= n-1 && forward >= 0 {
-            if arr[forward] == 0 {
+            if arr[forward] == 0 {  // only look for unvisited nodes ( i.e the ones with positive value )
                 return true
             }
             if arr[forward] > 0 {
                 q = append(q, forward)
-                arr[forward] *= -1
+                arr[forward] *= -1 // mark visited
             }
             // if _, ok := visited[forward]; !ok {
             //     q = append(q, forward)
@@ -39,9 +39,9 @@ func canReach(arr []int, start int) bool {
             if arr[backward] == 0 {
                 return true
             }
-            if arr[backward] > 0 {
+            if arr[backward] > 0 { // only look for unvisited nodes ( i.e the ones with positive value )
                 q = append(q, backward)
-                arr[backward] *= -1
+                arr[backward] *= -1 // mark visited
             }
             // if _, ok := visited[backward]; !ok {
             //     q = append(q, backward)
