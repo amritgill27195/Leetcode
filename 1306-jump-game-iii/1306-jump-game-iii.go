@@ -7,7 +7,10 @@
         - enqueue them both ( mark their inidices visited so we do not re-add them, also do boundary checks )
         - while processing an item we will check if this idx val == 0, return true
     - If our bfs exits without returning true, we will simply return false as in there was no way to get to an index with value 0
-        
+    
+    time: o(n)
+    space: o(n)        
+
 */
 func canReach(arr []int, start int) bool {
     // visited := map[int]struct{}{start: struct{}{}}
