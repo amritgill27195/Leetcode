@@ -14,12 +14,14 @@ func removeInvalidParentheses(s string) []string {
             }
             
             // enqueue all the childs
-            for i := 0; i < len(dq); i++ {
-                if dq[i] == '(' || dq[i] == ')' {
-                    child := string(dq[0:i]) + string(dq[i+1:])
-                    if _, ok := visited[child]; !ok {
-                        visited[child] = true
-                        q = append(q, child)
+            if len(result) == 0 {
+                for i := 0; i < len(dq); i++ {
+                    if dq[i] == '(' || dq[i] == ')' {
+                        child := string(dq[0:i]) + string(dq[i+1:])
+                        if _, ok := visited[child]; !ok {
+                            visited[child] = true
+                            q = append(q, child)
+                        }
                     }
                 }
             }
