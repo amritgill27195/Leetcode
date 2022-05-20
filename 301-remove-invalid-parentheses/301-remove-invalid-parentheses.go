@@ -90,6 +90,7 @@ func removeInvalidParentheses(str string) []string {
         for i := 0; i < len(s); i++ {
             if s[i] == ')' || s[i] == '(' {
                 child := string(s[0:i]) + string(s[i+1:])
+                if len(child) < max {continue}
                 dfs(child)
             }
         }
