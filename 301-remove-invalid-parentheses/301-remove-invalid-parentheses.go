@@ -33,37 +33,68 @@
     
 */
 
-func removeInvalidParentheses(s string) []string {
+// func removeInvalidParentheses(s string) []string {
+//     visited := map[string]bool{}
+//     q := []string{s}
+//     result := []string{}
+//     for len(q) != 0 {
+//         qSize := len(q)
+//         for qSize != 0 {
+//             dq := q[0]
+//             q = q[1:]
+//             if isBalanced(dq) {
+//                 result = append(result, dq)
+//             }
+            
+//             // enqueue all of this node's children - as long as they are not already visited
+//             for i := 0; i < len(dq); i++ {
+//                 if dq[i] == '(' || dq[i] == ')' {
+//                     child := string(dq[0:i]) + string(dq[i+1:])
+//                     if _, ok := visited[child]; !ok {
+//                         q = append(q, child)
+//                         visited[child] = true
+//                     }
+//                 }
+//             }
+            
+//             qSize--
+//         }
+//         // exit if we found our answer at a level 
+//         if len(result) > 0 {
+//             break
+//         }
+//     }
+//     return result
+// }
+
+
+func removeInvalidParentheses(str string) []string {
     visited := map[string]bool{}
-    q := []string{s}
+    max := 0
     result := []string{}
-    for len(q) != 0 {
-        qSize := len(q)
-        for qSize != 0 {
-            dq := q[0]
-            q = q[1:]
-            if isBalanced(dq) {
-                result = append(result, dq)
+    var dfs func(s string)
+    dfs = func(s string) {
+        // base
+        if len(s) < max || visited[s] {return}
+        visited[s] = true
+        if isBalanced(s) {
+            if len(s) > max {
+                max = len(s)
+                result = []string{s}
+            } else if len(s) == max {
+                result = append(result, s)
             }
-            
-            // enqueue all of this node's children - as long as they are not already visited
-            for i := 0; i < len(dq); i++ {
-                if dq[i] == '(' || dq[i] == ')' {
-                    child := string(dq[0:i]) + string(dq[i+1:])
-                    if _, ok := visited[child]; !ok {
-                        q = append(q, child)
-                        visited[child] = true
-                    }
-                }
-            }
-            
-            qSize--
+            return
         }
-        // exit if we found our answer at a level 
-        if len(result) > 0 {
-            break
+        
+        for i := 0; i < len(s); i++ {
+            if s[i] == ')' || s[i] == '(' {
+                child := string(s[0:i]) + string(s[i+1:])
+                dfs(child)
+            }
         }
     }
+    dfs(str)
     return result
 }
 
