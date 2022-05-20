@@ -75,7 +75,7 @@ func removeInvalidParentheses(str string) []string {
     var dfs func(s string)
     dfs = func(s string) {
         // base
-        if len(s) < max || visited[s] {return}
+        if len(s) < max || visited[s] {fmt.Println("Visited : ", s, visited[s]) ;return}
         visited[s] = true
         if isBalanced(s) {
             if len(s) > max {
