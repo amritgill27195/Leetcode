@@ -75,7 +75,7 @@ func removeInvalidParentheses(str string) []string {
     var dfs func(s string)
     dfs = func(s string) {
         // base
-        if len(s) < max || visited[s] {fmt.Println("Visited : ", s, visited[s]) ;return}
+        if len(s) < max || visited[s] {return}
         visited[s] = true
         if isBalanced(s) {
             if len(s) > max {
@@ -90,7 +90,6 @@ func removeInvalidParentheses(str string) []string {
         for i := 0; i < len(s); i++ {
             if s[i] == ')' || s[i] == '(' {
                 child := string(s[0:i]) + string(s[i+1:])
-                if len(child) < max {continue}
                 dfs(child)
             }
         }
