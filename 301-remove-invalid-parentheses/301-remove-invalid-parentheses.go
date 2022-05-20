@@ -68,6 +68,16 @@
 // }
 
 
+/*
+    approach: DFS
+    - The same logic is possible using DFS
+    - The only difference is we potentially go down path that leads to the smallest substr and we would have to reset
+    - However if we know the answers are at the deepest lowest level, then it makes sense to use DFS
+    - Otherwise BFS
+    
+    Time: n^n
+    space: visited map + recursion stack - n^n
+*/
 func removeInvalidParentheses(str string) []string {
     visited := map[string]bool{}
     max := 0
