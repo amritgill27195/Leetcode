@@ -32,6 +32,7 @@ func maxSubArray(nums []int) int {
     - we will still add current num to runningSum
     - but since the inputs can be negative integers
     - the current number on its own may be bigger than currentRunningSum
+        - this is when we will reset our window and our window starts from this number onwards
     - so, in that case , if current number > runningSum = then runningSum becomes currentNumber
     - Save the max between max,runningSum
     - So the idea becomes instead of blindly adding to runningSum , we will pick and choose whether
