@@ -1,35 +1,41 @@
 func nextPermutation(nums []int)  {
-    breachIdx := -1
-    for i := len(nums)-2; i >= 0; i-- {
+    
+    smallestFromRight := -1
+    
+    for i := len(nums)-2;  i>=0; i-- {
         if nums[i] < nums[i+1] {
-            breachIdx = i
+            smallestFromRight = i
             break
         }
     }
-    
-    if breachIdx != -1 {
-        nextGreaterOfBreachIdx := -1
-        
-        for i := len(nums)-1; i > breachIdx; i-- {
-            if nums[i] > nums[breachIdx] {
-                if nextGreaterOfBreachIdx == -1 {
-                    nextGreaterOfBreachIdx = i
-                } else {
-                    if nums[i] - nums[breachIdx] < nums[nextGreaterOfBreachIdx]-nums[breachIdx] {
-                        nextGreaterOfBreachIdx = i
-                    }
-                }
+    if smallestFromRight != -1 {
+        // look for immediate number greater than smallestToRight
+        smallestVal := nums[smallestFromRight]
+        nextGreater := -1
+
+        for i := len(nums)-1; i > smallestFromRight; i-- {
+            if nums[i] > smallestVal {
+                diff := nums[i] - smallestVal
+                if diff > 0 {
+                    if nextGreater == -1 {
+                        nextGreater = i
+                    } else if diff < nums[nextGreater]-smallestVal {
+                        nextGreater = i
+                    } 
+                }   
             }
         }
         
-        nums[breachIdx], nums[nextGreaterOfBreachIdx] = nums[nextGreaterOfBreachIdx], nums[breachIdx]
+        nums[smallestFromRight], nums[nextGreater] = nums[nextGreater], nums[smallestFromRight]
+        
     }
     
-    nums = reverse(breachIdx+1, len(nums)-1, nums)
+    rev(smallestFromRight+1, len(nums)-1, nums)
+    
 }
 
 
-func reverse(left, right int, nums []int) []int {
+func rev(left, right int, nums []int) []int {
     for left < right {
         nums[left], nums[right] = nums[right], nums[left]
         left++
