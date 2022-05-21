@@ -39,7 +39,8 @@ func cloneGraph(node *Node) *Node {
     var dfs func(n *Node) *Node
     dfs = func(n *Node) *Node {
         // base
-        if n == nil || visited[n] != nil {return nil}
+        if n == nil {return nil}
+        if _, ok := visited[n]; ok {return nil}
         
         // logic
         copyOfN := &Node{Val: n.Val}
