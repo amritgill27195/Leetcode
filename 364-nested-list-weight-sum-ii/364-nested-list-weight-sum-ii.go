@@ -23,6 +23,15 @@
  * // You can access NestedInteger's List element directly if you want to modify it
  * func (n NestedInteger) GetList() []*NestedInteger {}
  */
+/*
+
+    approach: 2 Pass DFS
+    1. 1 DFS pass to get the max depth
+    2. 2 DFS pass to do the math using maxDepth from 1st Pass.
+    
+    Time: o(n)
+    space: o(n)
+*/
 func depthSumInverse(nestedList []*NestedInteger) int {
     maxDepth := 0
     var maxDepthDfs func(nl []*NestedInteger, depth int)
