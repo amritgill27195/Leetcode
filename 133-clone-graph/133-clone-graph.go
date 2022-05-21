@@ -5,12 +5,17 @@
  *     Neighbors []*Node
  * }
  */
-
+/*
+    approach: BFS
+    - Similar type of approach as Copy LL with random pointers ( approach that used extra space )
+    time: o(v+e) where v is the number of verticies and e is number of edges.
+    Space: o(v) - we only ever store verticies in our {$srcNode:$clonedCopy} map
+*/
 func cloneGraph(node *Node) *Node {
     if node == nil {return nil}
-    newNode := &Node{Val: node.Val}
+    clone := &Node{Val: node.Val}
     q := []*Node{node}
-    visited := map[*Node]*Node{node: newNode}    
+    visited := map[*Node]*Node{node: clone}    
     for len(q) != 0 {
         dq := q[0]
         q = q[1:]
@@ -23,9 +28,6 @@ func cloneGraph(node *Node) *Node {
             }
             cloneOfDq.Neighbors = append(cloneOfDq.Neighbors, visited[n])
         }
-        
-    }
-    
-    return newNode
-    
+    }    
+    return clone
 }
