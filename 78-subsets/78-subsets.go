@@ -1,24 +1,14 @@
 func subsets(nums []int) [][]int {
-    result := [][]int{}
-    var backtrack func(start int, path []int)
-    backtrack = func(start int, path []int) {
-        // base
-        newL := make([]int, len(path))
-        copy(newL, path)
-        result = append(result, newL)
-        
-        if start == len(nums) {return}
-        
-        // logic
-        for i := start; i < len(nums); i++ {
-            // action
-            path = append(path, nums[i])
-            // recurse
-            backtrack(i+1, path)
-            // backtrack
-            path = path[:len(path)-1]
+    
+    result := [][]int{{}}
+    for i := 0; i < len(nums); i++ {
+        for _, el := range result {
+            newL := make([]int, len(el))
+            copy(newL, el)
+            newL = append(newL, nums[i])
+            result = append(result, newL)
         }
     }
-    backtrack(0, nil)
+    
     return result
 }
