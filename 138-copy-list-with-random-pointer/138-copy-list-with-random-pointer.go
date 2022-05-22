@@ -8,30 +8,40 @@
  */
 
 func copyRandomList(head *Node) *Node {
+    if head == nil {
+        return nil
+    }
     
-    srcToDeepCp := map[*Node]*Node{}
+    curr := head
+    for curr != nil {
+        next := curr.Next
+        deepCp := &Node{Val: curr.Val}
+        curr.Next = deepCp
+        deepCp.Next= next
+        curr = next
+    }
+    
+    curr = head
+    for curr != nil && curr.Next != nil {
+        next := curr.Next.Next
+        if curr.Random != nil {
+            curr.Next.Random = curr.Random.Next
+        }
+        curr = next
+    }
+    
     out := &Node{Val: 0}
     tail := out
-    
-    current := head
-    for current != nil {
-        deepCp := &Node{Val: current.Val}
-        tail.Next = deepCp
+    curr = head
+    // 1-2-2`-3-3`
+    // c 
+    //   t
+    for curr != nil {
+        next := curr.Next.Next
+        tail.Next = curr.Next
         tail = tail.Next
-        srcToDeepCp[current] = deepCp
-        current = current.Next
+        curr.Next = next
+        curr = next
     }
-    
-    current = head
-    for current != nil {
-        if current.Random != nil {
-            src := srcToDeepCp[current]
-            dest := srcToDeepCp[current.Random]
-            src.Random = dest
-        }
-        current = current.Next
-    }
-    
     return out.Next
-    
 }
