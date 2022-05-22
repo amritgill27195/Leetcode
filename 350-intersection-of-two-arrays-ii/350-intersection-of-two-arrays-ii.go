@@ -6,20 +6,34 @@ func intersect(nums1 []int, nums2 []int) []int {
     sort.Ints(nums1)
     sort.Ints(nums2)
     
-    n1 := 0
-    n2 := 0
     out := []int{}
-    for n1 < len(nums1) && n2 < len(nums2) {
-        if nums1[n1] == nums2[n2] {
-            out = append(out, nums1[n1])
-            n1++
-            n2++
-        } else if nums1[n1] < nums2[n2] {
-            n1++
-        } else {
-            n2++
+    left := 0
+    
+    for _, ele := range nums1 {
+        idx := searchLeftestIdx(left, ele, nums2)
+        if idx != -1 {
+            left = idx+1
+            out = append(out, ele)
         }
     }
+
     
     return out
+}
+
+func searchLeftestIdx(left, target int, nums []int) int {
+    right := len(nums)-1
+    idx := -1
+    for left <= right {
+        mid := left + (right-left)/2
+        if nums[mid] >= target {
+            if nums[mid] == target {
+                idx = mid
+            }
+            right = mid-1
+        } else {
+            left = mid+1
+        }
+    }
+    return idx
 }
