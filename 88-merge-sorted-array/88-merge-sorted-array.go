@@ -1,28 +1,53 @@
 func merge(nums1 []int, m int, nums2 []int, n int)  {
-    back := len(nums1)-1
-    n1 := m-1
-    n2 := n-1
     
-    for back >= 0 {
-        if n1 >= 0 && n2 >= 0 {
-            n1Val := nums1[n1]
-            n2Val := nums2[n2]
+    /*
+    approach 1
+    merge them blindly
+    and then sort at the end
+    
+        time: o(m+nlogm+n)
+        space: o(1)
+    */
 
-            if n1Val > n2Val {
-                nums1[back] = n1Val
-                n1--
+    /*
+    approach 2
+    create another array of size m+n
+    and use 2 pointers and start pushing items from n1 and n2 in asc order
+    
+        time : o(m+n)
+        space: o(m+n)
+    */
+    
+    
+    /*
+    approach 3
+    using three pointers, fill out the nums1 array in desc order
+    */
+    last := m+n-1
+    mPtr := m-1
+    nPtr := n-1
+    
+    for last >= 0 {
+        
+        if mPtr >= 0 && nPtr >= 0 {
+            mVal := nums1[mPtr]
+            nVal := nums2[nPtr]
+            
+            if mVal > nVal {
+                nums1[last] = mVal
+                mPtr--
             } else {
-                nums1[back] = n2Val
-                n2--
+                nums1[last] = nVal
+                nPtr--
             }
-        } else if n1 >= 0 {
-            nums1[back] = nums1[n1]
-            n1--
-        } else if n2 >= 0 {
-            nums1[back] = nums2[n2]
-            n2--
+        }else if nPtr >= 0 {
+            nums1[last] = nums2[nPtr]
+            nPtr--
+        }else if mPtr >= 0 {
+            nums1[last] = nums1[mPtr]
+            mPtr--
         }
-        back--
+        last--
     }
-
+    
 }
