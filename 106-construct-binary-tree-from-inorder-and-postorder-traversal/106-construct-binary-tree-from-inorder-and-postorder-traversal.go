@@ -56,10 +56,10 @@ func (b *btree) helper(post []int, start, end int) *TreeNode{
     if start > end {
         return nil
     }
-    rootVal := post[b.postOrderIdx]
+    root := &TreeNode{Val: post[b.postOrderIdx]}
     b.postOrderIdx--
-    rootIdx := b.inordermap[rootVal]
-    root := &TreeNode{Val: rootVal}
+    rootIdx := b.inordermap[root.Val]
+    
     
     root.Right = b.helper(post, rootIdx+1, end)
     root.Left = b.helper(post, start, rootIdx-1)
