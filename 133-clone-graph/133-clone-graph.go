@@ -9,22 +9,20 @@
 func cloneGraph(node *Node) *Node {
     if node == nil {return nil}
     visited := map[*Node]*Node{}
-    clone := &Node{Val: node.Val}
-    visited[node] = clone
-    q := []*Node{node}
-    
-    for len(q) != 0 {
-        dq := q[0]
-        q = q[1:]
+    var dfs func(a *Node)
+    dfs = func(a *Node) {
+        // base
+        if a == nil {return }
+        if _, ok := visited[a]; ok {return} 
         
-        for _, nh := range dq.Neighbors {
-            _, ok := visited[nh]
-            if !ok {
-                visited[nh] = &Node{Val: nh.Val}
-                q = append(q, nh)
-            }
-            visited[dq].Neighbors = append(visited[dq].Neighbors, visited[nh])
+        // logic
+        clone := &Node{Val:a.Val}
+        visited[a] = clone
+        for _, nh := range a.Neighbors {
+            dfs(nh)
+            clone.Neighbors = append(clone.Neighbors, visited[nh])
         }
     }
-    return clone
+    dfs(node)
+    return visited[node]
 }
