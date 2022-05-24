@@ -1,15 +1,13 @@
 /*
     approach: slow and fast pointers
-    - fast pointer becomes out iterating pointer
-    - using count ( starting with 1 since we have already seen 0th idx - implied )
-    - if fast ptr  == fast-1 , count++
-    - count is keeping track of number of dupes by comparing current fast with previous fast
-    - if count <= k
-        - Then we will move slow by 1
-        - And copy the value from fast to slow pointer
-    - otherwise if current fast val != prev fast value, then reset count to 1
-    - finally return slow+1
+    - slow and fast pointer both starting at idx 1
+    - count goes up by 1 if fast == fast-1
+    - count resets to 1 if fast != fast-1
+    - if count <= k, this tells slow pointer that it needs to move and that slow pointer has not seen k dupes to be allowed yet
+        - replace value at slow with fast and slow++
     
+    time: o(n)
+    space: o(1)
 */
 func removeDuplicates(nums []int) int {
     slow := 1
