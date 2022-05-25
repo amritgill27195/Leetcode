@@ -48,7 +48,7 @@ func snakesAndLadders(board [][]int) int {
     idx := 0
     r := n-1
     c := 0
-    even := 0
+    right := true // are we going right or no?
     for idx < n*n {
         if board[r][c] == -1 {
             flatBoard[idx]=-1
@@ -56,19 +56,19 @@ func snakesAndLadders(board [][]int) int {
             flatBoard[idx] = board[r][c]-1
         }
         idx++
-        if even % 2 == 0 {
+        if right {
             c++
             if c == n {
                 c--
                 r--
-                even++
+                right = false
             }
         } else {
             c--
             if c == -1 {
                 c++
                 r--
-                even++
+                right = true
             }
         }
     }
