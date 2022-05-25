@@ -86,15 +86,13 @@ func snakesAndLadders(board [][]int) int {
             }
             for i := 1; i <= 6; i++ {
                 childIdx := dq+i
-                if childIdx < n*n {
-                    if flatBoard[childIdx] == -2 {continue}
-                    if flatBoard[childIdx] == -1 {
-                        q = append(q, childIdx)
-                    } else {
-                        q = append(q, flatBoard[childIdx])
-                    }
-                    flatBoard[childIdx] = -2
+                if childIdx >= n*n || flatBoard[childIdx] == -2 { continue }
+                if flatBoard[childIdx] == -1 {
+                    q = append(q, childIdx)
+                } else {
+                    q = append(q, flatBoard[childIdx])
                 }
+                flatBoard[childIdx] = -2
             }
             qSize--
         }
