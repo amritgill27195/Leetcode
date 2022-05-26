@@ -86,7 +86,10 @@
 
 
 
-// DFS
+/*
+    approach: DFS
+    - Same logic as BFS but using recursion
+*/
 func updateBoard(board [][]byte, click []int) [][]byte {
     
     sr := click[0]
