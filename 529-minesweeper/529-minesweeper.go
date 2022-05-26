@@ -89,6 +89,8 @@
 /*
     approach: DFS
     - Same logic as BFS but using recursion
+    time: o(mn)
+    space: o(mn)
 */
 func updateBoard(board [][]byte, click []int) [][]byte {
     
