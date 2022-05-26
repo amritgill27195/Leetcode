@@ -13,7 +13,9 @@
     
     Time: o(mn) 
     - we only ever see a cell once
-    space: ??
+    space: o(mn)
+    - We will enqueue a child and then process that child and then this child will add its other 8 childs depending on the matrix if possible
+    - so somewhere at somepoint the space of the queue is proportional to the input matrix size
 */
 func updateBoard(board [][]byte, click []int) [][]byte {
     
