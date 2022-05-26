@@ -5,7 +5,7 @@ func isRobotBounded(instructions string) bool {
     idx := 0
     
     for idx < len(instructions) {
-        inst := string(instructions[idx%len(instructions)])
+        inst := string(instructions[idx])
         if inst == "G" {
             if dir == "u" {
                 y++
