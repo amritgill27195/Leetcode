@@ -1,103 +1,83 @@
-// bfs
-// func updateBoard(board [][]byte, click []int) [][]byte {
+/*
+    approach: BFS
+    - This is like applying flood fill / domino effect after starting from a start position based on some rules
+    - If the start position is a mine, then we reveal the mine on the board and end the game right away, otherwise
+    - We will initially enqueue this start position 
+    - And process our queue in a BFS manner ( no need to take the queue size as we do not need to do anything after a level )
+    - For a position being processed, we will count the number of mines around this cell ( all 8 dirs BUT ONLY IMMEDIATE CELLS )
+    - if no mines around immediate cells, then expose this cell with a 'B'
+        - also enqueue all childs
+    - if mines are found, the place the count in that cell
+        - do not enqueue any of this nodes child
+    - All this mutation will be happening on the board itself, and we will return the board at the end.
     
-//     m := len(board)
-//     n := len(board[0])
-//     sr := click[0]
-//     sc := click[1]
-//     if board[sr][sc] == 'M' {
-//         board[sr][sc] = 'X'
-//         return board
-//     }
-    
-//     board[sr][sc] = 'V' // visited
-//     q := [][]int{{sr,sc}}
- 
-//     for len(q) != 0 {
-//         // process current cell
-//         dq := q[0]
-//         q = q[1:]
-//         currRow := dq[0]
-//         currCol := dq[1]
-        
-//         // check for adjacent mines
-//         numMines := countMinesAround(currRow, currCol, board)
-//         if numMines > 0 {
-//             board[currRow][currCol] = byte(numMines + '0')
-//         } else {
-//             board[currRow][currCol] = 'B'
-//             // enqueue univistedCells around them and mark them visited
-//             for _, dir := range dirs {
-//                 r := currRow + dir[0]
-//                 c := currCol + dir[1]
-//                 if r >= 0 && r < m && c >= 0 && c < n && board[r][c] == 'E' {
-//                     board[r][c] = 'V'
-//                     q = append(q, []int{r,c})
-//                 }
-//             }
-//         }   
-//     }
-    
-//     return board
-// }
-
-// dfs
+    Time: o(mn) 
+    - we only ever see a cell once
+    space: ??
+*/
 func updateBoard(board [][]byte, click []int) [][]byte {
-    var dfs func(r,c int)
-    m := len(board)
-    n := len(board[0])
+    
     sr := click[0]
     sc := click[1]
     if board[sr][sc] == 'M' {
         board[sr][sc] = 'X'
         return board
     }
+    dirs := [][]int{
+        {1,0},
+        {-1,0},
+        {0,1},
+        {0,-1},
+        {-1,-1},
+        {-1,1},
+        {1,-1},
+        {1,1},
+    }
     
-    dfs = func(r, c int) {
-        // base
-        if r < 0 || r == m || c < 0 || c == n || board[r][c] != 'E' {
-            return
-        }
-        
-        // logic
-        num := countMinesAround(r,c, board)
-        if num > 0 {
-            board[r][c] = byte(num+'0')
+    q := [][]int{{sr,sc}}
+    
+    
+    for len(q) != 0 {
+        dq := q[0]
+        q = q[1:]
+        cr := dq[0]
+        cc := dq[1]
+        board[cr][cc] = 'B'
+        numMines, childs := countNumMinesAround(cr, cc, board, dirs)
+        if numMines > 0 {
+            board[cr][cc] = byte(numMines + '0')
         } else {
-            board[r][c] = 'B'
-            for _, dir := range dirs {
-                dfs(r+dir[0], c+dir[1])
+            for _, child := range childs {
+                board[child[0]][child[1]] = 'B'
+                q = append(q, child)
             }
         }
     }
-    dfs(sr,sc)
     return board
+    
 }
 
 
-var dirs = [][]int{
-        {-1,0}, // up
-        {1,0}, // down
-        {0,-1}, // left
-        {0,1}, //right
-        {-1,-1}, // diag-up-left
-        {-1,1}, // diag-up-right
-        {1,-1}, // diag-down-left
-        {1,1}, // diag-down-right
-    }
 
-
-func countMinesAround(r,c int, board[][]byte) int {
+func countNumMinesAround(r, c int, board [][]byte, dirs [][]int) (int, [][]int) {
     m := len(board)
     n := len(board[0])
-
-    numMinesFound := 0
+    count := 0
+    childs := [][]int{}
+    
     for _, dir := range dirs {
-        newR := r + dir[0]
-        newC := c + dir[1]
-        if newR >= 0 && newR < m && newC >= 0 && newC < n && board[newR][newC] == 'M' {
-            numMinesFound++
+        nr := r+dir[0]
+        nc := c+dir[1]
+        if nr >= 0 && nr < m && nc >=0 && nc < n {
+            
+            if board[nr][nc] == 'M' {
+                count++
+            }
+            
+            if board[nr][nc] == 'E' {
+                childs = append(childs, []int{nr,nc})
+            }
         }
     }
-    return numMinesFound
+    return count, childs
 }
