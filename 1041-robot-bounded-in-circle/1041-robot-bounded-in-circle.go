@@ -7,7 +7,7 @@ func isRobotBounded(instructions string) bool {
     for i := 0 ; i < len(instructions); i++ {
         inst := instructions[i]
         if inst == 'R' {
-            idx = (idx + 1)% 4
+            idx = (idx + 1) % 4
         } else if inst == 'L' {
             idx = (idx + 3) % 4
         } else if inst == 'G'{
