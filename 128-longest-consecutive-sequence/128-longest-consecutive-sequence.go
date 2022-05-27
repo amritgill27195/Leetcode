@@ -20,38 +20,7 @@
     Time: o(n)
     Space: o(1)
 */
-// // approach: looking for a start of sequence and counting as far as we can go
-// func longestConsecutive(nums []int) int {
-//     set := map[int]struct{}{}
-//     for i := 0; i < len(nums); i++ {
-//         set[nums[i]] = struct{}{}
-//     }
-    
-//     max := 0
-//     for i := 0; i < len(nums); i++ {
-//         num := nums[i]
-//         // is this number start of a sequence?
-//         _, exists := set[num-1];
-//         // if there is no prev number than this number, than this number is the start of sequence
-//         // try to build the sequence with this number as long as possible by adding +1 to num and checking in set
-//         if !exists {
-//             count := 1
-//             next := num+1
-//             _, setContainsNext := set[next]
-//             for setContainsNext {
-//                 count++
-//                 next++
-//                 _, setContainsNext = set[next]
-//             }
-//             if count > max {
-//                 max = count
-//             }
-//         }
-//     }
-//     return max
-// }
-
-// approach: looking for an end of sequence and counting back as far as we can go
+// approach: looking for a start of sequence and counting as far as we can go
 func longestConsecutive(nums []int) int {
     set := map[int]struct{}{}
     for i := 0; i < len(nums); i++ {
@@ -61,18 +30,18 @@ func longestConsecutive(nums []int) int {
     max := 0
     for i := 0; i < len(nums); i++ {
         num := nums[i]
-        // is this number end of a sequence?
-        _, exists := set[num+1];
-        // if there is no next number than this number, than this number is the end of sequence
-        // try to build the sequence with this number as long as possible by going back 1 from current num and checking in set
+        // is this number start of a sequence?
+        _, exists := set[num-1];
+        // if there is no prev number than this number, than this number is the start of sequence
+        // try to build the sequence with this number as long as possible by adding +1 to num and checking in set
         if !exists {
             count := 1
-            prev := num-1
-            _, setContainsPrev := set[prev]
-            for setContainsPrev {
+            next := num+1
+            _, setContainsNext := set[next]
+            for setContainsNext {
                 count++
-                prev--
-                _, setContainsPrev = set[prev]
+                next++
+                _, setContainsNext = set[next]
             }
             if count > max {
                 max = count
@@ -81,3 +50,34 @@ func longestConsecutive(nums []int) int {
     }
     return max
 }
+
+// approach: looking for an end of sequence and counting back as far as we can go
+// func longestConsecutive(nums []int) int {
+//     set := map[int]struct{}{}
+//     for i := 0; i < len(nums); i++ {
+//         set[nums[i]] = struct{}{}
+//     }
+    
+//     max := 0
+//     for i := 0; i < len(nums); i++ {
+//         num := nums[i]
+//         // is this number end of a sequence?
+//         _, exists := set[num+1];
+//         // if there is no next number than this number, than this number is the end of sequence
+//         // try to build the sequence with this number as long as possible by going back 1 from current num and checking in set
+//         if !exists {
+//             count := 1
+//             prev := num-1
+//             _, setContainsPrev := set[prev]
+//             for setContainsPrev {
+//                 count++
+//                 prev--
+//                 _, setContainsPrev = set[prev]
+//             }
+//             if count > max {
+//                 max = count
+//             }
+//         }
+//     }
+//     return max
+// }
