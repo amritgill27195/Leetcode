@@ -17,8 +17,8 @@
     
     - OR work backwards -- look for a number that will end a sequence and count back as long as you can.
     
-    Time: o(n)
-    Space: o(1)
+    time: o(n)
+    space: o(1)
 */
 // approach: looking for a start of sequence and counting as far as we can go
 func longestConsecutive(nums []int) int {
