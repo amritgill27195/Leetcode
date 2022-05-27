@@ -1,3 +1,23 @@
+/*
+    approach: 2 pass
+    - build left product for each ith element
+    - build right product for each ith element
+    - multiple each ith of left and right to get the answer for all elements
+    
+    to build the left/right product of an array - this means what would be the product of all numbers till ith element ( excluding i )
+    - if nums array was: [1,2,3,4]
+    - for 0th element we have no left product therefore imply 1 -- [1,0,0,0] ( initial left product )
+        - than start from 1st idx and to get the product of 1st idx : 0thIdxFromNumsArray * 0thIdxFromLeftProductArray
+        - more generic to get the left product of an ith element: leftProd[i] = nums[i-1] * leftProd[i-1]
+    - for last element we have no right product therefore imply 1 -- [0,0,0,1] ( initial right product )
+        - than start from 2nd last idx and to get the product of 2nd last idx : LastIdxFromNumsArray * LastIdxFromRightProductArray
+        - more generic to get the right product of an ith element: rightProd[i] = nums[i+1] * rightProd[i+1]
+  
+    - finally create an output array and muultiple each ith position from left and right prod arrays
+    
+    time: o(n)
+    space: o(n) -- o(2n) but 2 is constant - 2 arrays of n size
+*/
 func productExceptSelf(nums []int) []int {
     lProd := make([]int, len(nums))
     lProd[0] = 1
