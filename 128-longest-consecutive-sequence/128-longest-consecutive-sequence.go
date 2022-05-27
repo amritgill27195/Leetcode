@@ -14,6 +14,9 @@
             - Keep adding 1 to this currentNumber and as long as our nums map has the next number , keep incrementing the count
             - Once we no longer have a next immediate number, our loop will break out and we will need to save our count ( max = math.max(max, count))
     
+    
+    - OR work backwards -- look for a number that will end a sequence and count back as long as you can.
+    
     Time: o(n)
     Space: o(1)
 */
