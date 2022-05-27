@@ -1,5 +1,5 @@
 /*
-    approach: 2 pass
+    approach: extra space to compute left and right products
     - build left product for each ith element
     - build right product for each ith element
     - multiple each ith of left and right to get the answer for all elements
@@ -18,26 +18,56 @@
     time: o(n)
     space: o(n) -- o(2n) but 2 is constant - 2 arrays of n size
 */
+// func productExceptSelf(nums []int) []int {
+//     lProd := make([]int, len(nums))
+//     lProd[0] = 1
+//     for i := 1; i < len(nums); i++ {
+//         prev := nums[i-1]
+//         prevProd := lProd[i-1]
+//         lProd[i] = prev * prevProd
+//     }
+    
+//     rProd := make([]int, len(nums))
+//     rProd[len(nums)-1] = 1
+//     for i := len(nums)-2; i >= 0; i-- {
+//         prev := nums[i+1]
+//         prevProd := rProd[i+1]
+//         rProd[i] = prev*prevProd
+//     }
+    
+//     out := []int{}
+//     for i := 0; i < len(lProd); i++ {
+//         out = append(out, lProd[i] * rProd[i])
+//     }
+//     return out
+// }
+
+
+/*
+    approach: constant space, using nums array instead of allocating extra space
+    - Get the left prod in output array first
+    - Then using a rightRunningProd variable , compute the rightProd for ith element (nums[i+1] * rrp )
+    - Then multiply the updated rrp with nums[i]
+    - Just like we did in rightProd in extra space solution
+    
+    time: o(n)
+    space: o(1)
+*/
 func productExceptSelf(nums []int) []int {
-    lProd := make([]int, len(nums))
-    lProd[0] = 1
+    out := make([]int, len(nums))
+    out[0] = 1
     for i := 1; i < len(nums); i++ {
         prev := nums[i-1]
-        prevProd := lProd[i-1]
-        lProd[i] = prev * prevProd
+        prevProd := out[i-1]
+        out[i] = prev * prevProd
     }
     
-    rProd := make([]int, len(nums))
-    rProd[len(nums)-1] = 1
-    for i := len(nums)-2; i >= 0; i-- {
+    rrp := 1
+    for i := len(nums)-2; i>=0; i-- {
         prev := nums[i+1]
-        prevProd := rProd[i+1]
-        rProd[i] = prev*prevProd
+        rrp *= prev
+        out[i] *= rrp
     }
     
-    out := []int{}
-    for i := 0; i < len(lProd); i++ {
-        out = append(out, lProd[i] * rProd[i])
-    }
     return out
 }
