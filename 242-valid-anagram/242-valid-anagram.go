@@ -15,15 +15,12 @@ func isAnagram(s string, t string) bool {
     
     for _, char := range t {
         tChar := string(char)
-        val, ok := sMap[tChar]
-        if !ok {
-            return false
-        } else if val == 0 {
-            return false
-        }
+        _, ok := sMap[tChar]
+        if !ok {return false}
         sMap[tChar]--
+        if val := sMap[tChar]; val == 0 {delete( sMap,tChar)}
     }
-    return true
+    return len(sMap) == 0
 }
 
 
