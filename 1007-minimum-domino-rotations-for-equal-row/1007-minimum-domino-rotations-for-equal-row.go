@@ -1,13 +1,7 @@
 func minDominoRotations(tops []int, bottoms []int) int {
     result := check(tops, bottoms, tops[0])
-    if result == -1 {
-        return check(tops, bottoms, bottoms[0])
-    }
-    result2 := check(tops, bottoms, bottoms[0])
-    if result2 == -1 {
-        return result
-    }
-    return int(math.Min(float64(result), float64(result2)))
+    if result != -1 { return result }
+    return check(tops, bottoms, bottoms[0])
 }
 
 func check(tops, bottoms []int, target int) int {
