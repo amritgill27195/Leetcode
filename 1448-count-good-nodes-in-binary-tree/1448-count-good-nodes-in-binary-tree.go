@@ -17,8 +17,9 @@ func goodNodes(root *TreeNode) int {
         if a.Val >= max {
             result++
         }
-        dfs(int(math.Max(float64(max), float64(a.Val))), a.Left)
-        dfs(int(math.Max(float64(max), float64(a.Val))), a.Right)
+        max = int(math.Max(float64(max), float64(a.Val)))
+        dfs(max, a.Left)
+        dfs(max, a.Right)
     }
     dfs(root.Val, root)
     return result
