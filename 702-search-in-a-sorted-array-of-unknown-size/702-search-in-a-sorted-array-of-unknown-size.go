@@ -10,9 +10,10 @@
 func search(reader ArrayReader, target int) int {
     left := 0
     right := left+1
+    
     for reader.get(right) < target {
         left = right
-        right = right * 2
+        right *= 2
     }
     
     for left <= right {
@@ -20,10 +21,10 @@ func search(reader ArrayReader, target int) int {
         midVal := reader.get(mid)
         if midVal == target {
             return mid
-        } else if midVal > target {
-            right = mid-1
-        }  else {
+        } else if target > midVal {
             left = mid+1
+        } else {
+            right = mid-1
         }
     }
     return -1
