@@ -51,6 +51,11 @@ But then before deciding where Left pointer moves
     - move right to mid-1
 
 Apply the inverse of the above if left side turns out to be sorted 
+
+TLDR: 
+- find the sorted half from mid's perspective
+- ONLY search in the sorted half if your target is within the sorted half range
+- Otherwise search on the other side (unsorted side)
 */
 
 
