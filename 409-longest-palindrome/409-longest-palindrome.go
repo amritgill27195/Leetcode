@@ -17,6 +17,7 @@
         - dccccd - but we can add either a or b in the middle and this will still be a palindrome
         - dccaccd or dccbccd
     
+    Potential follow up: print the string that's being formed 
     
 */
 
@@ -46,9 +47,12 @@
 func longestPalindrome(s string) int {
     seen := map[byte]bool{}
     maxLen := 0
+    d := new(dq)
     for i := 0; i < len(s); i++ {
         _, ok := seen[s[i]]
         if ok {
+            d.appendToEnd(string(s[i]))
+            d.prepend(string(s[i]))
             maxLen += 2
             delete(seen, s[i])
         } else {
@@ -56,7 +60,83 @@ func longestPalindrome(s string) int {
         }
     }
     if len(seen) != 0 {
+        for k, _ := range seen{
+            d.insertInMiddle(string(k))
+            break
+        }
+        
         maxLen++
     }
+    fmt.Println(d.valsToString())
     return maxLen
+}
+
+
+type listnode struct {
+    val string
+    next *listnode
+}
+type dq struct {
+    head *listnode
+    tail *listnode
+    size int
+}
+
+
+func (d *dq) prepend(val string) {
+    newNode := &listnode{val: val}
+    if d.head == nil {
+        d.head = newNode
+        d.tail = newNode
+        d.size = 1
+        return
+    }
+    newNode.next = d.head
+    d.head = newNode
+    d.size++
+}   
+
+func (d *dq) appendToEnd(val string) {
+    newNode := &listnode{val: val}
+    if d.head == nil {
+        d.head = newNode
+        d.tail = newNode
+        d.size = 1
+        return
+    }
+    d.tail.next = newNode
+    d.tail = newNode
+    d.size++
+}
+
+func (d *dq) insertInMiddle(val string) {
+    newNode := &listnode{val: val}
+    if d.head == nil {
+        d.appendToEnd(val)
+        return
+    }
+    mid := d.size/2
+    currPos := 0
+    curr := d.head
+    var prev *listnode
+    for currPos != mid {
+        prev = curr
+        curr = curr.next
+        currPos++
+    }
+    
+    if prev != nil {
+        prev.next = newNode
+    }
+    newNode.next = curr
+}
+
+func (d *dq) valsToString() string {
+    str := new(strings.Builder)
+    curr := d.head
+    for curr != nil {
+        str.WriteString(curr.val)
+        curr = curr.next
+    }
+    return str.String()
 }
