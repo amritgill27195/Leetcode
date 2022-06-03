@@ -1,5 +1,6 @@
 /*
-    approach: greedy
+    approach: greedy/bucket sort
+    - bucket sort as in, assigning pairs to each bucket, here bucket is dist key in a distance map
     - We need to assign each bike to the closest worker possible
     - So for each worker;
         - we will calculate its distance from all bikes
