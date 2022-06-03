@@ -6,9 +6,8 @@ func expand(s string) []string {
         if s[i] == '{' {
             i++
             for s[i] != '}' {
-                if s[i] != ',' {
-                    block = append(block, string(s[i]))
-                }
+                if s[i] == ',' {i++;continue}
+                block = append(block, string(s[i]))
                 i++
             }
         } else {
@@ -35,6 +34,5 @@ func expand(s string) []string {
         }
     }
     backtrack(0, "")
-    
     return result
 }
