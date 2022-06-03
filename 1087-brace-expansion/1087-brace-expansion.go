@@ -35,6 +35,5 @@ func expand(s string) []string {
         }
     }
     backtrack(0, "")
-    
     return result
 }
