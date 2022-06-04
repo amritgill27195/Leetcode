@@ -1,28 +1,30 @@
-// brute force recursive solution
-// time: o(2^amount)
 // func coinChange(coins []int, amount int) int {
-//     var helper func(startIdx int, target int, numCoinsUsed int) int
-//     helper = func(startIdx int, target int, numCoinsUsed int) int {
+//     min := math.MaxInt64    
+//     var dfs func(start int, count int, amount int)
+//     dfs = func(start int, count int, amount int) {
 //         // base
-//         if target == 0 {
-//             return numCoinsUsed
+//         if amount == 0 {
+//             if count < min {
+//                 min = count
+//             }
+//             return
 //         }
-//         if startIdx == len(coins) || target < 0 {
-//             return -1
+//         if amount < 0 || start == len(coins) {
+//             return
 //         }
+        
         
 //         // logic
-//         choose := helper(startIdx, target-coins[startIdx], numCoinsUsed+1)
-//         notChoose := helper(startIdx+1, target, numCoinsUsed)
-//         if choose == -1 || notChoose == -1 {
-//             return int(math.Max(float64(choose), float64(notChoose)))
-//         }
+//         dfs(start, count+1, amount-coins[start])
+//         dfs(start+1, count, amount)
         
-//         return int(math.Min(float64(choose),float64(notChoose)))
 //     }
-//     return helper(0, amount, 0)
+//     dfs(0, 0, amount)
+//     if min == math.MaxInt64 {
+//         return -1
+//     }
+//     return min
 // }
-
 
 func coinChange(coins []int, amount int) int {
     m := len(coins)
@@ -33,16 +35,15 @@ func coinChange(coins []int, amount int) int {
         dp[idx] = make([]int, n+1)
     }
     
-    for c := 1; c < n+1; c++ {
-        dp[0][c] = amount+1
+    for j := 1; j < len(dp[0]); j++ {
+        dp[0][j] = amount+1
     }
-        
-    for i := 1; i < len(dp); i++ {
-        for j := 1; j < len(dp[0]); j++ {
+    
+    for i := 1; i < len(dp); i++ { // coin value
+        for j := 1; j < len(dp[0]); j++ { // amount
             coinVal := coins[i-1]
-            am := j
-            
-            if coinVal > am {
+            amount := j
+            if coinVal > amount {
                 dp[i][j] = dp[i-1][j]
             } else {
                 dp[i][j] = int(math.Min(float64(dp[i][j-coinVal]+1),float64(dp[i-1][j])))
