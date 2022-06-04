@@ -36,7 +36,7 @@ func coinChange(coins []int, amount int) int {
     }
     
     for j := 1; j < len(dp[0]); j++ {
-        dp[0][j] = amount+1
+        dp[0][j] = 10001
     }
     
     for i := 1; i < len(dp); i++ { // coin value
@@ -51,7 +51,7 @@ func coinChange(coins []int, amount int) int {
         }
     }
     result := dp[len(dp)-1][len(dp[0])-1]
-    if result > amount {
+    if result == 10001 {
         return -1
     }
     return result
