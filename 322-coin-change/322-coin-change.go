@@ -75,6 +75,6 @@ func coinChange(coins []int, amount int) int {
         }
     }
     
-    if dp[len(dp)-1] > amount {return -1}
+    if dp[len(dp)-1] == amount+1 {return -1}
     return dp[len(dp)-1]
 }
