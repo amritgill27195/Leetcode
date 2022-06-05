@@ -1,50 +1,49 @@
 // func change(amount int, coins []int) int {
-//     var helper func(start int, target int) int
-//     helper = func(start int, target int) int {
+//     total := 0
+//     var dfs func(start int, amount int)
+//     dfs = func(start int, amount int) {
 //         // base
-//         if target == 0 {
-//             return 1
+//         if amount == 0{
+//             total++
+//             return
 //         }
-        
-//         if target < 0 || start == len(coins) {
-//             return 0
+//         if amount < 0 || start == len(coins) {
+//             return
 //         }
-        
         
 //         // logic
-//         choose := helper(start, target-coins[start])
-//         notChoose := helper(start+1, target)
-        
-//         return choose+notChoose
+//         dfs(start+1, amount)
+//         dfs(start, amount-coins[start])
 //     }
-    
-//     return helper(0, amount)
+//     dfs(0, amount)
+//     return total
 // }
-
 
 func change(amount int, coins []int) int {
     m := len(coins)
     n := amount
     
     dp := make([][]int, m+1)
-    for i, _ := range dp {
-        dp[i] = make([]int, n+1)
+    for idx, _ := range dp {
+        dp[idx] = make([]int, n+1)
     }
-    for i := 0; i < m+1; i++ {
+    
+    for i := 0; i < len(dp); i++ {
         dp[i][0] = 1
     }
     
-    for i := 1; i < len(dp); i++ { // coins
-        for j := 1; j < len(dp[0]); j++ { // amounts 
-            coinVal := coins[i-1]
-            am := j
-            if coinVal > am {
+    for i := 1; i < len(dp); i++ {
+        for j := 1; j < len(dp[0]); j++ {
+            coin := coins[i-1]
+            amount := j
+            if coin > amount {
                 dp[i][j] = dp[i-1][j]
             } else {
-                dp[i][j] = dp[i-1][j] + dp[i][j-coinVal]
+                dp[i][j] = dp[i-1][j] + dp[i][j-coin]
             }
         }
     }
     
     return dp[len(dp)-1][len(dp[0])-1]
+    
 }
