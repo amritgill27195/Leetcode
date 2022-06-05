@@ -1,59 +1,49 @@
 func totalNQueens(n int) int {
-      // generate the nxn board
     board := make([][]bool, n)
     for idx, _ := range board {
         board[idx] = make([]bool, n)
     }
-    
     count := 0
-    // now try placing queens 
-    var backtrack func(row int)
-    backtrack = func(row int) {
+    var backtrack func(r int)
+    backtrack = func(r int) {
         // base
-        if row == n {
+        if r == len(board) {
             count++
             return
         }
         
-        //logic
-        // we loop over cols, row is controlled by recursion
-        for i := 0; i < n; i++ {
-            if canBePlaced(row, i, board) {
-                // action
-                board[row][i] = true
-                // recurse
-                backtrack(row+1)
-                // backtrack
-                board[row][i] = false
+        // logic
+        for i := 0; i < len(board[0]); i++ {
+            if isSafe(r,i, board) {
+                board[r][i] = true
+                backtrack(r+1)
+                board[r][i] = false
             }
         }
-        
     }
     backtrack(0)
     return count
 }
 
-
-// since we are looping row by row
-// the only directions we have to check for a specific [r][c]
-// are vertical up, diagonal up left and diagonal up right
-// we do not have to check in the same row because this function will be called when we do not have anything placed yet
-// we also do not have to check anything below because we have not went to row+1 yet,
-// and so we only need to check up from a specific r,c
-func canBePlaced(r, c int, board [][]bool) bool {
-    n := len(board)
-    dirs := [][]int{{-1,0},{-1,-1},{-1,1}}
+func isSafe(r,c int, board [][]bool) bool {
+    m := len(board)
+    n := len(board[0])
+    dirs := [][]int{
+        {-1,-1},
+        {-1,0},
+        {-1,1},
+    }
     for _, dir := range dirs {
-        newR := r + dir[0]
-        newC := c + dir[1]
-        for newR >= 0 && newR < n && newC >= 0 && newC < n {
-            if board[newR][newC] == true {
+        nr := r + dir[0]
+        nc := c + dir[1]
+        for nr >= 0 && nr < m && nc >= 0 && nc < n {
+            if !board[nr][nc] { 
+                nr += dir[0]
+                nc += dir[1]   
+            } else {
                 return false
             }
-            // continue in the same direction as long as we are inbound
-            newR = newR + dir[0]
-            newC = newC + dir[1]
-        }  
+        }
     }
     return true
-} 
+}
