@@ -81,32 +81,71 @@
 // }
 
 
-// bottom up dp
+// // bottom up dp - using dp matrix
+// time: o(mn); space: o(mn)
+// func coinChange(coins []int, amount int) int {
+//     // dp matrix constraints
+//     m := len(coins)
+//     n := amount
+    
+//     dp := make([][]int, m+1)
+//     for idx, _ := range dp {
+//         dp[idx] = make([]int, n+1)
+//     }
+//     for j := 1; j < len(dp[0]); j++ {
+//         dp[0][j] = amount+1
+//     }
+    
+//     for i := 1; i < len(dp); i++ {
+//         for j := 1; j < len(dp[0]); j++ {
+//             coin := coins[i-1]
+//             amount := j
+//             if coin > amount {
+//                 dp[i][j] = dp[i-1][j]
+//             } else {
+//                 dp[i][j] = int(math.Min(float64(dp[i-1][j]), float64(dp[i][j-coin]+1)))
+//             }
+//         }
+//     }
+//     result := dp[len(dp)-1][len(dp[0])-1]
+//     if result == amount+1 {return -1}
+//     return result
+// }
+
+
+// bottom up dp - using dp array
+// optimization of dp matrix
+// in dp matrix we can see that we are only ever referencing a row above value
+// so we do not really need a matrix, we can use a 1d array and keep on overwriting
+// the 0 case ( not choose case / when coin > amount ) - we were getting from same col, but a row above
+// in dp 1d array, our current ith position will be previous row value ( since we have changed it yet )
+// so 0 case - continue ( do not change the value and pretend that this is row above value - therefore we do not change it - since in matrix we simply took row above value)
+// for 1 case ( choose ) - we will follow the same math.min ( because we still want min coins used between choose and not choose cases )
+// our choose case for next smaller subproblem was $coin steps back in the same row and not choose case row above but same col
+// in 1d dp array - not choose case is same ith position and choose case is i-$coinStepsBack
+// this optimizes our dp space
+// however filling out the array will follow same nested for loop format
+// time: o(mn)
+// space: o(n) = n is amount
 func coinChange(coins []int, amount int) int {
     // dp matrix constraints
     m := len(coins)
     n := amount
     
-    dp := make([][]int, m+1)
-    for idx, _ := range dp {
-        dp[idx] = make([]int, n+1)
-    }
-    for j := 1; j < len(dp[0]); j++ {
-        dp[0][j] = amount+1
+    dp := make([]int, n+1)
+    for j := 1; j < len(dp); j++ {
+        dp[j] = amount+1
     }
     
-    for i := 1; i < len(dp); i++ {
-        for j := 1; j < len(dp[0]); j++ {
+    for i := 1; i < m+1; i++ {
+        for j := 1; j < len(dp); j++ {
             coin := coins[i-1]
             amount := j
-            if coin > amount {
-                dp[i][j] = dp[i-1][j]
-            } else {
-                dp[i][j] = int(math.Min(float64(dp[i-1][j]), float64(dp[i][j-coin]+1)))
-            }
+            if coin > amount {continue}
+            dp[j] = int(math.Min(float64(dp[j]), float64(dp[j-coin]+1)))
         }
     }
-    result := dp[len(dp)-1][len(dp[0])-1]
+    result := dp[len(dp)-1]
     if result == amount+1 {return -1}
     return result
 }
