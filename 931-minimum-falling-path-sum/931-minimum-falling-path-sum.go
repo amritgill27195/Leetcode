@@ -1,62 +1,28 @@
-// time: o(n^2)
-// space: o(1)
-// approach: in place min sum from bottom up for each cell.
 func minFallingPathSum(matrix [][]int) int {
     m := len(matrix)
     n := len(matrix[0])
+    
+    dirs := [][]int{{1,-1},{1,0},{1,1}}
     for i := m-2; i >= 0; i-- {
         for j := 0; j < n; j++ {
-            if j == 0 {
-                matrix[i][j] += int(math.Min(float64(matrix[i+1][0]), float64(matrix[i+1][1])))
-            } else if j == n-1 {
-                matrix[i][j] += int(math.Min(float64(matrix[i+1][j]), float64(matrix[i+1][j-1])))
-            } else {
-                matrix[i][j] += int(math.Min(float64(matrix[i+1][j]), math.Min(float64(matrix[i+1][j-1]),float64(matrix[i+1][j+1]))))
+            min := math.MaxInt64
+            for _, dir := range dirs {
+                nr := i+dir[0]
+                nc := j+dir[1]
+                if nr < m && nc < n && nr >= 0 && nc >= 0 {
+                    if matrix[nr][nc] < min {
+                        min = matrix[nr][nc]
+                    }
+                }
             }
+            matrix[i][j] += min
         }
     }
-    min := matrix[0][0]
+    minVal := matrix[0][0]
     for j := 1; j < n; j++ {
-        if matrix[0][j] < min {
-            min = matrix[0][j]
+        if matrix[0][j] < minVal {
+            minVal = matrix[0][j]
         }
     }
-    return min
+    return minVal
 }
-
-
-// // time: o(n^2)
-// // space: o(n^2)
-// // approach using dp matrix and filling out the sum for each cell from bottom up
-// func minFallingPathSum(matrix [][]int) int {
-//     m := len(matrix)
-//     n := len(matrix[0])
-//     dp := make([][]int, m)
-//     for idx, _ := range dp {
-//         dp[idx] = make([]int, n)
-//     }
-//     for j := 0; j < n; j++ {
-//         dp[m-1][j] = matrix[m-1][j]
-//     }
-    
-//     for i := m-2; i >= 0; i-- {
-//         for j := 0; j < n; j++ {
-//             if j == 0 {
-//                 dp[i][j] = matrix[i][j] + int(math.Min(float64(dp[i+1][0]), float64(dp[i+1][1])))
-//             } else if j == n-1 {
-//                 dp[i][j] = matrix[i][j] + int(math.Min(float64(dp[i+1][j]), float64(dp[i+1][j-1])))
-//             } else {
-//                 dp[i][j] = matrix[i][j] + int(math.Min(float64(dp[i+1][j]), math.Min(float64(dp[i+1][j-1]),float64(dp[i+1][j+1]))))
-//             }
-//         }
-//     }
-//     min := dp[0][0]
-//     for j := 1; j < n; j++ {
-//         if dp[0][j] < min {
-//             min = dp[0][j]
-//         }
-//     }
-//     return min
-// }
-
-
