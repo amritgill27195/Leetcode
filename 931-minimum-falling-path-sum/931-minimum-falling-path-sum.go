@@ -17,6 +17,7 @@ func minFallingPathSum(matrix [][]int) int {
                 }
             }
             matrix[i][j] += min
+           
         }
     }
     minVal := matrix[0][0]
