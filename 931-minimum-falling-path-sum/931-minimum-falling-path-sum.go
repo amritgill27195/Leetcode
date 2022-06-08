@@ -6,6 +6,7 @@ func minFallingPathSum(matrix [][]int) int {
     for i := m-2; i >= 0; i-- {
         for j := 0; j < n; j++ {
             min := math.MaxInt64
+            // this for loop is constant -- its 3 loops for each r,c
             for _, dir := range dirs {
                 nr := i+dir[0]
                 nc := j+dir[1]
