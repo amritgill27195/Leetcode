@@ -5,7 +5,7 @@ func removeInvalidParentheses(s string) []string {
     var backtrack func(path string)
     backtrack = func(path string) {
         // base
-        if len(path) < maxLen {return}
+        
         if _, ok := visited[path]; ok {return}
         
         // logic
@@ -21,6 +21,7 @@ func removeInvalidParentheses(s string) []string {
         for i := 0; i < len(path); i++ {
             if path[i] != '(' && path[i] != ')' {continue}
             child := path[:i] + path[i+1:]
+            if len(child) < maxLen {continue}
             backtrack(child)
         }
     }
