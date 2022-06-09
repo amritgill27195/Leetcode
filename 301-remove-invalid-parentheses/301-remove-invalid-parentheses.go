@@ -18,6 +18,7 @@ func removeInvalidParentheses(s string) []string {
             }
         }
         for i := 0; i < len(path); i++ {
+            if path[i] != '(' && path[i] != ')' {continue}
             child := path[:i] + path[i+1:]
             backtrack(child)
         }
