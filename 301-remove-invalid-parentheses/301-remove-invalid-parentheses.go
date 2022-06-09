@@ -1,28 +1,28 @@
 func removeInvalidParentheses(s string) []string {
     result := []string{}
-    q := []string{s}
+    maxLen := 0
     visited := map[string]struct{}{}
-    for len(q) != 0 {
-        qSize := len(q)
-        for qSize != 0 {    
-            dq := q[0]
-            q = q[1:]
-            if isValid(dq) {
-                result = append(result, dq)
+    var backtrack func(path string)
+    backtrack = func(path string) {
+        // base
+        if _, ok := visited[path]; ok {return}
+        
+        // logic
+        visited[path] = struct{}{}
+        if isValid(path) {
+            if len(path) > maxLen {
+                result = []string{path}
+                maxLen = len(path)
+            } else if len(path) == maxLen {
+                result = append(result, path)
             }
-            for i := 0; i < len(dq); i++ {
-                child := string(dq[:i] + dq[i+1:])
-                if _, ok := visited[child]; !ok {
-                    visited[child] = struct{}{}
-                    q = append(q, child)
-                }
-            }
-            qSize--
         }
-        if len(result) != 0 {
-            break
+        for i := 0; i < len(path); i++ {
+            child := path[:i] + path[i+1:]
+            backtrack(child)
         }
     }
+    backtrack(s)
     return result
 }
 
