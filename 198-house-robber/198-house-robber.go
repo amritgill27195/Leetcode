@@ -31,13 +31,8 @@ func rob(nums []int) int {
     dp[0][0] = 0
     dp[0][1] = nums[0]
     for i := 1; i < len(dp); i++ {
-        for j := 0; j < len(dp[0]); j++ {
-            if j == 0 {
-                dp[i][j] = int(math.Max(float64(dp[i-1][0]),float64(dp[i-1][1]))) 
-            } else {
-                dp[i][j] = nums[i] + dp[i-1][0]
-            }
-        }
+        dp[i][0] = int(math.Max(float64(dp[i-1][0]),float64(dp[i-1][1]))) 
+        dp[i][1] = nums[i] + dp[i-1][0]
     }
     if dp[len(dp)-1][0] > dp[len(dp)-1][1] {
         return dp[len(dp)-1][0]
