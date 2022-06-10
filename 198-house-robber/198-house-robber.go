@@ -57,15 +57,35 @@
 // }
 
 
+// bottom up DP using dp array of fixed size -- can be replaced by 2 vars instead
+// time: o(n)
+// space: o(1)
+// func rob(nums []int) int {
+//     dp := make([]int, 2)
+//     dp[0] = 0
+//     dp[1] = nums[len(nums)-1]
+//     for i := len(nums)-2; i >= 0; i-- {
+//         choose := dp[1]
+//         notChoose := dp[0]
+        
+//         dp[0] = int(math.Max(float64(choose),float64(notChoose))) 
+//         dp[1] = nums[i] + notChoose
+//     }
+//     return int(math.Max(float64(dp[0]),float64(dp[1])))
+// }
+
+
+// top - down using fixed size ( 2 ) 1D array -- can be replaced with 2 vars
+// time: o(n)
+// space: o(1)
 func rob(nums []int) int {
     dp := make([]int, 2)
     dp[0] = 0
-    dp[1] = nums[len(nums)-1]
-    for i := len(nums)-2; i >= 0; i-- {
+    dp[1] = nums[0]
+    for i := 1; i < len(nums); i++ {
         choose := dp[1]
         notChoose := dp[0]
-        
-        dp[0] = int(math.Max(float64(choose),float64(notChoose))) 
+        dp[0] = int(math.Max(float64(notChoose),float64(choose))) 
         dp[1] = nums[i] + notChoose
     }
     return int(math.Max(float64(dp[0]),float64(dp[1])))
