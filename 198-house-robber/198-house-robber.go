@@ -42,16 +42,31 @@
 
 
 // bottom up using dp matrix
+// func rob(nums []int) int {
+//     dp := make([][]int, len(nums))
+//     for idx, _ := range dp {
+//         dp[idx] = make([]int, 2) // 0 | 1 case
+//     }
+//     dp[len(dp)-1][0] = 0
+//     dp[len(dp)-1][1] = nums[len(nums)-1]
+//     for i := len(dp)-2; i >= 0; i-- {
+//         dp[i][0] = int(math.Max(float64(dp[i+1][0]),float64(dp[i+1][1]))) 
+//         dp[i][1] = nums[i] + dp[i+1][0]
+//     }
+//     return int(math.Max(float64(dp[0][1]),float64(dp[0][0])))
+// }
+
+
 func rob(nums []int) int {
-    dp := make([][]int, len(nums))
-    for idx, _ := range dp {
-        dp[idx] = make([]int, 2) // 0 | 1 case
+    dp := make([]int, 2)
+    dp[0] = 0
+    dp[1] = nums[len(nums)-1]
+    for i := len(nums)-2; i >= 0; i-- {
+        choose := dp[1]
+        notChoose := dp[0]
+        
+        dp[0] = int(math.Max(float64(choose),float64(notChoose))) 
+        dp[1] = nums[i] + notChoose
     }
-    dp[len(dp)-1][0] = 0
-    dp[len(dp)-1][1] = nums[len(nums)-1]
-    for i := len(dp)-2; i >= 0; i-- {
-        dp[i][0] = int(math.Max(float64(dp[i+1][0]),float64(dp[i+1][1]))) 
-        dp[i][1] = nums[i] + dp[i+1][0]
-    }
-    return int(math.Max(float64(dp[0][1]),float64(dp[0][0])))
+    return int(math.Max(float64(dp[0]),float64(dp[1])))
 }
