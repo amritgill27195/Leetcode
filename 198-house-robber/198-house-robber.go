@@ -1,5 +1,6 @@
 
-
+// brute force dfs
+// time: exponential
 // func rob(nums []int) int {
 //     max := math.MinInt64
 //     var dfs func(start int, profit int)
@@ -23,6 +24,8 @@
 
 
 // top - down using dp matrix
+// time: o(n)
+// space: o(n)
 // func rob(nums []int) int {
 //     dp := make([][]int, len(nums))
 //     for idx, _ := range dp {
@@ -42,6 +45,8 @@
 
 
 // bottom up using dp matrix
+// time: o(n)
+// space: o(n)
 // func rob(nums []int) int {
 //     dp := make([][]int, len(nums))
 //     for idx, _ := range dp {
