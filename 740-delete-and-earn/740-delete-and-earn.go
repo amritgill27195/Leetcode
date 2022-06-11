@@ -31,16 +31,21 @@
             - 0th case will be max between the prev row
             - 1 case will be current value + 0th case from prev row
     
-    time: 
-    space: 
+    time: o(n) + o(n) + o(maxNumberInArray) = o(2n) + o(maxNumberInArray)
+    space:  o(maxNumberInArray)
 */
 func deleteAndEarn(nums []int) int {
     max := math.MinInt64
+    // time: o(n)
+    // space: o(1)
     for _, num := range nums {
         if num > max {
             max = num
         }
     }
+    
+    // time: o(n)
+    // space: o(maxNumberInArray)
     values := make([]int, max+1)
     for _, num := range nums {
         values[num] += num
@@ -50,6 +55,8 @@ func deleteAndEarn(nums []int) int {
     dp := make([]int, 2)
     dp[0] = 0
     dp[1] = values[0]
+    // time: o(maxNumberInArray)
+    // space: o(1)
     for i := 1; i < len(values); i++ {
         choose := dp[1] // prev choose case
         notChoose := dp[0] // prev notChoose case
