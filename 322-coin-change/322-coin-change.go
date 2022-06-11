@@ -140,8 +140,8 @@ func coinChange(coins []int, amount int) int {
     for i := 1; i < m+1; i++ {
         for j := 1; j < len(dp); j++ {
             coin := coins[i-1]
-            amount := j
-            if coin > amount {continue}
+            am := j
+            if coin > am {continue}
             dp[j] = int(math.Min(float64(dp[j]), float64(dp[j-coin]+1)))
         }
     }
