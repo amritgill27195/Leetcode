@@ -82,10 +82,19 @@ func addOperators(num string, target int) []string {
             result = append(result, path)
             return
         }
-        
         for i := start; i < len(num); i++ {
             if string(num[start]) == "0" && start != i {continue}
+            // why start:i+1 ? why not just num[i]
+            // this would be true IF we do not have to use all numbers
+            // for example with '123' we can make target 6 with 2*3. 
+            // But we have to use all numbers
+            // ALSO how would we solve for target 15 with '123' as input.
+            // the answer is 12+3 -- which means we can join 2 characters as a single digit number
+            // so when the recursion goes back up to the top of tree, start pointer is at idx 0 - so we can use i which moved to idx 1
+            // and form 12 by num[start:i+1] -- when our pointers are here: 1(start) 2(i) 3
             currStr := string(num[start:i+1])
+            // but how did we form 12 as calc value?
+            // we converted the string to int ( we never did the fancy int concatnation )
             currStrNum, _ := strconv.Atoi(currStr)
             if start == 0 {
                 dfs(path+currStr, i+1, currStrNum, currStrNum)
