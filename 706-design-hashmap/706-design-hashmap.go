@@ -1,15 +1,15 @@
 const (
-    arraySize = 1000000
+    arraySize = 1001
 )
 
 type MyHashMap struct {
-    items []*int   
+    items [][]*int   
 }
 
 
 func Constructor() MyHashMap {
     return MyHashMap{
-        items: make([]*int, arraySize),
+        items: make([][]*int, arraySize),
     }  
 }
 
@@ -17,25 +17,36 @@ func (this *MyHashMap) hashIdx(key int) int {
     return key % arraySize
 }
 
+func (this *MyHashMap) hashIdx2(key int) int {
+    return key / arraySize
+}
+
 
 func (this *MyHashMap) Put(key int, value int)  {
     idx := this.hashIdx(key)
-    this.items[idx] = &value
+    if this.items[idx] == nil {
+        this.items[idx] = make([]*int, arraySize)
+    }
+    innerIdx := this.hashIdx2(key)
+    this.items[idx][innerIdx] = &value
 }
 
 
 func (this *MyHashMap) Get(key int) int {
     idx := this.hashIdx(key)
-    if this.items[idx] == nil {
+    innerIdx := this.hashIdx2(key)
+    if this.items[idx] == nil || this.items[idx][innerIdx] == nil {
         return -1
     }
-    return *this.items[idx]
+    return *this.items[idx][innerIdx]
 }
 
 
 func (this *MyHashMap) Remove(key int)  {
     idx := this.hashIdx(key)
-    this.items[idx] = nil
+    innerIdx := this.hashIdx2(key)
+    if this.items[idx] == nil {return}
+    this.items[idx][innerIdx] = nil
 }
 
 
