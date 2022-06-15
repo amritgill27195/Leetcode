@@ -20,47 +20,46 @@ func (this *Codec) serialize(root *TreeNode) string {
     if root == nil {
         return ""
     }
+    str := new(strings.Builder)
     q := []*TreeNode{root}
-    strBuilder := new(strings.Builder)
     for len(q) != 0 {
         dq := q[0]
         q = q[1:]
         if dq == nil {
-            strBuilder.WriteString("null")
+            str.WriteString("null")
         } else {
-            strBuilder.WriteString(fmt.Sprintf("%v",dq.Val))
+            str.WriteString(fmt.Sprintf("%v", dq.Val))
             q = append(q, dq.Left)
             q = append(q, dq.Right)
         }
-        strBuilder.WriteString(",")
+        str.WriteString(",")
     }
-    return strBuilder.String()
+    
+    return str.String()
 }
 
 // Deserializes your encoded data to tree.
 func (this *Codec) deserialize(data string) *TreeNode {    
     if data == "" {return nil}
     strData := strings.Split(data, ",")
-    idxZeroInt, _ := strconv.Atoi(strData[0])
-    root := &TreeNode{Val:idxZeroInt}
+    intVal,_ := strconv.Atoi(strData[0])
+    root := &TreeNode{Val: intVal}
     idx := 1
     q := []*TreeNode{root}
     
-    for len(q) != 0 && idx < len(strData)  {
+    for len(q) != 0 && idx < len(strData) {
         dq := q[0]
         q = q[1:]
         if strData[idx] != "null" {
-            intVal, _ := strconv.Atoi(strData[idx])
+            intVal,_ := strconv.Atoi(strData[idx])
             dq.Left = &TreeNode{Val: intVal}
             q = append(q, dq.Left)
         }
         idx++
-        if idx < len(strData) {
-            if strData[idx] != "null" {
-                intVal, _ := strconv.Atoi(strData[idx])
-                dq.Right = &TreeNode{Val: intVal}
-                q = append(q, dq.Right)
-            }
+        if idx < len(strData) && strData[idx] != "null" {
+            intVal,_ := strconv.Atoi(strData[idx])
+            dq.Right = &TreeNode{Val: intVal}
+            q = append(q, dq.Right)
         }
         idx++
     }
