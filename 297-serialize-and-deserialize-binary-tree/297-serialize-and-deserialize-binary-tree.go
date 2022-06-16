@@ -69,61 +69,60 @@ func Constructor() Codec {
 // Serializes a tree to a single string.
 // time: o(n)
 // space: o(n) 
-// func (this *Codec) serialize(root *TreeNode) string {
-//     if root == nil {
-//         return ""
-//     }
-//     str := new(strings.Builder)
-//     q := []*TreeNode{root}
-//     for len(q) != 0 {
-//         dq := q[0]
-//         q = q[1:]
-//         if dq == nil {
-//             str.WriteString("null")
-//         } else {
-//             str.WriteString(fmt.Sprintf("%v", dq.Val))
-//             q = append(q, dq.Left)
-//             q = append(q, dq.Right)
-//         }
-//         str.WriteString(",")
-//     }
-    
-//     return str.String()
-// }
-
-// serialize using dfs
 func (this *Codec) serialize(root *TreeNode) string {
     if root == nil {
         return ""
     }
-    levels := [][]string{}
-    var dfs func(r *TreeNode, level int)
-    dfs = func(r *TreeNode, level int) {
-        // base
-        
-        // logic
-        if len(levels) == level {
-            levels = append(levels, []string{})
+    str := new(strings.Builder)
+    q := []*TreeNode{root}
+    for len(q) != 0 {
+        dq := q[0]
+        q = q[1:]
+        if dq == nil {
+            str.WriteString("null")
+        } else {
+            str.WriteString(fmt.Sprintf("%v", dq.Val))
+            q = append(q, dq.Left)
+            q = append(q, dq.Right)
         }
-        levelStr := "null"
-        if r != nil {
-            levelStr = fmt.Sprintf("%v", r.Val)
-        }
-        levels[level] = append(levels[level], levelStr)
-        if r != nil {
-            dfs(r.Left, level+1)
-            dfs(r.Right, level+1)
-        }
+        str.WriteString(",")
     }
-    dfs(root, 0)
-    strBuilder := new(strings.Builder)
-    for _, level := range levels {
-        strBuilder.WriteString(strings.Join(level, ","))
-        strBuilder.WriteString(",")
-    }
-    return strBuilder.String()
+    
+    return str.String()
 }
 
+// serialize using level order using dfs
+// func (this *Codec) serialize(root *TreeNode) string {
+//     if root == nil {
+//         return ""
+//     }
+//     levels := [][]string{}
+//     var dfs func(r *TreeNode, level int)
+//     dfs = func(r *TreeNode, level int) {
+//         // base
+        
+//         // logic
+//         if len(levels) == level {
+//             levels = append(levels, []string{})
+//         }
+//         levelStr := "null"
+//         if r != nil {
+//             levelStr = fmt.Sprintf("%v", r.Val)
+//         }
+//         levels[level] = append(levels[level], levelStr)
+//         if r != nil {
+//             dfs(r.Left, level+1)
+//             dfs(r.Right, level+1)
+//         }
+//     }
+//     dfs(root, 0)
+//     strBuilder := new(strings.Builder)
+//     for _, level := range levels {
+//         strBuilder.WriteString(strings.Join(level, ","))
+//         strBuilder.WriteString(",")
+//     }
+//     return strBuilder.String()
+// }
 
 
 
