@@ -10,37 +10,29 @@ func updateBoard(board [][]byte, click []int) [][]byte {
     }
     m := len(board)
     n := len(board[0])
-    board[cr][cc] = 'B'
-    q := [][]int{{cr,cc}}
     dirs := [][]int{
-        {-1,0},
-        {1,0},
-        {0,-1},
-        {0,1},
-        {-1,-1},
-        {-1,1},
-        {1,-1},
-        {1,1},
+        {-1,0},{1,0},{0,-1},{0,1},
+        {-1,-1},{-1,1},{1,-1},{1,1},
     }
-    for len(q) != 0 {
-        dq := q[0]
-        q = q[1:]
-        currRow := dq[0]
-        currCol := dq[1]
-        numMines := countMines(currRow, currCol, board, dirs)
+    var dfs func(r, c int)
+    dfs = func(r, c int) {
+        // base
+        if r < 0 || r == m || c < 0 || c == n || board[r][c] != 'E' {
+            return 
+        }
+        
+        // logic
+        numMines := countMines(r,c,board,dirs)
         if numMines > 0 {
-            board[currRow][currCol] = byte(numMines + '0')
+            board[r][c] = byte(numMines+'0')
         } else {
+            board[r][c] = 'B'
             for _, dir := range dirs {
-                nr := currRow+dir[0]
-                nc := currCol+dir[1]
-                if nr >= 0 && nr < m && nc >= 0 && nc < n && board[nr][nc] == 'E' {
-                    board[nr][nc] = 'B'
-                    q = append(q, []int{nr, nc})
-                }
+                dfs(r+dir[0], c+dir[1])
             }
         }
     }
+    dfs(cr, cc)
     return board
 }
 
