@@ -1,20 +1,19 @@
 func findRepeatedDnaSequences(s string) []string {
-    windowState := map[string]bool{}
-    tmp := ""
-    result := []string{}
+    state := map[string]bool{}
+    str := ""
+    out := []string{}
     for right := 0; right < len(s); right++ {
-        rightChar := string(s[right])
-        tmp += rightChar
-        if len(tmp) == 10 {
-            val , ok := windowState[tmp]
+        str += string(s[right])
+        if len(str) == 10 {
+            used, ok := state[str]
             if !ok {
-                windowState[tmp] = false
-            } else if val == false {
-                windowState[tmp] = true
-                result = append(result, tmp)
+                state[str] = false
+            } else if !used {
+                out = append(out, str)
+                state[str] = true
             }
-            tmp = tmp[1:]
+            str = str[1:]
         }
     }
-    return result
+    return out
 }
