@@ -1,58 +1,27 @@
-
-// map solution
-// time: o(s+t)
-// space: o(1) -- there are only 26 alphabets
 func isAnagram(s string, t string) bool {
-    // make sure s is the smaller string
-    if len(t) < len(s) {
-        return isAnagram(t,s)
+    if len(s) != len(t) {
+        return false
+    }
+    sFreqMap := map[string]int{}
+    
+    for i := 0; i < len(s); i++ {
+        char := string(s[i])
+        sFreqMap[char]++
     }
     
-    sMap := map[string]int{}
-    for _, char := range s{
-        sMap[string(char)]++
+    for i := 0; i < len(t); i++ {
+        char := string(t[i])
+        numTimes, exists := sFreqMap[char]
+        if exists {
+            sFreqMap[char]--
+            if numTimes == 1 {
+                delete(sFreqMap, char)
+            }
+        } else {
+            return false
+        }
     }
     
-    for _, char := range t {
-        tChar := string(char)
-        _, ok := sMap[tChar]
-        if !ok {return false}
-        sMap[tChar]--
-        if val := sMap[tChar]; val == 0 {delete( sMap,tChar)}
-    }
-    return len(sMap) == 0
+    return true
+    
 }
-
-
-
-// sort both strings and return equality check
-// time: o(slogs) + o(tlogt) + split and join times for both s and t
-// space: o(t) + o(s) for the split array 
-// func isAnagram(s string, t string) bool {
-//     news := strings.Split(s, "")
-//     sort.Strings(news)
-//     s = strings.Join(news, "")
-//     newt := strings.Split(t, "")
-//     sort.Strings(newt)
-//     t = strings.Join(newt, "")
-//     return s == t
-// }
-
-
-// prime product hash -- Does not work because the product becomes +Inf for larger words
-// var primes = []float64{2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101}
-// func isAnagram(s string, t string) bool {
-//     sHash := hash(s)
-//     tHash := hash(t)
-//     fmt.Println(sHash, tHash)
-//     return sHash == tHash
-// }
-
-// func hash(word string) float64 {
-//     var hash float64 = 1
-//     for _, char := range word {
-//         hash *= primes[char-'a']
-//     }
-//     return hash
-// }
-
