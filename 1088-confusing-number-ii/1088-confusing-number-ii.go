@@ -1,16 +1,22 @@
 func confusingNumberII(n int) int {
+    
     count := 0
-    flipMap := map[int]int{0:0,1:1,6:9,8:8,9:6}
+    flipMap := map[int]int{
+        0:0,1:1,6:9,8:8,9:6,
+    }
     var dfs func(curr int)
     dfs = func(curr int) {
         // base
         if curr > n {return}
-        if isConfusing(flipMap, curr) { count++ }
+        
         // logic
+        if isConfusingNum(curr, flipMap) {
+            count++
+        }
         for k, _ := range flipMap {
-            newCurr := curr * 10 + k
-            if newCurr != 0 {
-                dfs(newCurr)
+            newNum := curr * 10 + k
+            if newNum != 0 {
+                dfs(newNum)
             }
         }
     }
@@ -18,14 +24,14 @@ func confusingNumberII(n int) int {
     return count
 }
 
-func isConfusing(flipMap map[int]int, n int) bool {
+func isConfusingNum(n int, flipMap map[int]int) bool {
     orig := n
-    flip := 0
+    result := 0
     for n != 0 {
-        last := n%10
-        n /= 10
+        last := n % 10
+        n = n / 10
         lastFlipped := flipMap[last]
-        flip = flip * 10 + lastFlipped
+        result = result * 10 + lastFlipped
     }
-    return flip != orig
-}
+    return orig != result
+} 
