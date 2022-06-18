@@ -54,11 +54,21 @@ func confusingNumberII(n int) int {
             count++
         }
         for k, _ := range flipMap {
-            curr = curr * 10 + k
-            if curr != 0 {
-                dfs(curr)
+            // action
+            // curr = curr * 10 + k
+            // recurse
+            // if curr != 0 {
+            //     dfs(curr)
+            // }
+            // backtrack
+            // curr /= 10
+            
+            // the above is not needed if we do not modify curr
+            newCurr := curr * 10 + k
+            if newCurr != 0 {
+                dfs(newCurr)
             }
-            curr /= 10
+            
         }
     }
     dfs(0)
