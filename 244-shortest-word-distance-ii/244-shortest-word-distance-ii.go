@@ -55,6 +55,9 @@ func (this *WordDistance) Shortest(word1 string, word2 string) int {
         if diff < minDist {
             minDist = diff
         }
+        if minDist == 1 {
+            break
+        }
         
         if w1Idx < w2Idx {
             w1++
