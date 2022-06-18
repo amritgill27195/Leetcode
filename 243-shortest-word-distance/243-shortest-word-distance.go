@@ -1,4 +1,9 @@
 /*
+    approach: hash map
+    - we need to search for word1 and word2 and find the closest distance between those 2 words
+    - words could be repeated multiple times in the wordsDict
+    - so for easy lookup of a word's idx, we will store word with all of its indicies in a map
+    - then the map will look like: { $word: [$indicies] }
     
 */
 
@@ -18,6 +23,9 @@ func shortestDistance(wordsDict []string, word1, word2 string) int {
             if dist < min {
                 min = dist
             }
+        }
+        if min == 1 {
+            break
         }
      }
     return min
