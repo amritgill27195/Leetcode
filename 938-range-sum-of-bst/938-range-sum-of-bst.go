@@ -9,6 +9,8 @@
 
 
 // approach : traverse with bst constraints 
+// time: o(n) 
+// space: o(h)
 func rangeSumBST(root *TreeNode, low int, high int) int {
     sum := 0
     var dfs func(r *TreeNode)
