@@ -17,8 +17,6 @@ func reorderLogFiles(logs []string) []string {
             if iLogSplit[1] == jLogSplit[1] {
                 return iLogSplit[0] < jLogSplit[0]
             } else {
-                // res := strings.Compare(iLogSplit[1],jLogSplit[1])
-                // if
                 return iLogSplit[1] < jLogSplit[1]
             }
             
