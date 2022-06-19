@@ -31,10 +31,10 @@
 
 func lengthOfLongestSubstring(s string) int {
     left := 0
-    charIdx := map[string]int{}
+    charIdx := map[byte]int{}
     max := 0
     for right := 0; right < len(s); right++ {
-        rightChar := string(s[right])
+        rightChar := s[right]
         idxLastSeenAt, ok := charIdx[rightChar]
         if ok && left <= idxLastSeenAt {
             left = idxLastSeenAt+1
