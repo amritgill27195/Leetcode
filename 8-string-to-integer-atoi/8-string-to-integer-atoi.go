@@ -1,3 +1,5 @@
+// time: o(n)
+// space: o(1)
 func myAtoi(s string) int {
     s = strings.TrimSpace(s)
     if s == "" {
