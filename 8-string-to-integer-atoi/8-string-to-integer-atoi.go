@@ -1,3 +1,5 @@
+// time: o(n)
+// space: o(1)
 func myAtoi(s string) int {
     s = strings.TrimSpace(s)
     if s == "" {
@@ -5,8 +7,6 @@ func myAtoi(s string) int {
     }
     first := s[0]
     if (!(first == '-' || first == '+')) && !isDigit(first) {
-        // fmt.Println(s)
-        // fmt.Println(string(first), "isDigit: ", isDigit(first))
         return 0
     }
     n := 0
