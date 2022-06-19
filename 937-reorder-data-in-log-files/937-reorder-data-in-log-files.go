@@ -21,11 +21,11 @@ func reorderLogFiles(logs []string) []string {
             }
             
             
-        } else if iLogIsDigitLog && !jLogIsDigitLog { // i is digit and j is letter, letter comes first, so swap
+        } else if iLogIsDigitLog && !jLogIsDigitLog { 
             return false
-        } else if !iLogIsDigitLog && jLogIsDigitLog { // i is letter and j is digit, letter comes first, so do nothing
+        } else if !iLogIsDigitLog && jLogIsDigitLog {
             return true
-        } else { // both are digit log, nothing to swap, return false
+        } else { 
             return false
         }        
     }) 
