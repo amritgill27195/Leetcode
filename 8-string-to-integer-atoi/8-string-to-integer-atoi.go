@@ -23,7 +23,7 @@ func myAtoi(s string) int {
                     why these 2 checks as separate checks?
                     - first, maxInt32 is 2147483647
                     - keep in mind we are "APPENDING" numbers to our n
-                    - we drop the last number of maxInt32 (maxInt32/10) and we are left with 214748364
+                    - we drop the last number of maxInt32 (maxInt32/10) and we are left with 214748364(lets call this our limit)
                         - why?
                         - because we have 2 cases
                         - if our n == limit(214748364) then, the only choice of appending another number must be within 0 to 7 ( inclusive )
@@ -31,12 +31,11 @@ func myAtoi(s string) int {
                             - but then, why are we comparing with 8 when the number being formed in negative?
                             - because minInt32 (when we are forming negative number), minInt32 limit is 2147483648 instead of 2147483647
                             - therefore...
-                        - We are appending, not adding...
-                        - the second case is when our already past limit ( n > limit(214748364) )
+                        - the second case is when our n is already past limit ( n > limit(214748364) )
                             - i.e n could be 214748365, 214748366, 214748367 for example
-                            - then we cannot proceed to add append another number right? 
+                            - then we cannot proceed to append another number right? - its already past the limit
                         - therefore in this case, as soon as we are past the limit, regardless if the new number being appending is within our range, we cannot add it because
-                        - it will be past int32.
+                        - n is already past int32.
                     
                         
                 */
