@@ -1,3 +1,5 @@
+// time: o(nlogn)
+// space: o(1)
 func reorderLogFiles(logs []string) []string {
     sort.SliceStable(logs, func(i, j int) bool{
         
@@ -14,9 +16,9 @@ func reorderLogFiles(logs []string) []string {
                 ["g2", "act car"]
                 ["g1", "act car"]
             */
-            if iLogSplit[1] == jLogSplit[1] {
+            if iLogSplit[1] == jLogSplit[1] { // if logs are same, sort by logID
                 return iLogSplit[0] < jLogSplit[0]
-            } else {
+            } else { // otherwise sort by log messages
                 return iLogSplit[1] < jLogSplit[1]
             }
             
@@ -29,7 +31,6 @@ func reorderLogFiles(logs []string) []string {
             return false
         }        
     }) 
-
     return logs
 }
 
