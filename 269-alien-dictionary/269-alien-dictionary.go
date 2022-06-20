@@ -80,11 +80,7 @@ func buildGraph(words []string) (map[byte]*set, []int){
 type set struct{
     items map[byte]struct{}
 }
-func newSet() *set {
-    return &set{
-        items: map[byte]struct{}{},
-    }
-}
+func newSet() *set { return &set{items: map[byte]struct{}{}} }
 func (s *set) add(x byte){ s.items[x] = struct{}{} }
 func (s *set) remove(x byte) { delete(s.items, x)}
 func (s *set) contains(x byte) bool { _, ok := s.items[x]; return ok}
