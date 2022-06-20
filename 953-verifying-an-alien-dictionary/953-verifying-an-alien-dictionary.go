@@ -27,6 +27,13 @@
         - then check if len of word1 is greater than word2
         - if it is, return false because for word1 to be placed before word2, it must be SMALLER in length
     
+    time: 
+    - o(order) + o(numberOfWords)xo(avgLenOfWords)
+    - o(order) is constant - it will never exceed 26
+    - so therefore o(nk) - n words, k avg len of each word
+    
+    space:
+    - we allocated an extra idxMap, buts constant because there are only 26 characters that can be added as keys from order string
 
 */
 func isAlienSorted(words []string, order string) bool {
