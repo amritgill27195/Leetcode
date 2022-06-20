@@ -1,4 +1,5 @@
 func isPalindrome(s string) bool {
+    
     left, right := 0, len(s) - 1
     
     for left < right {
@@ -17,6 +18,7 @@ func isPalindrome(s string) bool {
             return false
         }
     }
-
     return true
+    
+    
 }
