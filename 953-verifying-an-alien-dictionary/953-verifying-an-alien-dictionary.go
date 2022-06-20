@@ -22,7 +22,7 @@ func isSorted(charIdxMap map[byte]int, word1, word2 string) bool {
         }
     }
     
-    // if we got here, the characters are sorted
+    // if we got here, the characters are so far lexicographically sorted
     // but the smaller len must be word1 for word1 to be placed before word2
     if len(word1) > len(word2) {
         return false
