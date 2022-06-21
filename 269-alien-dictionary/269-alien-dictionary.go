@@ -1,85 +1,78 @@
 func alienOrder(words []string) string {
-    if words == nil || len(words) == 0 {
-        return ""
-    }
+    result := new(strings.Builder)
+    
     adjList, indegrees := buildGraph(words)
     q := []byte{}
-    for parent, _ := range adjList {
-        parentIdx := parent-'a'
-        if indegrees[parentIdx] == 0 {
-            q = append(q, parent)
+    for char, _ := range adjList {
+        if indegrees[char-'a'] == 0 {
+            q = append(q, char)
         }
     }
+    // if we have no independent node(s) to start with , return empty string
     if len(q) == 0 {
         return ""
     }
-    out := new(strings.Builder)
     for len(q) != 0 {
         dq := q[0]
         q = q[1:]
-        out.WriteByte(dq)
-        
+        result.WriteByte(dq)
         childSet := adjList[dq]
         for child, _ := range childSet.items {
-            childIdx := child-'a'
-            indegrees[childIdx]--
-            if indegrees[childIdx] == 0 {
+            indegrees[child-'a']--
+            if indegrees[child-'a'] == 0 {
                 q = append(q, child)
             }
         }
     }
-    outStr := out.String()
+    outStr := result.String()
+    // if we have not used all characters from adjList ( keys ), that means there
+    // are still nodes in indegrees to process that could not be processed
+    // meaning there is no valid top sort
+    // i.e return ""
     if len(outStr) != len(adjList) {
         return ""
     }
     return outStr
 }
 
-func buildGraph(words []string) (map[byte]*set, []int){
-    // { independant : [dependants] }
-    // { parent : [edges to childs] }
-    // here our parent is the first sorted word
-    // and childs are the second chars that depend on parent char to be placed first
-    
-    graph := map[byte]*set{}
+func buildGraph(words []string) (map[byte]*set, []int) {
+    out := map[byte]*set{}
     for i := 0; i < len(words); i++ {
         for j := 0; j < len(words[i]); j++ {
-            graph[words[i][j]] = newSet()
+            out[words[i][j]] = newSet()
         }
     }
-    
     indegrees := make([]int, 26)
     for i := 0; i < len(words)-1; i++ {
         word1 := words[i]
         word2 := words[i+1]
-        if strings.HasPrefix(string(word1), string(word2)) && len(word1) != len(word2) {
+        
+        /*
+        func HasPrefix(s, prefix string) bool
+        HasPrefix tests whether the string s begins with prefix.
+        */
+        if strings.HasPrefix(string(word1), string(word2)) && len(word2) < len(word1) {
             return map[byte]*set{}, nil
         }
-        // otherwise when there is a diff in characters, word1 char is the parent(independent, has no dependency), and word2 char is the child/dependsOnParent
-        for j := 0; j < len(word1) && j < len(word2); j++ {
-            w1 := word1[j] // parent / independant node
-            w2 := word2[j] // child / depends on parent
-            
-            if w1 != w2 {
-                if !graph[w1].contains(w2){
-                    indegrees[w2-'a']++
-                    graph[w1].add(w2)
+        
+        for j := 0 ; j < len(word1) && j < len(word2); j++ {
+            w1Char := word1[j]
+            w2Char := word2[j]
+            if w1Char != w2Char {
+                // w1 is the parent/independent
+                // w2 is the child ( i.e it has an incoming edge )
+                if !out[w1Char].contains(w2Char){
+                    indegrees[w2Char-'a']++
+                    out[w1Char].add(w2Char)
                 }
                 break
-            }
+            } 
         }
-        
     }
-    
-    return graph, indegrees
-    
+    return out, indegrees   
 }
 
-
-
-type set struct{
-    items map[byte]struct{}
-}
+type set struct{ items map[byte]struct{} }
 func newSet() *set { return &set{items: map[byte]struct{}{}} }
 func (s *set) add(x byte){ s.items[x] = struct{}{} }
 func (s *set) remove(x byte) { delete(s.items, x)}
