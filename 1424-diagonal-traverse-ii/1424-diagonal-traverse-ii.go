@@ -5,8 +5,9 @@ func findDiagonalOrder(nums [][]int) []int {
     max := 0
     for i := m-1; i >= 0; i-- {
         for j := 0; j < len(nums[i]); j++ {
-            diagGroup[i+j] = append(diagGroup[i+j], nums[i][j])
-            if i+j > max {max = i+j}
+            rowColSum := i+j
+            diagGroup[rowColSum] = append(diagGroup[rowColSum], nums[i][j])
+            if rowColSum > max {max = rowColSum}
         }
     }
     out := []int{}
