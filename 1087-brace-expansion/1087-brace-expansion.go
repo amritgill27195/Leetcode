@@ -1,44 +1,42 @@
 func expand(s string) []string {
-    blocks := [][]string{}
+    sList := [][]string{}
     i := 0
-    
     for i < len(s) {
-        block := []string{}
-        if s[i] == '{' {
+        grp := []string{}
+        char := s[i]
+        if char == ',' {continue}
+        if char == '{' {
             i++
             for s[i] != '}' {
-                if s[i] != ','{
-                    block = append(block, string(s[i]))    
-                }
+                if s[i] == ',' {i++; continue}
+                grp = append(grp, string(s[i]))
                 i++
             }
         } else {
-            block = append(block, string(s[i]))
+            grp = append(grp, string(s[i]))
         }
-        sort.Strings(block)
-        blocks = append(blocks, block)
         i++
+        sort.Strings(grp)
+        sList = append(sList, grp)
     }
     result := []string{}
-    var backtrack func(start int, path string)
-    backtrack = func(start int, path string) {
+    var backtrack func(outterIdx int, path string)
+    backtrack = func(outterIdx int, path string) {
+        
         // base
-        if start == len(blocks) {
+        if outterIdx == len(sList) {
             result = append(result, path)
             return
         }
-        
+
         // logic
-        for i := 0; i < len(blocks[start]); i++ {
-            // action
-            path += blocks[start][i]
-            // recurse
-            backtrack(start+1, path)
-            // backtrack
+        for i := 0; i < len(sList[outterIdx]); i++ {
+            path += sList[outterIdx][i]
+            backtrack(outterIdx+1, path)
             path = path[:len(path)-1]
         }
+        
     }
-    backtrack(0, "")   
+    backtrack(0, "")
     return result
-    
 }
