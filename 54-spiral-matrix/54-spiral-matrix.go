@@ -1,48 +1,48 @@
+// approach : 4 pointers ( left col, right col, top row, bottom row) -- use them to shrink boundaries!
 func spiralOrder(matrix [][]int) []int {
     m := len(matrix)
     n := len(matrix[0])
+    left := 0
     top := 0
     right := n-1
     bottom := m-1
-    left := 0
-    
-    out := make([]int, m*n)
-    idx := 0
-    for top <= bottom && left <= right {
-        // left to right
-        for i := left; i <= right; i++ {
-            out[idx] = matrix[left][i]
-            idx++
+    out := []int{}
+    for left <= right && top <= bottom {
+        
+        // top row
+        // left-right
+        for i := top; i <= right; i++ {
+            out = append(out, matrix[top][i])
         }
         top++
         
-        if top <= bottom && left <= right {
-            // top to bottom
+        // right col
+        // top to bottom
+        if left <= right && top <= bottom {
             for i := top; i <= bottom; i++ {
-                out[idx] = matrix[i][right]
-                idx++
+                out = append(out, matrix[i][right])
             }
         }
         right--
         
-        if top <= bottom && left <= right {
-            // bottom row right to left
+        
+        // bottom row
+        // right to left
+        if left <= right && top <= bottom {
             for i := right; i >= left; i-- {
-                out[idx] = matrix[bottom][i]
-                idx++
+                out = append(out, matrix[bottom][i])
             }
         }
         bottom--
         
-        if top <= bottom && left <= right {
-            // left col - bottom to top
+        // left col
+        // bottom to top
+        if left <= right && top <= bottom {
             for i := bottom; i >= top; i-- {
-                out[idx] = matrix[i][left]
-                idx++
+                out = append(out, matrix[i][left])
             }
         }
         left++
     }
     return out
-    
 }
