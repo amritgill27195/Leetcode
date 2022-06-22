@@ -3,6 +3,8 @@ func findDiagonalOrder(nums [][]int) []int {
     m := len(nums)
     
     max := 0
+    
+    // time: o(mn)
     for i := m-1; i >= 0; i-- {
         for j := 0; j < len(nums[i]); j++ {
             rowColSum := i+j
@@ -11,9 +13,14 @@ func findDiagonalOrder(nums [][]int) []int {
         }
     }
     out := []int{}
+    
+    // time: o(mn)
     for i := 0; i <= max; i++ {
         out = append(out, diagGroup[i]...)
     }
+    
+    // time: 2o(mn) = o(mn)
+    // space: 
     
     return out
     
