@@ -5,9 +5,9 @@ func diagonalSum(mat [][]int) int {
     n := len(mat[0])
     sum := 0
     
-    for r < m && c < n {
+    for r < m && c < n { // time: m+n
         sum += mat[r][c]
-        mat[r][c] *= -1
+        mat[r][c] *= -1 // mark it visited
         r++
         c++
     }
@@ -15,9 +15,9 @@ func diagonalSum(mat [][]int) int {
     r = 0
     c = n-1
     
-    for r < m && c >= 0 {
-        if mat[r][c] > 0 {
-            sum += mat[r][c]
+    for r < m && c >= 0 { // time : m+n
+        if mat[r][c] > 0 { // only add unvisited nodes
+            sum += mat[r][c] 
         }
         r++
         c--
