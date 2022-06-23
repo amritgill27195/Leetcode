@@ -14,11 +14,10 @@ func letterCombinations(digits string) []string {
     var backtrack func(start int, path string)
     backtrack = func(start int, path string) {
         // base
-        if len(path) == len(digits) {
+        if start == len(digits) {
             result = append(result, path)
             return
         }
-        if start == len(digits) {return}
         
         // logic
         chars := charsMap[digits[start]]
