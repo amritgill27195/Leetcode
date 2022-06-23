@@ -33,7 +33,8 @@
 //     return dp[0][0]
 // }
 
-
+// o(1) space 
+// o(mn) time
 func uniquePathsWithObstacles(grid [][]int) int {
     m := len(grid)
     n := len(grid[0])
