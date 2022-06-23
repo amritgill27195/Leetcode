@@ -1,20 +1,15 @@
 func uniquePaths(m int, n int) int {
-    dr := m-1
-    dc := n-1
-    memo := make([][]int, m)
-    for idx, _ := range memo {
-        memo[idx] = make([]int, n)
+    dp := make([][]int, m+1)
+    for idx, _ := range dp {
+        dp[idx] = make([]int, n+1)
     }
-    var dfs func(r,c int) int
-    dfs = func(r, c int) int {
-        // base
-        if r == m || r < 0 || c == n || c < 0 {return 0}
-        if r == dr && c == dc {return 1}
-        if memo[r][c] == 0 {
-            memo[r][c] = dfs(r+1, c) + dfs(r,c+1)
+    // there is only 1 way to get out from the last cell ( which is right ) therefore only 1 way
+    dp[m-1][n-1] = 1
+    for i := m-1; i >= 0; i-- {
+        for j := n-1; j >= 0; j-- {
+            if i == m-1 && j == n-1 {continue}
+            dp[i][j] = dp[i+1][j] + dp[i][j+1]
         }
-        return memo[r][c]
     }
-    
-    return dfs(0,0)
+    return dp[0][0]
 }
