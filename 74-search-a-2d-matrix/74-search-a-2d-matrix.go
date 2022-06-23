@@ -9,7 +9,7 @@ func searchMatrix(matrix [][]int, target int) bool {
         mid := left + (right-left)/2
         row := mid / numCols
         col := mid % numCols
-        if row >= numRows || row < 0 || col >= numCols || col < 0{
+        if row >= numRows || col >= numCols {
             break
         }
         if matrix[row][col] == target {
