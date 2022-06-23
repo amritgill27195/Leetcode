@@ -4,7 +4,7 @@ func searchMatrix(matrix [][]int, target int) bool {
     total := numRows * numCols
     
     left := 0
-    right := total
+    right := total-1
     for left <= right {
         mid := left + (right-left)/2
         row := mid / numCols
