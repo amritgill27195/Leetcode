@@ -1,20 +1,20 @@
 func maxArea(height []int) int {
-    max := 0
     left := 0
     right := len(height)-1
-    
+    maxArea := 0
     for left < right {
-        h := int(math.Min(float64(height[left]), float64(height[right])))
-        w := right-left
-        area := h*w
-        if area > max {
-            max = area
+        leftHeight := height[left]
+        rightHeight := height[right]
+        height := int(math.Min(float64(leftHeight), float64(rightHeight)))
+        width := right-left
+        if height*width > maxArea {
+            maxArea = height*width
         }
-        if height[left] < height[right] {
+        if leftHeight < rightHeight {
             left++
         } else {
             right--
         }
     }
-    return max
-}   
+    return maxArea
+}
