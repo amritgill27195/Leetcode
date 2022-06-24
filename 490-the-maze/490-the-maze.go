@@ -1,40 +1,42 @@
 func hasPath(maze [][]int, start []int, destination []int) bool {
-    
-    m := len(maze)
-    n := len(maze[0])
-    
     sr := start[0]
     sc := start[1]
     dr := destination[0]
     dc := destination[1]
+    m := len(maze)
+    n := len(maze[0])
     
-    maze[sr][sc] = -1
+    if maze[dr][dc] == 1 {return false}
+    
     q := [][]int{{sr,sc}}
+    maze[sr][sc] = 2 // 2 represents a already visited node
     dirs := [][]int{{1,0},{-1,0},{0,-1},{0,1}}
     
     for len(q) != 0 {
-        dq := q[0]
-        q = q[1:]
-        
+        dq := q[0]; q = q[1:]
         cr := dq[0]
         cc := dq[1]
         
         if cr == dr && cc == dc {return true}
+        
         for _, dir := range dirs {
-            r := cr + dir[0]
-            c := cc + dir[1]
-            for r >= 0 && r < m && c >= 0 && c < n && maze[r][c] != 1 {
-                r += dir[0]
-                c += dir[1]
+            nr := cr + dir[0]
+            nc := cc + dir[1]
+            for nr >= 0 && nr < m && nc >= 0 && nc < n && maze[nr][nc] != 1 {
+                nr += dir[0]
+                nc += dir[1]
             }
-            r -= dir[0]
-            c -= dir[1]
-            if maze[r][c] != -1 {
-                maze[r][c] = -1                
-                q = append(q, []int{r,c})   
+            
+            nr -= dir[0]
+            nc -= dir[1]
+            
+            if maze[nr][nc] != 2 {
+                if nr == dr && nc == dc {return true}
+                q = append(q, []int{nr,nc})
+                maze[nr][nc] = 2
             }
         }
     }
-    
     return false
+    
 }
