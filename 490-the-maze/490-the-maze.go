@@ -1,4 +1,6 @@
 // BFS
+// time: o(mn)
+
 func hasPath(maze [][]int, start []int, destination []int) bool {
     sr := start[0]
     sc := start[1]
