@@ -1,28 +1,28 @@
 func minFallingPathSum(matrix [][]int) int {
-    dirs := [][]int{{1,0}, {1,-1}, {1,1}}
     m := len(matrix)
     n := len(matrix[0])
+    min := math.MaxInt64
     
-    for i := m-2; i >= 0; i-- {
-        for j := 0; j < n; j++ {
-            min := math.MaxInt64
+    dirs := [][]int{{-1,0},{-1,-1},{-1,1}}
+    for i := 1; i < m; i++ {
+        for j := 0; j < n; j++ {        
+            smallestChoice := math.MaxInt64
             for _, dir := range dirs {
-                nr := i+dir[0]
-                nc := j+dir[1]
-                if nr >= 0 && nr < m && nc >= 0 && nc < n {
-                    if matrix[nr][nc] < min {
-                        min = matrix[nr][nc]
+                r := i+dir[0]
+                c := j+dir[1]
+                if r >= 0 && c >= 0 && c < n {
+                    if matrix[r][c] < smallestChoice {
+                        smallestChoice = matrix[r][c]
                     }
                 }
             }
-            matrix[i][j] += min
+            matrix[i][j] += smallestChoice
         }
     }
-    minVal := matrix[0][0]
-    for j := 1; j < n; j++ {
-        if matrix[0][j] < minVal {
-            minVal = matrix[0][j]
+    for j := 0; j < n; j++ {
+        if matrix[m-1][j] < min {
+            min = matrix[m-1][j]
         }
     }
-    return minVal    
+    return min
 }
