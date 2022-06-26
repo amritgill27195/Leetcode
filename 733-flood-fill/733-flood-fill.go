@@ -8,7 +8,7 @@ func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
     var dfs func(r, c int)
     dfs = func(r, c int) {
         // base
-        if r < 0 || r == m || c < 0 || c == n || image[r][c] != oldColor {
+        if r < 0 || r == m || c < 0 || c == n || image[r][c] != oldColor || image[r][c] == newColor {
             return
         }
         
