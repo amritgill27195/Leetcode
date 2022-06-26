@@ -9,7 +9,7 @@ func arraysIntersection(arr1 []int, arr2 []int, arr3 []int) []int {
         a2Val := arr2[a2]
         a3Val := arr3[a3]
         
-        if (a1Val == a2Val && a1Val == a3Val) && (a2Val == a1Val && a2Val == a3Val) && (a3Val == a1Val && a3Val == a2Val) {
+        if (a1Val == a2Val && a2Val == a3Val) {
             out = append(out, a1Val)
             a1++; a2++; a3++
         } else if a1Val < a2Val  {
