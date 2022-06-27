@@ -2,7 +2,7 @@ func rob(nums []int) int {
     n := 2
     dp := make([]int, n)
 
-    for i := len(nums)-1; i >= 0; i-- {
+    for i := 0; i < len(nums); i++ {
         houseVal := nums[i]
         zeroCase := dp[0]
         oneCase := dp[1]
