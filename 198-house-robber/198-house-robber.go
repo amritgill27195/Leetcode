@@ -5,11 +5,11 @@ func rob(nums []int) int {
     for idx, _ := range dp {
         dp[idx] = make([]int, n)
     }
-    for i := 1; i < len(dp); i++ { // house val
-        dp[i][0] = int(math.Max(float64(dp[i-1][0]), float64(dp[i-1][1])))
-        dp[i][1] = nums[i-1] + dp[i-1][0]
+    for i := len(dp)-2; i >= 0; i-- { // house val
+        dp[i][0] = int(math.Max(float64(dp[i+1][0]), float64(dp[i+1][1])))
+        dp[i][1] = nums[i] + dp[i+1][0]
     }
     
-    return int(math.Max(float64(dp[m-1][0]),float64(dp[m-1][1])))
+    return int(math.Max(float64(dp[0][0]),float64(dp[0][1])))
     
 }
