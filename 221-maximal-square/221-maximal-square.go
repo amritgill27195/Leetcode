@@ -24,7 +24,7 @@ func maximalSquare(matrix [][]byte) int {
                     
                     if flag { l++ }
                 }
-                if l*l > max { max = l*l }
+                max = int(math.Max(float64(max),float64(l*l)))
             }
         }
     }
