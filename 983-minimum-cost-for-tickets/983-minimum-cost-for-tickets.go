@@ -4,7 +4,6 @@ func mincostTickets(days []int, costs []int) int {
     for i := 0; i < len(days); i++ {
         travelDates[days[i]] = struct{}{}
     }
-    // fmt.Println(travelDates)
     
     // bottom up dp
     // each subproblem has 3 choices, make the best one for each ( i.e min cost )
@@ -15,27 +14,17 @@ func mincostTickets(days []int, costs []int) int {
     thirtyDayPass := costs[2]
     dp[len(dp)-1] = min(oneDayPass,min(sevenDayPass,thirtyDayPass))
 
-    
     for i := len(dp)-2; i >= 0; i-- {
-        
         travelDate := i+1
         _, traveling := travelDates[travelDate]
-        if traveling {
-            
-            oneDayTotalCost := oneDayPass + dp[i+1]
-            
-            sevenDayTotalCost := sevenDayPass
-            if i+7 < n { sevenDayTotalCost = sevenDayPass + dp[i+7] }
-            
-            thirtyDayTotalCost := thirtyDayPass
-            if i+30 < n {thirtyDayTotalCost = thirtyDayPass + dp[i+30] }
-                        
-            dp[i] = min(oneDayTotalCost,min(sevenDayTotalCost,thirtyDayTotalCost))
-            
-            
-        } else {
-            dp[i] = dp[i+1]
-        }
+        if !traveling { dp[i] = dp[i+1]; continue }
+    
+        oneDayTotalCost := oneDayPass + dp[i+1]
+        sevenDayTotalCost := sevenDayPass
+        if i+7 < n { sevenDayTotalCost = sevenDayPass + dp[i+7] }
+        thirtyDayTotalCost := thirtyDayPass
+        if i+30 < n {thirtyDayTotalCost = thirtyDayPass + dp[i+30] }
+        dp[i] = min(oneDayTotalCost,min(sevenDayTotalCost,thirtyDayTotalCost))
     }
     return dp[0]
 }
