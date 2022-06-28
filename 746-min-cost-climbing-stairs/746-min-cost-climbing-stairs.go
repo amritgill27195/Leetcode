@@ -11,8 +11,8 @@ func minCostClimbingStairs(cost []int) int {
         currentCost := cost[i]
         
         if i == 0 {
-            chooseMin := min(oneStepCost,twoStepCost)+currentCost
-            dp[i] =  min(oneStepCost,chooseMin )
+            ifWeChoose0thIdx := min(oneStepCost,twoStepCost)+currentCost
+            dp[i] =  min(oneStepCost,ifWeChoose0thIdx )
         } else {
             dp[i] = int(math.Min(float64(oneStepCost), float64(twoStepCost)))+currentCost
         }
