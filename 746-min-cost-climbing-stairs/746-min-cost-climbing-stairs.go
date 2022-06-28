@@ -35,6 +35,13 @@
     - Finally at the end we have bubbled our answer up in the 0th idx
     - We took the cheapest decision on each step by evaluation whether its better to take 1 or 2 steps - from the back of the array 
     - We essentially solved the smallest subproblem for each step - and worked up to bubble up the final ans.
+    
+    time: o(n) 
+        - n is the len of cost array
+    space: o(n)
+        - n is the len of cost array
+        - we allocated extra dp array 
+        - could be optimized to o(1) space, if we can mutate the cost array
 */
 func minCostClimbingStairs(cost []int) int {
     dp := make([]int, len(cost))
