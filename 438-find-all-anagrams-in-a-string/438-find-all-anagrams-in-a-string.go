@@ -12,7 +12,7 @@ func findAnagrams(s string, p string) []int {
             wStateIsAnagram := true
             for k, v := range wState {
                 pMapVal, exists := pMap[k]
-                if !exists || pMapVal != v {
+                if (!exists && v != 0 )|| pMapVal != v {
                     wStateIsAnagram = false
                     break
                 } 
@@ -22,7 +22,7 @@ func findAnagrams(s string, p string) []int {
             }
             leftChar := s[left]
             wState[leftChar]--
-            if wState[leftChar] == 0 {delete(wState, leftChar)}
+            // if wState[leftChar] == 0 {delete(wState, leftChar)}
             left++
         }
     }
