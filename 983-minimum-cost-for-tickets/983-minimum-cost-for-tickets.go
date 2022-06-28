@@ -24,25 +24,18 @@ func mincostTickets(days []int, costs []int) int {
             
             oneDayTotalCost := oneDayPass + dp[i+1]
             
-            sevenDayTotalCost := 0
+            sevenDayTotalCost := sevenDayPass
             sevenDaysFromNowIdx := i+7-1
-            if sevenDaysFromNowIdx >= n-1 {
-                sevenDayTotalCost = sevenDayPass
-            } else {
+            if sevenDaysFromNowIdx < n-1 {
                 sevenDayTotalCost = sevenDayPass + dp[sevenDaysFromNowIdx+1]
             }
             
-            thirtyDayTotalCost := 0
+            thirtyDayTotalCost := thirtyDayPass
             thirtyDaysFromNowIdx := i+30-1
-            if thirtyDaysFromNowIdx >= n-1 {
-                thirtyDayTotalCost = thirtyDayPass
-            } else{
+            if thirtyDaysFromNowIdx < n-1 {
                 thirtyDayTotalCost = thirtyDayPass + dp[thirtyDaysFromNowIdx+1]
             }
-            
-            // fmt.Println(oneDayTotalCost,sevenDayTotalCost, thirtyDayTotalCost)
-            // fmt.Println("------------------------------------------------")
-            
+                        
             dp[i] = min(oneDayTotalCost,min(sevenDayTotalCost,thirtyDayTotalCost))
             
             
