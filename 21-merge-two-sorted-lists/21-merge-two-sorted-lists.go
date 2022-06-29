@@ -5,29 +5,39 @@
  *     Next *ListNode
  * }
  */
-
-/*
-2 pointers
-1. Start at l1
-2. Start at l2
-3. While both are not nil,
-    a. Compare which is smaller and append to output tail
-    b. the smaller pointer moves forward
-4. Finally append whoever did not hit nil ( in case of uneven sized LL )
-
-time: o(l1+l2) 
-space: o(1)
-
-*/
 func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
+    // 1->2->3->4
+    // insert(5)
+    
+    mergedHead := &ListNode{Val: 0}
+    tail := mergedHead
+    // 0
+    
     l1 := list1
     l2 := list2
-    out := &ListNode{Val: 0}
-    tail := out
-    for l1 != nil && l2 != nil {
-        l1Val := l1.Val
-        l2Val := l2.Val
-        if l1Val < l2Val {
+    
+    for l1 != nil || l2 != nil {
+        var l1Val int = 101
+        if l1 != nil {
+            l1Val = l1.Val
+        }
+        
+        var l2Val int = 101
+        if l2 != nil {
+            l2Val = l2.Val
+        }
+        
+        if l1Val != 101 && l2Val != 101 {
+            if l1Val < l2Val {
+                tail.Next = &ListNode{Val: l1Val}
+                tail = tail.Next
+                l1 = l1.Next
+            } else {
+                tail.Next = &ListNode{Val: l2Val}
+                tail = tail.Next
+                l2 = l2.Next
+            }
+        } else if l1Val != 101 && l2Val == 101 {
             tail.Next = &ListNode{Val: l1Val}
             tail = tail.Next
             l1 = l1.Next
@@ -37,15 +47,6 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
             l2 = l2.Next
         }
     }
-    for l1 != nil {
-        tail.Next = &ListNode{Val: l1.Val}
-        tail = tail.Next
-        l1 = l1.Next
-    }
-    for l2 != nil {
-        tail.Next = &ListNode{Val: l2.Val}
-        tail = tail.Next
-        l2 = l2.Next
-    }
-    return out.Next
+    
+    return mergedHead.Next
 }
