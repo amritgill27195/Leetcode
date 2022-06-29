@@ -1,28 +1,28 @@
 func findAnagrams(s string, p string) []int {
-    left := 0
-    wState := map[byte]int{}
     pMap := map[byte]int{}
     for i := 0; i < len(p); i++ {
         pMap[p[i]]++
     }
     out := []int{}
+    count := len(pMap)
+    left := 0
     for right := 0; right < len(s); right++ {
-        wState[s[right]]++
-        if right-left+1 == len(p) {
-            wStateIsAnagram := true
-            for k, v := range wState {
-                pMapVal, exists := pMap[k]
-                if !exists || pMapVal != v {
-                    wStateIsAnagram = false
-                    break
-                } 
+        _, ok := pMap[s[right]]
+        if ok {
+            pMap[s[right]]--
+            if val := pMap[s[right]]; val == 0 {
+                count--
             }
-            if wStateIsAnagram {
+        }
+        if right-left+1 == len(p) {
+            if count == 0 {
                 out = append(out, left)
             }
             leftChar := s[left]
-            wState[leftChar]--
-            if wState[leftChar] == 0 {delete(wState, leftChar)}
+            if val, exists := pMap[leftChar]; exists {
+                pMap[leftChar]++
+                if val == 0 {count++}
+            }
             left++
         }
     }
