@@ -83,15 +83,40 @@
 // top - down using fixed size ( 2 ) 1D array -- can be replaced with 2 vars
 // time: o(n)
 // space: o(1)
+// func rob(nums []int) int {
+//     dp := make([]int, 2)
+//     dp[0] = 0
+//     dp[1] = nums[0]
+//     for i := 1; i < len(nums); i++ {
+//         choose := dp[1]
+//         notChoose := dp[0]
+//         dp[0] = int(math.Max(float64(notChoose),float64(choose))) 
+//         dp[1] = nums[i] + notChoose
+//     }
+//     return int(math.Max(float64(dp[0]),float64(dp[1])))
+// }
+
+
+
 func rob(nums []int) int {
-    dp := make([]int, 2)
-    dp[0] = 0
+    dp := make([]int, len(nums)+1)
     dp[1] = nums[0]
-    for i := 1; i < len(nums); i++ {
-        choose := dp[1]
-        notChoose := dp[0]
-        dp[0] = int(math.Max(float64(notChoose),float64(choose))) 
-        dp[1] = nums[i] + notChoose
+    
+    /*
+        [1,2,3,1]
+             i
+        [0,1,0,0,0]
+    */
+    for i := 2; i < len(dp); i++ {
+        currHouse := nums[i-1]
+        dp[i] = max(currHouse+dp[i-2], dp[i-1])
     }
-    return int(math.Max(float64(dp[0]),float64(dp[1])))
+    return dp[len(dp)-1]
 }
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
+} 
