@@ -18,17 +18,34 @@
     time: o(mn)
     space: o(mn)
 */
+
+// func uniquePaths(m int, n int) int {
+//     dp := make([][]int, m+1)
+//     for idx, _ := range dp {
+//         dp[idx] = make([]int, n+1)
+//     }
+//     dp[1][1] = 1
+//     for i := 1; i < len(dp); i++ {
+//         for j := 1; j < len(dp[0]); j++ {
+//             if i == 1 && j == 1 {continue}
+//             dp[i][j] = dp[i-1][j] + dp[i][j-1]
+//         }
+//     }
+//     return dp[len(dp)-1][len(dp[0])-1]
+// }
+
+/*
+    approach: bottom up dp
+    - same thing as above but using 1D array
+*/
 func uniquePaths(m int, n int) int {
-    dp := make([][]int, m+1)
-    for idx, _ := range dp {
-        dp[idx] = make([]int, n+1)
-    }
-    dp[1][1] = 1
-    for i := 1; i < len(dp); i++ {
-        for j := 1; j < len(dp[0]); j++ {
-            if i == 1 && j == 1 {continue}
-            dp[i][j] = dp[i-1][j] + dp[i][j-1]
+    dp := make([]int, n+1)
+    dp[1] = 1
+    for i := 0; i < m; i++ {
+        for j := 1; j < len(dp); j++ {
+            if j == 1 {continue}
+            dp[j] = dp[j] + dp[j-1]
         }
     }
-    return dp[len(dp)-1][len(dp[0])-1]
+    return dp[len(dp)-1]
 }
