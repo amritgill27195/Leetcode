@@ -7,15 +7,13 @@ func getHint(secret string, guess string) string {
     }
     
     for i := 0; i < len(guess); i++ {
-        gChar := guess[i]
-        if _, ok := sFreqMap[gChar]; ok {
-            if guess[i] == secret[i] {
+        char := guess[i]
+        if count, ok := sFreqMap[char]; ok {
+            if char == secret[i] {
                 bulls++
-                if val := sFreqMap[gChar]; val <= 0 {cows--} 
-            } else {
-                if val := sFreqMap[gChar]; val > 0 {cows++}
-            }
-            sFreqMap[gChar]--
+                if val := sFreqMap[char]; val <= 0 {cows--} 
+            } else if count > 0 { cows++ }
+            sFreqMap[char]--
 
         }
     }
