@@ -68,22 +68,47 @@
 /*
     approach: bottom up dp
     - solve the smallest subproblem and use previous decisions to enhance smallest subproblem ans
+    time: o(n)
+    space: o(n)
+*/
+// func minCostClimbingStairs(cost []int) int {
+//     dp := make([]int, len(cost))
+//     dp[0] = cost[0]
+    
+//     for i := 1; i < len(dp); i++ {
+//         currStepCost := cost[i]
+//         oneStepBackCost := dp[i-1]
+//         twoStepBackCost := 0
+//         if i-2 >= 0 {
+//             twoStepBackCost = dp[i-2]
+//         }
+//         dp[i] = min(currStepCost+oneStepBackCost, currStepCost+twoStepBackCost)
+//     }
+//     return min(dp[len(dp)-1], dp[len(dp)-2])
+// }
+
+
+
+/*
+    approach: bottom up dp
+    - solve the smallest subproblem and use previous decisions to enhance smallest subproblem ans
+    time: o(n)
+    space: o(1)
 */
 func minCostClimbingStairs(cost []int) int {
-    dp := make([]int, len(cost))
-    dp[0] = cost[0]
+    dp := []int{cost[0],cost[1]}
     
-    for i := 1; i < len(dp); i++ {
+    for i := 2; i < len(cost); i++ {
         currStepCost := cost[i]
-        oneStepBackCost := dp[i-1]
-        twoStepBackCost := 0
-        if i-2 >= 0 {
-            twoStepBackCost = dp[i-2]
-        }
-        dp[i] = min(currStepCost+oneStepBackCost, currStepCost+twoStepBackCost)
+        oneStepBackCost := dp[1]
+        twoStepBackCost := dp[0]
+        totalCostAtThisStep := min(currStepCost+oneStepBackCost, currStepCost+twoStepBackCost) 
+        dp[0] = dp[1]
+        dp[1] = totalCostAtThisStep
     }
-    return min(dp[len(dp)-1], dp[len(dp)-2])
+    return min(dp[0], dp[1])
 }
+
 
 
 func min(x, y int) int{
