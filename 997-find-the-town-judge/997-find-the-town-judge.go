@@ -1,12 +1,10 @@
 func findJudge(n int, trust [][]int) int {
-    indegrees := make([]int, n+1) // count number of incoming edges to a node
     
-    for _, ele := range trust {
-        person := ele[0]
-        trusts := ele[1]
-        
-        indegrees[trusts]++
-        indegrees[person]--
+    indegrees := make([]int, n+1)
+    
+    for i := 0; i < len(trust); i++ {
+        indegrees[trust[i][1]]++
+        indegrees[trust[i][0]]--
     }
     
     for i := 1; i < len(indegrees); i++ {
@@ -15,4 +13,5 @@ func findJudge(n int, trust [][]int) int {
         }
     }
     return -1
+    
 }
