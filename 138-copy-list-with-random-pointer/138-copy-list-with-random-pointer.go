@@ -8,20 +8,21 @@
  */
 
 func copyRandomList(head *Node) *Node {
+    
     if head == nil {
-        return nil
+        return head
     }
     
-    // 1-1|-2-2|-3-3|-nil
     curr := head
     for curr != nil {
         next := curr.Next
-        cp := &Node{Val: curr.Val}
-        curr.Next = cp
-        cp.Next = next
+        newNode := &Node{Val: curr.Val}
+        curr.Next = newNode
+        newNode.Next = next
         curr = next
     }
-    // now for each copy node, connect to its corresponding random ref
+    
+    
     curr = head
     for curr != nil && curr.Next != nil {
         next := curr.Next.Next
@@ -31,25 +32,17 @@ func copyRandomList(head *Node) *Node {
         curr = next
     }
     
-    curr = head
     out := &Node{Val: 0}
+    curr = head
     tail := out
-    var prev *Node
-
-    // 1-1|-2-2|-3-3|-nil
     for curr != nil && curr.Next != nil {
         next := curr.Next.Next
-        cp := curr.Next
-        curr.Next = nil
-        tail.Next = cp
+        deepCp := curr.Next
+        deepCp.Next = nil
+        curr.Next = next
+        tail.Next = deepCp
         tail = tail.Next
-        if prev != nil {
-            prev.Next = curr
-        }
-        prev = curr
         curr = next
     }
-    
     return out.Next
-    
 }
