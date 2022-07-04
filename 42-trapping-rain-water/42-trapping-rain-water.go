@@ -20,32 +20,36 @@
 func trap(height []int) int {
     n := len(height)
     result := 0
-    slow := 0
-    fast := slow+1
     trap := 0
+    
+    slow := 0 // acting as the left wall
+    fast := slow+1
+    
     for fast < n {
-        if height[fast] < height[slow] {
+        if height[slow] > height[fast] {
             trap += height[slow]-height[fast]
         } else {
             result += trap
-            slow = fast
             trap = 0
+            slow = fast
         }
         fast++
     }
+    
     peek := slow
-    slow = n-1
-    fast = slow-1
+    slow = n-1 // acting as the right wall now
+    fast = slow - 1
     trap = 0
     for fast >= peek {
-        if height[fast] < height[slow] {
-            trap += height[slow] - height[fast]
+        if height[slow] > height[fast] {
+            trap += height[slow]-height[fast]
         } else {
             result += trap
-            slow = fast
             trap = 0
+            slow = fast
         }
         fast--
     }
+    
     return result
 }
