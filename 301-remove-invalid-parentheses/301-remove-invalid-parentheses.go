@@ -44,18 +44,19 @@ func removeInvalidParentheses(s string) []string {
             q = q[1:]
             if isBalanced(dq) {
                 result = append(result, dq)
-            }
-            
-            // enqueue all of this node's children - as long as they are not already visited
-            for i := 0; i < len(dq); i++ {
-                if dq[i] == '(' || dq[i] == ')' {
-                    child := string(dq[0:i]) + string(dq[i+1:])
-                    if _, ok := visited[child]; !ok {
-                        q = append(q, child)
-                        visited[child] = true
+            } else {
+                // enqueue all of this node's children - as long as they are not already visited
+                for i := 0; i < len(dq); i++ {
+                    if dq[i] == '(' || dq[i] == ')' {
+                        child := string(dq[0:i]) + string(dq[i+1:])
+                        if _, ok := visited[child]; !ok {
+                            q = append(q, child)
+                            visited[child] = true
+                        }
                     }
                 }
             }
+            
             
             qSize--
         }
