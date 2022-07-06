@@ -1,6 +1,6 @@
 func permute(nums []int) [][]int {
     var result [][]int
-    var dfs func(start int) 
+    var dfs func(start int)
     dfs = func(start int) {
         // base
         if start == len(nums) {
@@ -9,12 +9,14 @@ func permute(nums []int) [][]int {
             result = append(result, newL)
             return
         }
-        
         // logic
         for i := start; i < len(nums); i++ {
-            nums[i],nums[start] = nums[start],nums[i]
+            // action
+            nums[i], nums[start] = nums[start], nums[i]
+            // recurse
             dfs(start+1)
-            nums[i],nums[start] = nums[start],nums[i]
+            // backtrack
+            nums[i], nums[start] = nums[start], nums[i]
         }
     }
     
