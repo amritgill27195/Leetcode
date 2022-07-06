@@ -1,37 +1,28 @@
 func removeInvalidParentheses(s string) []string {    
-    maxLen := 0
     out := []string{}
-    visited := map[string]struct{}{}
-    
-    var dfs func(path string)
-    dfs = func( path string) {
-        // base
-        if _, ok := visited[path]; ok { return }
-        visited[path] = struct{}{}
-
-        // logic
-        if isValid(path) {
-            if len(path) > maxLen {
-                out = []string{path}
-                maxLen = len(path)
+    q := []string{s}
+    visited := map[string]bool{s: true}    
+    for len(q) != 0 {
+        qSize := len(q)
+        for qSize != 0 {
+            dq := q[0]
+            q = q[1:]
+            if isValid(dq) {
+                out = append(out, dq)
             } else {
-                out = append(out, path)
+                for i := 0; i < len(dq); i++ {
+                    child := string(dq[0:i] + dq[i+1:])
+                    if _, ok := visited[child]; !ok {
+                        visited[child] = true
+                        q = append(q, child)
+                    }
+                }
             }
-            return
+            qSize--
         }
-        
-        for i := 0 ; i < len(path); i++ {
-            // if path[i] == '(' || path[i] == ')' { 
-                child := string(path[0:i]) + string(path[i+1:])
-                if len(child) < maxLen{continue}
-                dfs(child)
-            // }
+        if len(out) != 0 {
+            break
         }
-    }
-    
-    dfs(s)
-    if len(out) == 0 {
-        out = []string{""}
     }
     return out
 }
