@@ -10,24 +10,19 @@ func exist(board [][]byte, word string) bool {
         if ptr == len(word) {
             return true
         }
+        if r == m || r < 0 || c == n || c < 0 || board[r][c] == '#' || board[r][c] != word[ptr] {
+            return false
+        }
         
         // logic
+        tmp := board[r][c]
+        board[r][c] = '#'
         for _, dir := range dirs {
-            nr := r + dir[0]
-            nc := c + dir[1]
-            if nr >= 0 && nr < m && nc >= 0 && nc < n && board[nr][nc] == word[ptr] {
-                // action
-                tmp := board[nr][nc]
-                board[nr][nc] = '1'
-                // recurse
-                ok := dfs(nr, nc, ptr+1)
-                if ok {
-                    return true
-                }
-                // backtrack
-                board[nr][nc] = tmp
+            if dfs(r+dir[0], c+dir[1], ptr+1) {
+                return true
             }
         }
+        board[r][c] = tmp
         
         return false
     }
@@ -35,11 +30,9 @@ func exist(board [][]byte, word string) bool {
     for i := 0; i < m; i++ {
         for j := 0; j < n; j++ {
             if board[i][j] == word[0] {
-                board[i][j] = 1
-                if found := dfs(i, j, 1); found {
+                if found := dfs(i, j, 0); found {
                     return true
                 }
-                board[i][j] = word[0]
             }
         }
     }
