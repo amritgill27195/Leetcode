@@ -1,33 +1,33 @@
 func permuteUnique(nums []int) [][]int {
-    
     result := [][]int{}
-    m := map[int]int{}
-    for _, n := range nums {
-        m[n]++
-    }
-    
-    var dfs func(paths []int)
-	dfs = func(paths []int) {
-            
-        // base
-        if len(paths) == len(nums) {
-            newL := make([]int, len(paths))
-            copy(newL, paths)
+    cache := map[string]bool{}
+    var dfs func(start int)
+    dfs = func(start int) {
+        // logic
+        seenData, _ := json.Marshal(nums)
+        if cache[string(seenData)] { return }
+        
+        if start == len(nums) {
+            newL := make([]int, len(nums))
+            copy(newL, nums)
             result = append(result, newL)
             return
-		}
+        }
         
-        // logic
-        for num, freq := range m {
-            if freq > 0 {
-                paths = append(paths, num)
-                m[num]--
-                dfs(paths)
-                paths = paths[:len(paths)-1]
-                m[num]++
-            }
-		}
-	}
-	dfs(nil)
-	return result    
+        // base
+        for i := start; i < len(nums); i++ {
+            // action
+            nums[start],nums[i] = nums[i], nums[start]
+            // recurse
+            dfs(start+1)
+            // backtrack
+            nums[start],nums[i] = nums[i], nums[start]
+        }
+        
+        data, _ := json.Marshal(nums)
+        cache[string(data)] = true
+    }
+    
+    dfs(0)
+    return result
 }
