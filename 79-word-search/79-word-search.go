@@ -1,37 +1,47 @@
 func exist(board [][]byte, word string) bool {
-    dirs := [][]int{{1,0},{-1,0},{0,-1},{0,1}}
+
+    if board == nil || len(board) == 0 || len(word) == 0 { return true }
     m := len(board)
     n := len(board[0])
-    var backtrack func(r, c int, wordIdx int) bool
-    backtrack = func(r, c int, wordIdx int) bool {
+    dirs := [][]int{{-1,0},{1,0},{0,-1},{0,1}}
+    var dfs func(r, c, ptr int) bool
+    dfs = func(r, c, ptr int) bool{
         // base
-        if wordIdx == len(word) {return true}
-        if r < 0 || r == m || c < 0 || c == n || board[r][c] == '#' || board[r][c] != word[wordIdx] {
-            return false
-        } 
+        if ptr == len(word) {
+            return true
+        }
         
         // logic
-        tmp := board[r][c]
-        board[r][c] = '#'
         for _, dir := range dirs {
-            if found := backtrack(r+dir[0],c+dir[1], wordIdx+1); found {
-                return true
+            nr := r + dir[0]
+            nc := c + dir[1]
+            if nr >= 0 && nr < m && nc >= 0 && nc < n && board[nr][nc] == word[ptr] {
+                // action
+                tmp := board[nr][nc]
+                board[nr][nc] = '1'
+                // recurse
+                ok := dfs(nr, nc, ptr+1)
+                if ok {
+                    return true
+                }
+                // backtrack
+                board[nr][nc] = tmp
             }
         }
-        board[r][c] = tmp
+        
         return false
     }
     
     for i := 0; i < m; i++ {
         for j := 0; j < n; j++ {
             if board[i][j] == word[0] {
-                if found := backtrack(i,j,0); found {
+                board[i][j] = 1
+                if found := dfs(i, j, 1); found {
                     return true
                 }
+                board[i][j] = word[0]
             }
         }
     }
-    
     return false
-    
 }
