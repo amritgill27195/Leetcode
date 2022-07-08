@@ -27,8 +27,6 @@ func permuteUnique(nums []int) [][]int {
             path = path[:len(path)-1]
         }
     }
-    
-    
     dfs(nil)
     return result
 }
