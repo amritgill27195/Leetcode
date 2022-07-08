@@ -1,8 +1,10 @@
 func permuteUnique(nums []int) [][]int {
+    
     freqMap := map[int]int{}
     for i := 0; i < len(nums); i++ {
         freqMap[nums[i]]++
     }
+    
     result := [][]int{}
     var dfs func(path []int)
     dfs = func(path []int) {
@@ -11,7 +13,7 @@ func permuteUnique(nums []int) [][]int {
             newL := make([]int, len(path))
             copy(newL, path)
             result = append(result, newL)
-            return
+            return 
         }
         
         // logic
@@ -20,13 +22,17 @@ func permuteUnique(nums []int) [][]int {
             // action
             path = append(path, k)
             freqMap[k]--
+            
             // recurse
             dfs(path)
+            
             // backtrack
-            freqMap[k]++
             path = path[:len(path)-1]
+            freqMap[k]++
         }
     }
+    
     dfs(nil)
     return result
+    
 }
