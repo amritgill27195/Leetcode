@@ -1,3 +1,6 @@
+// time: o(2^m) where m are the number of valid permutations
+// space: o(2^m)
+
 func countArrangement(n int) int {
     nums := make([]int, n)
 	for i := 0; i < len(nums); i++ {
