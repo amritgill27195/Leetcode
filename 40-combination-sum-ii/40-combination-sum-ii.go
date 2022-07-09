@@ -1,16 +1,14 @@
 func combinationSum2(candidates []int, target int) [][]int {
-    result := [][]int{}
-    
+    if candidates == nil || len(candidates) == 0 {
+        return nil
+    }
     freqMap := map[int]int{}
-    for i := 0; i < len(candidates); i++ {
-        freqMap[candidates[i]]++
-    }
-    
+    for i := 0; i < len(candidates); i++ { freqMap[candidates[i]]++ }
+
     deduped := [][]int{}
-    for k, v := range freqMap {
-        deduped = append(deduped, []int{k,v})
-    }
+    for k, v := range freqMap { deduped = append(deduped, []int{k,v}) }
     
+    result := [][]int{}
     var dfs func(start int, path []int, t int)
     dfs = func(start int, path []int, t int) {
         // base
@@ -25,23 +23,17 @@ func combinationSum2(candidates []int, target int) [][]int {
         
         // logic
         for i := start; i < len(deduped); i++ {
-            val := deduped[i][0]
-            count := deduped[i][1]
-            if count == 0 {continue}
-            
+            if deduped[i][1] == 0 {continue}
             // action
-            path = append(path, val)
+            path = append(path, deduped[i][0])
             deduped[i][1]--
             // recurse
-            dfs(i,path,t-val)
+            dfs(i, path, t-deduped[i][0])
             // backtrack
             path = path[:len(path)-1]
-            deduped[i][1] = count
-        
+            deduped[i][1]++
         }
     }
-    
-    dfs(0,nil, target)
+    dfs(0, nil, target)
     return result
-    
 }
