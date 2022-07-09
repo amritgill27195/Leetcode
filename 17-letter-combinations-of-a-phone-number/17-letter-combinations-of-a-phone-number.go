@@ -1,3 +1,16 @@
+/*
+    WHEN YOU DONT HAVE TO USE ALL THE ELEMENTS TO MAKE A COMBINATION
+    - FOR LOOP BASED RECURSION
+    
+    WHEN YOU HAVE TO USE ALL THE ELEMENTS TO MAKE A COMBINATION
+    - MAKE DFS YOUR FOR LOOP WITH A START POINTER PICKING ELEMENTS FROM INPUT FORMING A PATH
+    - ALTHOUGH FOR LOOP RECURSION WORKS TOO BUT HAVE TO BE MINDFUL 
+    - WHETHER TO SELECT ONLY THE ith CHAR 
+    - OR [0:i+1] CHAR (we did this in expression add operator - where we had multiple ints to be concatnated to evaluate n digit expression with other remaining numbers )
+    
+    Here we have to use each char for each digit, therefore making DFS act as my loop
+    
+*/  
 func letterCombinations(digits string) []string {
     if len(digits) == 0 {return nil} 
     result := []string{}
