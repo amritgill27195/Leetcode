@@ -1,35 +1,35 @@
 func getMaximumGold(grid [][]int) int {
-    maxGold := 0
     m := len(grid)
     n := len(grid[0])
-    dirs := [][]int{{1,0},{-1,0},{0,-1},{0,1}}
-    var dfs func(sum, r, c int) 
-    dfs = func(sum, r, c int) {
+    max := 0
+    var backtrack func(r, c int, total int) 
+    dirs := [][]int{{-1,0},{1,0},{0,-1},{0,1}}
+    backtrack = func(r, c int, total int) {
         // base
-        if r < 0 || r == m || c < 0 || c == n || grid[r][c] <= 0 {
+        if r == m || r < 0 || c == n || c < 0 || grid[r][c] <= 0 {
             return
         }
-        sum += grid[r][c]
-        if sum > maxGold {maxGold = sum}
-        grid[r][c] *= -1
+        
         // logic
+        total += grid[r][c]
+        // action
+        grid[r][c] *= -1
+        if total > max {max = total}
         for _, dir := range dirs {
-            dfs(sum, r+dir[0], c+dir[1])
+            // recurse
+            backtrack(r+dir[0], c+dir[1], total)
         }
-        grid[r][c] *= -1        
+        // backtrack
+        grid[r][c] *= -1
+        
     }
     
-    for i := 0;i < m; i++ {
-        for j := 0;j < n; j++ {
+    for i := 0; i < m; i++ {
+        for j := 0; j < n; j++ {
             if grid[i][j] != 0 {
-                dfs(0,i, j)
+                backtrack(i,j,0)
             }
         }
     }
-    return maxGold
-}
-
-func max(x, y int) int {
-    if x > y {return x}
-    return y
+    return max
 }
