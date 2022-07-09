@@ -1,29 +1,37 @@
+// using same technique as for loop based recursion
+// and using hashmap + index based deduped array to perform for loop based recursion on
 func subsetsWithDup(nums []int) [][]int {
-    sort.Ints(nums)
-    var result [][]int
-    var dfs func(start int, paths []int)
-    dfs = func(start int, paths []int) {
-        
-        // base 
-        newL := make([]int, len(paths))
-        copy(newL, paths)
+    if nums == nil || len(nums) == 0 {
+        return nil
+    }
+    
+    freqMap := map[int]int{}
+    for i := 0; i < len(nums); i++ { freqMap[nums[i]]++ }
+    
+    deduped := [][]int{}
+    for k, v := range freqMap { deduped = append(deduped, []int{k, v})}
+    
+    result := [][]int{}
+    var dfs func(start int, path []int)
+    dfs = func(start int, path []int) {
+        // base
+        newL := make([]int, len(path))
+        copy(newL, path)
         result = append(result, newL)
-        if start >= len(nums) {return}
-        
         
         // logic
-        for i := start; i < len(nums); i++ {
-            if i != start && nums[i] == nums[i-1] {continue}
+        for i := start;i<len(deduped);i++ {
+            if deduped[i][1] == 0 {continue}
             // action
-            paths = append(paths, nums[i])
+            path = append(path, deduped[i][0])
+            deduped[i][1]--
             // recurse
-            dfs(i+1, paths)
+            dfs(i, path)
             // backtrack
-            paths = paths[:len(paths)-1]
+            path = path[:len(path)-1]
+            deduped[i][1]++
         }
-        
     }
-    dfs(0, []int{})
+    dfs(0, nil)
     return result
-    
 }
