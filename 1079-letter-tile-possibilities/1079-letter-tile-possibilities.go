@@ -5,26 +5,23 @@ func numTilePossibilities(tiles string) int {
     for i := 0; i < len(tiles); i++ { freqMap[tiles[i]]++ }
     
     count := 0
-    var dfs func(path string) 
-    dfs = func(path string) {
+    var dfs func() 
+    dfs = func() {
         // base
-        if path != "" {
-            count++
-        }
+       count++
         
         // logic
         for k, v := range freqMap {
             if v == 0 {continue}
             // action
             freqMap[k]--
-            path += string(k)
             // recurse
-            dfs(path)
+            dfs()
             // backtrack
             freqMap[k]++
         }
     }
-    dfs("")
-    return count
+    dfs()
+    return count-1
     
 }
