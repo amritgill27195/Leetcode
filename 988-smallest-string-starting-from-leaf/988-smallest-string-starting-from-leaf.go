@@ -7,7 +7,7 @@
  * }
  */
 func smallestFromLeaf(root *TreeNode) string {
-    min := "-"
+    min := ""
     var dfs func(r *TreeNode, path string)
     dfs = func(r *TreeNode, path string) {
         // base
@@ -23,7 +23,7 @@ func smallestFromLeaf(root *TreeNode) string {
             //// The result will be 0 if a == b, -1 if a < b, and +1 if a > b.
             // strings.Compare(a,b)
             revPath := reverse(path)
-            if min == "-" {
+            if min == "" {
                 min = revPath
             }else if val := strings.Compare(min, revPath); val == 1 {
                 min = revPath
