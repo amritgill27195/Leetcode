@@ -25,10 +25,12 @@ func smallestFromLeaf(root *TreeNode) string {
             revPath := reverse(path)
             if min == "" {
                 min = revPath
-            }else if val := strings.Compare(min, revPath); val == 1 {
+            } else if val := strings.Compare(min, revPath); val == 1 {
                 min = revPath
             }
+            return
         }
+        
         dfs(r.Right, path)
     }
     dfs(root, "")
