@@ -28,6 +28,7 @@ func smallestFromLeaf(root *TreeNode) string {
             } else if val := strings.Compare(min, revPath); val == 1 {
                 min = revPath
             }
+            return
         }
         
         dfs(r.Right, path)
