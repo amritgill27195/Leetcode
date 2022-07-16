@@ -11,26 +11,24 @@ func recoverTree(root *TreeNode)  {
     var second *TreeNode
     var prev *TreeNode
     
-    var inorder func(r *TreeNode)
-    inorder = func(r *TreeNode) {
+    var dfs func(r *TreeNode)
+    dfs = func(r *TreeNode) {
         // base
         if r == nil {
             return
-        }    
+        }
+        
         // logic
-        inorder(r.Left)
+        dfs(r.Left)
         if prev != nil {
             if prev.Val >= r.Val {
-                if second == nil {
-                    second = prev
-                }
-                first = r
+                if first == nil { first = prev }
+                second = r
             }
         }
         prev = r
-        inorder(r.Right)
+        dfs(r.Right)
     }
-    inorder(root)
+    dfs(root)
     first.Val, second.Val = second.Val, first.Val
-    
 }
