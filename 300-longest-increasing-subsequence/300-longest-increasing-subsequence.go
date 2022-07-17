@@ -48,10 +48,14 @@
 //     return maxLen
 // }
 
-func max(x, y int) int {
-    if x > y {return x}
-    return y
-}
+// func max(x, y int) int {
+//     if x > y {return x}
+//     return y
+// }
+
+
+// time: o(nlogn)
+// space: o(n)
 func lengthOfLIS(nums []int) int {
     if nums == nil || len(nums) == 0 {
         return 0
@@ -59,18 +63,22 @@ func lengthOfLIS(nums []int) int {
     effective := []int{nums[0]}
     
     for i := 1; i < len(nums); i++ {
-        if nums[i] > effective[len(effective)-1] {
+        lastEffectiveIdx := len(effective)-1
+
+        if nums[i] > effective[lastEffectiveIdx] {
             effective = append(effective, nums[i])
         } else {
-            idx := nextSmallestBinarySearch(nums[i],0,len(effective),effective)
+            idx := nextSmallestBinarySearch(nums[i],effective)
             effective[idx] = nums[i]
         }
     }
     return len(effective)
 }
 
-func nextSmallestBinarySearch(target int, left, right int, nums []int) int {
+func nextSmallestBinarySearch(target int, nums []int) int {
     ans := -1
+    left := 0
+    right := len(nums)-1
     for left <= right {
         mid := left + (right-left)/2
         if nums[mid] >= target {
