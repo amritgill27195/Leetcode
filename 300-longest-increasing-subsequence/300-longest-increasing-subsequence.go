@@ -26,26 +26,60 @@
 // }
     
 
-func lengthOfLIS(nums []int) int {
-    if nums == nil || len(nums) == 0 {
-        return 0
-    }
-    dp := make([]int, len(nums))
-    for idx, _ := range dp {dp[idx] = 1}
-    maxLen := 1
-    for i := 1; i < len(nums); i++ {
-        currNum := nums[i]
-        for j := 0; j < i; j++ {
-            if currNum > nums[j] {
-                dp[i] = max(dp[j]+1, dp[i])
-            }
-            maxLen = max(maxLen, dp[i])
-        }
-    }
-    return maxLen
-}
+// approach: bottom up dp and form every single subsequence for each subproblem and pick longest one for each subproblem
+// time : o(n^2)
+// space: o(n) == dp array
+// func lengthOfLIS(nums []int) int {
+//     if nums == nil || len(nums) == 0 {
+//         return 0
+//     }
+//     dp := make([]int, len(nums))
+//     for idx, _ := range dp {dp[idx] = 1}
+//     maxLen := 1
+//     for i := 1; i < len(nums); i++ {
+//         currNum := nums[i]
+//         for j := 0; j < i; j++ {
+//             if currNum > nums[j] {
+//                 dp[i] = max(dp[j]+1, dp[i])
+//             }
+//             maxLen = max(maxLen, dp[i])
+//         }
+//     }
+//     return maxLen
+// }
 
 func max(x, y int) int {
     if x > y {return x}
     return y
+}
+func lengthOfLIS(nums []int) int {
+    if nums == nil || len(nums) == 0 {
+        return 0
+    }
+    effective := []int{nums[0]}
+    
+    for i := 1; i < len(nums); i++ {
+        if nums[i] > effective[len(effective)-1] {
+            effective = append(effective, nums[i])
+        } else {
+            idx := nextSmallestBinarySearch(nums[i],0,len(effective),effective)
+            effective[idx] = nums[i]
+        }
+    }
+    return len(effective)
+}
+
+func nextSmallestBinarySearch(target int, left, right int, nums []int) int {
+    ans := -1
+    for left <= right {
+        mid := left + (right-left)/2
+        if nums[mid] >= target {
+            if nums[mid] == target {return mid}
+            ans = mid
+            right = mid-1
+        } else {
+            left = mid+1
+        }
+    }
+    return ans
 }
