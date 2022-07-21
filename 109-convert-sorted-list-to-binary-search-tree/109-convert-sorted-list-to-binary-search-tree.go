@@ -24,10 +24,8 @@ func sortedListToBST(head *ListNode) *TreeNode {
         // logic
         // find mid given start = left and end = right
         slow := left
-        // slowPrev := slow
         fast := left
         for slow != nil && fast != right && fast.Next != right {
-            // slowPrev = slow
             slow = slow.Next
             fast = fast.Next.Next
         }
