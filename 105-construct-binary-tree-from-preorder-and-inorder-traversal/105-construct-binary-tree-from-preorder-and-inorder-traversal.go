@@ -87,12 +87,21 @@
 
 // time: o(n)
 // space: o(n)
+
+    
+// instead of slicing we will use 3 ptrs
+// 1. idx: to tell us where the next root in preorder is ( so we will gradually increase this ptr by 1 in each recursion call )
+// 2. start: to tell us the start position in inorder
+// 3. end: to tell us the end position in inorder
 func buildTree(preorder []int, inorder []int) *TreeNode {
     if len(preorder) != len(inorder) {return nil}
     
     idxMap := map[int]int{}
     for i := 0; i < len(inorder); i++ { idxMap[inorder[i]] = i }
     
+    // why are we not passing inorder list here?
+    // we dont need it because we only used inorder to find our rootIdx
+
     preRootPtr := 0
     var dfs func(left, right int) *TreeNode
     dfs = func(left, right int) *TreeNode {
