@@ -6,46 +6,108 @@
  *     Right *TreeNode
  * }
  */
-// func isValidBST(root *TreeNode) bool {
-//     var dfs func(min, max int, r *TreeNode) bool
-//     dfs = func(min, max int, r *TreeNode) bool {
-//         // base
-//         if r == nil {return true}
-//         // logic
-//         if r.Val <= min || r.Val >= max {
-//             return false
-//         }
-//         return dfs(min, r.Val, r.Left) && dfs(r.Val, max, r.Right)
-//     }
-//     return dfs(math.MinInt64, math.MaxInt64, root)
-// }
 
+
+/*
+    Sorted order == valid BST
+    How to traverse a tree in a sorted order?
+    - Inorder traversal of a BST guarentees a sorted order
+    
+    If you traverse a tree in inorder fashion, you will see nodes in asc order.
+    
+    approach 1: Populate a list while traversing inorder
+    - inorder traverse
+        - time: o(n) - where n is the number of nodes in the tree. We end up seeing all nodes.
+        - space: o(h) - where h is the height of the tree. Regardless if we use recursion or iterative stack
+    - push each item to a list
+        - time: o(1)
+        - space: o(n)
+    - finally check if the list is sorted
+        - time : o(n)
+        - space : o(1)
+    time: o(n) + o(1) + o(n) = o(n)
+    space: o(n) + o(h) + o(1) = o(n)
+    
+    
+    approach 2: Maintain a prev pointer to compare current root node with
+    - inorder traversal
+    - compare prev with current root
+        - prev will always be smaller in a true BST ( prev in a number line thats sorted will always be smalled )
+        - if prev >= current { return false }
+    time: o(n)
+    space: o(h)
+    
+    approach 3: Iterative implmentation of approach #2
+*/
+
+
+// inorder DFS ( recursive ) -- using prev pointer
+// time: o(n) - we visit all nodes in best/worst case
+// space: o(h) - max height of the tree will be in recursion stack at worse case and o(n) in a skewed tree
 
 func isValidBST(root *TreeNode) bool {
-    type sNode struct {
-        n *TreeNode
-        min int
-        max int
-    }
     
-    // [ [*TreeNode, min, max] ]
-    s := []*sNode{ &sNode{n:root, min: math.MinInt64, max: math.MaxInt64} }
-
-    for len(s) != 0 {
-        top := s[len(s)-1]
-        s= s[:len(s)-1]
+    // why isnt prev part of recursion stack...
+    // because when the inorder goes back to a root node from left
+    // the prev to this root should be left.
+    // if prev is maintained with root in recursion stack, it will never be the left child.
+    // therefore global prev
+//     var p *TreeNode
+    
+//     // inorder dfs
+//     var inorderDfs func(c *TreeNode) bool
+//     inorderDfs = func(c *TreeNode) bool {
         
-        node := top.n
-        min := top.min
-        max := top.max
+//         // base
+//         if c == nil {
+//             return true
+//         }
         
-        if node.Val <= min || node.Val >= max {
-            return false
-        }
+//         // logic
+//         leftValid := inorderDfs(c.Left)
+//         if !leftValid {
+//             return false
+//         }
+//         // process
+//         if p != nil {
+//             if p.Val >= c.Val {
+//                 return false
+//             }
+//         }
+//         p = c
         
-        if node.Left != nil { s = append(s, &sNode{n: node.Left, min: min, max: node.Val})}
-        if node.Right != nil { s = append(s, &sNode{n: node.Right, min: node.Val, max: max})}
-        
-    }
-    return true
+//         return inorderDfs(c.Right)
+//     }
+   
+//     return inorderDfs(root)
+    return preorderUsingMinMax(root, nil, nil)
 }
+
+
+// we need to check at each node
+// it must either be less than parent ( left branch )
+// or it must be greater than parent ( right branch )
+// so at each level we have a min and max 
+// min and max with the parent depending on which side we go on.
+// left -> max parent, and min pass it as is
+// right -> min parent and max pass it as is
+// since we will be checking at each node whether its between min and max, and then only then go left and right, we will do this in preorder fashion
+
+func preorderUsingMinMax(root, min, max *TreeNode) bool {
+    // base 
+    if root == nil {return true}
+    if min != nil && root.Val <= min.Val {return false}
+    if max != nil && root.Val >= max.Val {return false}
+    
+    // logic
+    return preorderUsingMinMax(root.Left, min, root) && preorderUsingMinMax(root.Right, root, max)
+    
+}
+
+
+
+
+
+
+
+
