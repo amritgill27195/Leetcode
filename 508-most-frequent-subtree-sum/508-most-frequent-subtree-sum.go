@@ -8,6 +8,8 @@
  */
 func findFrequentTreeSum(root *TreeNode) []int {
     freqMap := map[int]int{}
+    maxV := math.MinInt64
+    
     var dfs func(r *TreeNode) int
     dfs = func(r *TreeNode) int {
         // base
@@ -21,20 +23,19 @@ func findFrequentTreeSum(root *TreeNode) []int {
         sum := r.Val
         if left != math.MinInt64 {
             freqMap[left]++
+            maxV = max(freqMap[left], maxV)
             sum += left
         }
         if right != math.MinInt64 {
             freqMap[right]++
+            maxV = max(freqMap[right], maxV)
             sum += right
         }
         return sum
     }
     rootSum := dfs(root)
     freqMap[rootSum]++
-    maxV := math.MinInt64
-    for _, v := range freqMap {
-        maxV = max(v, maxV)
-    }
+    maxV = max(maxV, freqMap[rootSum])
     
     out := []int{}
     for k, v := range freqMap {
