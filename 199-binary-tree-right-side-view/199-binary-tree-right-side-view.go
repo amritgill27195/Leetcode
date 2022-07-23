@@ -9,20 +9,19 @@
 func rightSideView(root *TreeNode) []int {
     if root == nil {return nil}
     out := []int{}
-    q := []*TreeNode{root}
-    for len(q) != 0 {
-        qSize := len(q)
-        tmp := len(q)
-        for qSize != 0 {
-            if tmp == qSize {
-                out = append(out, q[qSize-1].Val)
-            }
-            dq := q[0]
-            q = q[1:]
-            if dq.Left != nil {q = append(q, dq.Left)}
-            if dq.Right != nil {q = append(q, dq.Right)}
-            qSize--
+    var dfs func(r *TreeNode, level int) 
+    dfs = func(r *TreeNode, level int) {
+        // base
+        if r == nil {return}
+        
+        // logic
+        if len(out) == level {
+            out = append(out, r.Val)
         }
+
+        dfs(r.Right, level+1)
+        dfs(r.Left, level+1)
     }
+    dfs(root, 0)
     return out
 }
