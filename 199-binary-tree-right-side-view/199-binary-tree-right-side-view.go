@@ -6,110 +6,23 @@
  *     Right *TreeNode
  * }
  */
-
-
-/*
-    approach 1: level order using BFS
-    This was the very first thing that came to my mind.
-    Before processing each level ( in a queue ), we will save the last element from it
-    and then process the nodes in queue like any other BFS
-
-    time: o(n) - where n is the number of nodes in the tree. We visit and see every single node best/worst case ( we do not exit early anywhere )
-    space: o(math.Max(widthOfTree)) or o(w) -- if its a skewed tree it becomes o(n)
-
-    ------------------------------------------------
-
-    approach 2: level order using DFS
-    We can do level order traversal using DFS too by maintaining a level at each node in recursion stack.
-    But how do we only save the right side of the tree?
-    We will have a result array and each idx in this result array will represent a level in the tree
-    level == idx and if len(res) == level this means the max idx avail right now is len(res)-1 and if level == len(res) and level is our idx
-    then that means we do not have level as an idx avail ( its less then level ) - so append in this case.
-    
-    2 ways:
-    1. We can traverse left first and go reckless override each new element at the same level. 
-        - if right goes after left, the last overrides will be the right side view
-    2. We can traverse right first and only add to result array at the level IF the size of result array == level (i.e this is the first time we have seen this level)
-        - gather all the right side values for each level
-        - if this level does not exist in our result array
-            - that means this is the first time we have seen this level, so append it with current level value
-        - if this level does exist, it means we already have the farthest right side value for this level
-    
-    time: o(n) - where n is the number of nodes in the tree. We visit and see every single node best/worst case ( we do not exit early anywhere )
-    space: o(h) - where h is the max height of tree and it will be o(n) space in a skewed tree
-   
-   
-*/
-
-// level order using BFS
-// func rightSideView(root *TreeNode) []int {
-//     if root == nil {
-//         return nil
-//     }
-//     result := []int{}
-//     q := []*TreeNode{root}
-    
-//     for len(q) != 0 {
-//         qSize := len(q)
-//         result = append(result, q[qSize-1].Val)
-//         for qSize != 0 {
-//             dq := q[0]
-//             q = q[1:]
-//             if dq.Left != nil {q = append(q, dq.Left)}
-//             if dq.Right != nil {q = append(q, dq.Right)}
-//             qSize--
-//         }
-//     }
-//     return result
-// }
-
-
-// level order using DFS ( i.e maintain a level local state at each node )
-// this exists to scope down global to only this class/struct or else global pollution happens
-// func rightSideView(root *TreeNode) []int {
-//     // right side first
-//     var result []int
-//     var dfs func(a *TreeNode, level int)
-//     dfs = func(a *TreeNode, level int){
-//         // base
-//         if a == nil {return}
-        
-//         // logic
-//         if len(result) == level {
-//             // this means this level idx does not exist 
-//             // and since we traverse right side first, save this item
-//             result = append(result, a.Val)
-//         }
-//         dfs(a.Right, level+1)
-//         dfs(a.Left, level+1)
-//     }
-//     dfs(root, 0)
-//     return result
-// }
-
-
 func rightSideView(root *TreeNode) []int {
-    // left side first
-    var result []int
-    var dfs func(a *TreeNode, level int)
-    dfs = func(a *TreeNode, level int){
-        // base
-        if a == nil {return}
-        
-        // logic
-        if len(result) == level {
-            // this means this level idx does not exist 
-            // add it
-            result = append(result, a.Val)
-        } else {
-            // this means levelIdx already exists and since we reach right branch after
-            // the value saved at levelIdx is likely the left val, so we need to replace
-            result[level] = a.Val
+    if root == nil {return nil}
+    out := []int{}
+    q := []*TreeNode{root}
+    for len(q) != 0 {
+        qSize := len(q)
+        tmp := len(q)
+        for qSize != 0 {
+            if tmp == qSize {
+                out = append(out, q[qSize-1].Val)
+            }
+            dq := q[0]
+            q = q[1:]
+            if dq.Left != nil {q = append(q, dq.Left)}
+            if dq.Right != nil {q = append(q, dq.Right)}
+            qSize--
         }
-        dfs(a.Left, level+1)
-        dfs(a.Right, level+1)
-   
     }
-    dfs(root, 0)
-    return result
+    return out
 }
